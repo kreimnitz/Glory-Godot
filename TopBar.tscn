@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://2543b3vjpe1e"]
+
+[ext_resource type="Script" path="res://ValueLabel.cs" id="1_645d2"]
+[ext_resource type="Script" path="res://TopBar.cs" id="1_fak58"]
+
+[sub_resource type="Theme" id="Theme_shgwj"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_opnpd"]
+specular_color = Color(0.317647, 0.317647, 0.317647, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1oghe"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="TopBar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1100.0
+offset_bottom = -850.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_shgwj")
+script = ExtResource("1_fak58")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 50.0
+texture = SubResource("CanvasTexture_opnpd")
+
+[node name="ValueLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 70.0
+offset_bottom = 40.0
+text = "Glory: 0"
+label_settings = SubResource("LabelSettings_1oghe")
+script = ExtResource("1_645d2")

@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://datlm1a8l16aa"]
+
+[ext_resource type="Texture2D" uid="uid://do0txehoimol5" path="res://UIBarBackground.bmp" id="1_3krxh"]
+[ext_resource type="PackedScene" uid="uid://dglf173oay0qw" path="res://ButtonGroup.tscn" id="2_nabhb"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 600.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 300.0
+texture = ExtResource("1_3krxh")
+
+[node name="MainButtonGroup" parent="." instance=ExtResource("2_nabhb")]
+layout_mode = 0
+offset_left = 1207.0
+offset_top = 22.0
+offset_right = 1523.0
+offset_bottom = 274.0

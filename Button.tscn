@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://fop0wb4aejle"]
+
+[ext_resource type="Texture2D" uid="uid://c7e4nyqeu8ciy" path="res://ButtonIcon.bmp" id="1_e1axg"]
+
+[node name="MarginContainer" type="MarginContainer"]
+custom_minimum_size = Vector2(60, 60)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureButton" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("1_e1axg")
