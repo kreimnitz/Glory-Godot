@@ -13,6 +13,7 @@ public partial class TopBar : Control
 	public override void _Ready()
 	{
 		_label = GetNode<Label>("ValueLabel");
+		Player = new Player();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

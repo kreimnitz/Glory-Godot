@@ -5,31 +5,35 @@ using System.ComponentModel;
 
 public partial class TowerShotSprite : Sprite2D
 {
-	private Dictionary<int, TowerShotSprite> _modelIdToSpite = new();
-	private double _duration = 500; // milliseconds
-	private DateTime _creationTime;
+	public TowerShot Model { get; private set; }
 
-	private Vector2 _lastTargetPosition;
-	public Node2D Target { get; private set; }
-	public Node2D Source { get; private set; }
-	public int Id { get; }
-
+	public TowerSprite TowerSprite { get; private set; }
+	public EnemySprite TargetSprite { get; private set; }
 
 	private static PackedScene _scene = GD.Load<PackedScene>("res://TowerShotSprite.tscn");
-	public static TowerShotSprite CreateTowerShotSprite(Node2D source, Node2D target)
+	public static TowerShotSprite CreateTowerShotSprite(TowerShot model, TowerSprite towerSprite, EnemySprite targetSprite)
 	{
 		var shot = _scene.Instantiate() as TowerShotSprite;
-		shot.Source = source;
-		shot.Target = target;
-		shot._creationTime = DateTime.UtcNow;
+		shot.Model = model;
+		shot.TowerSprite = towerSprite;
+		shot.TargetSprite = targetSprite;
 		return shot;
 	}
 
-	public void Reset(Node2D target)
+	public void Reset(TowerShot towerShot)
 	{
-		Target = target;
-		_creationTime = DateTime.UtcNow;
+		Model = towerShot;
 		Show();
+	}
+
+	public void ClearModel()
+	{
+		Model = null;
+	}
+
+	public void UpdateModel(TowerShot towerShot)
+	{
+		Model.UpdateFrom(towerShot);
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -40,27 +44,15 @@ public partial class TowerShotSprite : Sprite2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		var percent = (DateTime.UtcNow - _creationTime).TotalMilliseconds / _duration;
-		if (percent > 1)
+		if (Model is null)
 		{
-			percent = 1;
-			Hide();
+			if (Visible)
+			{
+				Hide();
+			}
+			return;
 		}
-
-		UpdateLastTargetPosition();
-		var offset = _lastTargetPosition - Source.Position;
-		Position = offset * (float)percent;
-	}
-
-	private void UpdateLastTargetPosition()
-	{
-		if (Target is not null && Target.Visible)
-		{
-			_lastTargetPosition = Target.Position;
-		}
-		else
-		{
-			Target = null;
-		}
+		var offset = TargetSprite.Position - TowerSprite.Position;
+		Position = offset * (float)Model.ProgressRatio;
 	}
 }

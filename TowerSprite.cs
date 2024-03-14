@@ -6,24 +6,24 @@ using System.Linq;
 public partial class TowerSprite : Sprite2D
 {
 	private PackedScene _towerShotScene;
-	private DateTime _lastShotTime = DateTime.MinValue;
+	private Dictionary<Guid, TowerShotSprite> _idToTowerShotSprite = new();
+
 	private int _cooldownMs = 500;
 
-	public int Range { get; } = 200;
-	public int Damage { get; }
-
 	private Queue<TowerShotSprite> _hiddenShots = new Queue<TowerShotSprite>();
-	public void Shoot(Node2D target)
+	private TowerShotSprite CreateTowerShotSprite(TowerShot towerShot, EnemySprite targetSprite)
 	{
 		if (_hiddenShots.TryDequeue(out TowerShotSprite toRecycle))
 		{
-			toRecycle.Reset(target);
-			return;
+			toRecycle.Reset(towerShot);
+			_idToTowerShotSprite[towerShot.Id] = toRecycle;
+			return toRecycle;
 		}
 
-		var shot = TowerShotSprite.CreateTowerShotSprite(this, target);
-		shot.Hidden += () => _hiddenShots.Enqueue(shot);
-		AddChild(shot);
+		var shotSprite = TowerShotSprite.CreateTowerShotSprite(towerShot, this, targetSprite);
+		AddChild(shotSprite);
+		_idToTowerShotSprite[towerShot.Id] = shotSprite;
+		return shotSprite;
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -37,18 +37,34 @@ public partial class TowerSprite : Sprite2D
 	{
 	}
 
-    public void FireAtEnemies(IEnumerable<EnemySprite> enemies)
-    {
-		if ((DateTime.UtcNow - _lastShotTime).TotalMilliseconds < _cooldownMs)
+	public void UpdateShotsToGameState(ConcurrentGameState gameState, Dictionary<Guid, EnemySprite> enemySprites)
+	{
+		var serverTowerShotIds = gameState.TowerShots.Select(e => e.Id).ToList();
+		var spriteTowerShotIds = _idToTowerShotSprite.Keys.ToList();
+		foreach (var spriteId in spriteTowerShotIds)
 		{
-			return;
+			if (!serverTowerShotIds.Contains(spriteId))
+			{
+				var toHide = _idToTowerShotSprite[spriteId];
+				toHide.ClearModel();
+				toHide.Hide();
+				_hiddenShots.Enqueue(toHide);
+				_idToTowerShotSprite.Remove(spriteId);
+			}
 		}
 
-        var closestEnemy = enemies.OrderByDescending(e => e.ProgressRatio).First();
-		if ((closestEnemy.Position - Position).Length() <= Range)
+		foreach (var towerShot in gameState.TowerShots)
 		{
-			Shoot(closestEnemy);
-			_lastShotTime = DateTime.UtcNow;
+			TowerShotSprite towerShotSprite;
+			if (_idToTowerShotSprite.TryGetValue(towerShot.Id, out towerShotSprite))
+			{
+				towerShotSprite.UpdateModel(towerShot);
+			}
+			else
+			{
+				var targetSprite = enemySprites[towerShot.Target.Id];
+				towerShotSprite = CreateTowerShotSprite(towerShot, targetSprite);
+			}
 		}
-    }
+	}
 }

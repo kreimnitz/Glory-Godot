@@ -9,10 +9,13 @@ public partial class EnemySprite : Sprite2D
 
 	public float ProgressRatio => _pathFollow.ProgressRatio;
 
+	public Enemy Model { get; private set; }
+
 	private static PackedScene _scene = GD.Load<PackedScene>("res://EnemySprite.tscn");
-	public static EnemySprite CreateEnemy(Path2D path)
+	public static EnemySprite CreateEnemy(Enemy model, Path2D path)
 	{
 		var enemy = _scene.Instantiate() as EnemySprite;
+		enemy.Model = model;
 		var pathFollow = new PathFollow2D();
 		pathFollow.Loop = false;
 		path.AddChild(pathFollow);
@@ -20,30 +23,32 @@ public partial class EnemySprite : Sprite2D
 		return enemy;
 	}
 
-	public void Reset()
+	public void Reset(Enemy model)
 	{
-		_pathFollow.Progress = 0;
-		Position = _pathFollow.Position;
+		Model = model;
 		Show();
 	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Position = _pathFollow.Position;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		_pathFollow.Progress += (float)delta * _speed;
-		if (_pathFollow.ProgressRatio >= 1)
+		if (!Visible)
+		{
+			return;
+		}
+
+		if (Model.IsZombie)
 		{
 			Hide();
+			Model = null;
+			return;
 		}
-		else
-		{
-			Position = _pathFollow.Position;
-		}
+		_pathFollow.ProgressRatio = (float)Model.ProgressRatio;
+		Position = _pathFollow.Position;
 	}
 }
