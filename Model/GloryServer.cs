@@ -35,8 +35,8 @@ public class GloryServer : IClientMessageRecievedHandler
     private void DoLoop(ElapsedEventArgs a)
     {
         _gameState.UpdateProgress();
-        _gameState.CheckForNewShot();
         _gameState.CheckLifetimes();
+        _gameState.CheckForNewShot();
         SendGameStateMessage();
     }
 

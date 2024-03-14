@@ -14,7 +14,7 @@ public class TowerShot
     public double ProgressRatio { get; private set; }
 
     [ProtoMember(3)]
-    public Enemy Target { get; set; }
+    public Guid TargetId { get; set; }
 
     public void UpdateProgressRatio()
     {
@@ -30,7 +30,7 @@ public class TowerShot
     public TowerShot(Enemy target)
     {
         _creationTime = DateTime.UtcNow;
-        Target = target;
+        TargetId = target.Id;
         Id = IdGenerator.Generate();
     }
 
@@ -38,6 +38,6 @@ public class TowerShot
     {
         Id = other.Id;
         ProgressRatio = other.ProgressRatio;
-        Target = other.Target;
+        TargetId = other.TargetId;
     }
 }

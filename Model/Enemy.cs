@@ -28,6 +28,4 @@ public class Enemy
     {
         ProgressRatio = other.ProgressRatio;
     }
-
-    public bool IsZombie { get; set; } = false;
 }

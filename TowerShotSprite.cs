@@ -1,10 +1,8 @@
 using Godot;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 public partial class TowerShotSprite : Sprite2D
 {
+	private Vector2 _lastTargetPosition = new();
 	public TowerShot Model { get; private set; }
 
 	public TowerSprite TowerSprite { get; private set; }
@@ -20,20 +18,20 @@ public partial class TowerShotSprite : Sprite2D
 		return shot;
 	}
 
-	public void Reset(TowerShot towerShot)
-	{
-		Model = towerShot;
-		Show();
-	}
-
-	public void ClearModel()
+	public void Kill()
 	{
 		Model = null;
+		TargetSprite = null;
+		TowerSprite = null;
+		Hide();
 	}
 
-	public void UpdateModel(TowerShot towerShot)
+	public void Reset(TowerShot towerShot, TowerSprite towerSprite, EnemySprite targetSprite)
 	{
-		Model.UpdateFrom(towerShot);
+		TowerSprite = towerSprite;
+		TargetSprite = targetSprite;
+		Model = towerShot;
+		Show();
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -44,14 +42,17 @@ public partial class TowerShotSprite : Sprite2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Model is null)
+		if (!Visible)
 		{
-			if (Visible)
-			{
-				Hide();
-			}
 			return;
 		}
+
+		if (TargetSprite is null || !TargetSprite.Visible)
+		{
+			Hide();
+			return;
+		}
+
 		var offset = TargetSprite.Position - TowerSprite.Position;
 		Position = offset * (float)Model.ProgressRatio;
 	}

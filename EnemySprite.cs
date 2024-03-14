@@ -23,6 +23,12 @@ public partial class EnemySprite : Sprite2D
 		return enemy;
 	}
 
+	public void Kill()
+	{
+		Hide();
+		Model = null;
+	}
+
 	public void Reset(Enemy model)
 	{
 		Model = model;
@@ -42,12 +48,6 @@ public partial class EnemySprite : Sprite2D
 			return;
 		}
 
-		if (Model.IsZombie)
-		{
-			Hide();
-			Model = null;
-			return;
-		}
 		_pathFollow.ProgressRatio = (float)Model.ProgressRatio;
 		Position = _pathFollow.Position;
 	}

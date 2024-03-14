@@ -14,14 +14,16 @@ public class ClientGameState
     {
         var updateInfo = new GameStateUpdateInfo();
         Player.UpdateFrom(serverGameState.Player);
-        updateInfo.NewEnemies = UpdateEnemiesFromGameState(serverGameState);
+        (updateInfo.NewEnemies, updateInfo.RemovedEnemies) = UpdateEnemies(serverGameState);
+        (updateInfo.NewTowerShots, updateInfo.RemovedTowerShots) = UpdateTowerShots(serverGameState);
 
         return updateInfo;
     }
 
-    private List<Enemy> UpdateEnemiesFromGameState(ConcurrentGameState serverGameState)
+    private (List<Enemy> NewEnemies, List<Enemy> RemovedEnemies) UpdateEnemies(ConcurrentGameState serverGameState)
     {
         var newEnemies = new List<Enemy>();
+        var removedEnemies = new List<Enemy>();
         foreach (var serverEnemy in serverGameState.Enemies)
         {
             if (Enemies.TryGetValue(serverEnemy.Id, out Enemy matchingEnemy))
@@ -42,33 +44,49 @@ public class ClientGameState
             {
                 continue;
             }
-            enemy.IsZombie = true;
             Enemies.Remove(enemy.Id);
+            removedEnemies.Add(enemy);
         }
 
-        return newEnemies;
+        return (newEnemies, removedEnemies);
     }
 
-    private List<TowerShot> UpdateTowerShotsFromGameState(ConcurrentGameState serverGameState)
+    private (List<TowerShot> NewShots, List<TowerShot> RemovedShots) UpdateTowerShots(ConcurrentGameState serverGameState)
     {
         var newTowerShots = new List<TowerShot>();
+        var removedTowerShots = new List<TowerShot>();
         foreach (var serverTowerShot in serverGameState.TowerShots)
         {
-            if (TowerShots.TryGetValue(serverTowerShot.Id, out TowerShot matchingEnemy))
+            if (TowerShots.TryGetValue(serverTowerShot.Id, out TowerShot matchingTowerShot))
             {
-                matchingEnemy.UpdateFrom(serverEnemy);
+                matchingTowerShot.UpdateFrom(serverTowerShot);
             }
             else
             {
-                Enemies.Add(serverEnemy.Id, serverEnemy);
-                newEnemies.Add(serverEnemy);
+                TowerShots.Add(serverTowerShot.Id, serverTowerShot);
+                newTowerShots.Add(serverTowerShot);
             }
         }
+
+        var serverIds = serverGameState.TowerShots.Select(e => e.Id).ToHashSet();
+        foreach (var towerShot in TowerShots.Values.ToList())
+        {
+            if (serverIds.Contains(towerShot.Id))
+            {
+                continue;
+            }
+            TowerShots.Remove(towerShot.Id);
+            removedTowerShots.Add(towerShot);
+        }
+
+        return (newTowerShots, removedTowerShots);
     }
 }
 
 public class GameStateUpdateInfo
 {
     public List<Enemy> NewEnemies { get; set; } = new();
+    public List<Enemy> RemovedEnemies { get; set; } = new();
     public List<TowerShot> NewTowerShots { get; set; } = new();
+    public List<TowerShot> RemovedTowerShots { get; set; } = new();
 }

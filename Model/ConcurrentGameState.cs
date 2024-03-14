@@ -30,13 +30,16 @@ public class ConcurrentGameState
 
     public void UpdateProgress()
     {
-        foreach (var enemy in Enemies)
+        lock (_lock)
         {
-            enemy.UpdateProgressRatio();
-        }
-        foreach (var towerShot in TowerShots)
-        {
-            towerShot.UpdateProgressRatio();
+            foreach (var enemy in Enemies)
+            {
+                enemy.UpdateProgressRatio();
+            }
+            foreach (var towerShot in TowerShots)
+            {
+                towerShot.UpdateProgressRatio();
+            }
         }
     }
 
