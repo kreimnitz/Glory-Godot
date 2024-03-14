@@ -47,13 +47,20 @@ public partial class TowerShotSprite : Sprite2D
 			return;
 		}
 
-		if (TargetSprite is null || !TargetSprite.Visible)
-		{
-			Hide();
-			return;
-		}
-
-		var offset = TargetSprite.Position - TowerSprite.Position;
+		UpdateLastTargetPosition();
+		var offset = _lastTargetPosition - TowerSprite.Position;
 		Position = offset * (float)Model.ProgressRatio;
+	}
+
+	private void UpdateLastTargetPosition()
+	{
+		if (TargetSprite is not null && TargetSprite.Visible)
+		{
+			_lastTargetPosition = TargetSprite.Position;
+		}
+		else
+		{
+			TargetSprite = null;
+		}
 	}
 }
