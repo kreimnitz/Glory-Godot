@@ -16,7 +16,7 @@ script = ExtResource("1_botxg")
 
 [node name="TopBar" parent="." instance=ExtResource("2_m6jq6")]
 
-[node name="Control" parent="." instance=ExtResource("1_e0vua")]
+[node name="BottomBar" parent="." instance=ExtResource("1_e0vua")]
 
 [node name="TowerSprite" parent="." instance=ExtResource("2_uknex")]
 position = Vector2(404, 295)

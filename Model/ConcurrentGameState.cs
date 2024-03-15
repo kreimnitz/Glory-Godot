@@ -20,6 +20,41 @@ public class ConcurrentGameState
     [ProtoMember(3)]
     public List<TowerShot> TowerShots { get; } = new List<TowerShot>();
 
+    public void HandleClientRequest(ClientRequests request)
+    {
+        lock (_lock)
+        {
+            switch (request)
+            {
+                case ClientRequests.AddFollower:
+                    HandleAddFollowerRequest();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void HandleAddFollowerRequest()
+    {
+        if (Player.Glory < Player.FollowerCost)
+        {
+            return;
+        }
+        
+        Player.Glory -= Player.FollowerCost;
+        var action = new DelayedAction(() => AddFollower(), Player.FollowerDelayMs);
+        action.Start();
+    }
+
+    private void AddFollower()
+    {
+        lock (_lock)
+        {
+            Player.FollowerCount += 1;
+        }
+    }
+
     public void AddEnemy(Enemy enemy)
     {
         lock (_lock)

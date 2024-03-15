@@ -18,7 +18,7 @@ public class TowerShot
 
     public void UpdateProgressRatio()
     {
-        ProgressRatio = (DateTime.UtcNow - _creationTime).TotalMilliseconds / _durationMs;
+        ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
     }
 
     public TowerShot()

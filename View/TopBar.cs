@@ -3,8 +3,11 @@ using System;
 
 public partial class TopBar : Control
 {
-	private Label _label;
+	private Label _gloryLabel;
 	private const string GloryLabelPrefix = "Glory: ";
+
+	private Label _followersLabel;
+	private const string FollowersLabelPrefix = "Followers: ";
 
 	public Player Player { get; set; }
 
@@ -12,13 +15,15 @@ public partial class TopBar : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_label = GetNode<Label>("ValueLabel");
+		_gloryLabel = GetNode<Label>("GloryLabel");
+		_followersLabel = GetNode<Label>("FollowersLabel");
 		Player = new Player();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		_label.Text = GloryLabelPrefix + Player.Glory;
+		_gloryLabel.Text = GloryLabelPrefix + Player.Glory;
+		_followersLabel.Text = FollowersLabelPrefix + Player.FollowerCount;
 	}
 }

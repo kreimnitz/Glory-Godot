@@ -14,6 +14,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 	private TowerSprite _tower;
 	private Path2D _enemyPath;
 	private TopBar _topBar;
+	private UiBar _bottomBar;
 
 	private ClientGameState _gameState;
 
@@ -31,9 +32,18 @@ public partial class Main : Node, IServerMessageReceivedHandler
 
 		_topBar = GetNode<TopBar>("TopBar");
 		_topBar.Player = _gameState.Player;
+
+		_bottomBar = GetNode<UiBar>("BottomBar");
+		_bottomBar.AddFollowerButton.Pressed += TryAddFollower;
 	}
 
-	private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();
+    private void TryAddFollower()
+    {
+		var message = new Message((int)ClientRequests.AddFollower, Array.Empty<byte>());
+        _client.SendMessage(message);
+    }
+
+    private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();
     private EnemySprite CreateEnemySprite(Enemy model)
     {
 		if (_hiddenEnemies.TryDequeue(out EnemySprite toRecycle))

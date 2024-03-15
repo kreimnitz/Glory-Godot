@@ -7,7 +7,7 @@ public class GloryServer : IClientMessageRecievedHandler
     private ConcurrentGameState _gameState = new();
     private ServerMessageTransmitter _serverMessenger;
     private SysTimer _enemyTimer = new(3000);
-    private SysTimer _incomeTimer = new(5000);
+    private SysTimer _incomeTimer = new(1000);
 
     private SysTimer _loopTimer = new(4);
 
@@ -42,6 +42,7 @@ public class GloryServer : IClientMessageRecievedHandler
 
     public void HandleClientMessage(Message message, int playerId)
     {
-        
+        var request = (ClientRequests)message.MessageTypeId;
+        _gameState.HandleClientRequest(request);
     }
 }
