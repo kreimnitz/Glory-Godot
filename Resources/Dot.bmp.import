@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5vceg2es7idw"
-path="res://.godot/imported/RedDot.bmp-c0ff2389b4961de7fd524ce07357467e.ctex"
+uid="uid://dffmuakrxqtc5"
+path="res://.godot/imported/Dot.bmp-5ffeb7c4d620832b42c70c759d61173d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://RedDot.bmp"
-dest_files=["res://.godot/imported/RedDot.bmp-c0ff2389b4961de7fd524ce07357467e.ctex"]
+source_file="res://Resources/Dot.bmp"
+dest_files=["res://.godot/imported/Dot.bmp-5ffeb7c4d620832b42c70c759d61173d.ctex"]
 
 [params]
 

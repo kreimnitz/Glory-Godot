@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://datlm1a8l16aa"]
 
-[ext_resource type="Texture2D" uid="uid://do0txehoimol5" path="res://UIBarBackground.bmp" id="1_3krxh"]
-[ext_resource type="PackedScene" uid="uid://dglf173oay0qw" path="res://ButtonGroup.tscn" id="2_nabhb"]
+[ext_resource type="Texture2D" uid="uid://do0txehoimol5" path="res://Resources/UIBarBackground.bmp" id="1_3krxh"]
+[ext_resource type="PackedScene" uid="uid://dglf173oay0qw" path="res://View/ButtonGroup.tscn" id="2_nabhb"]
 
 [node name="Control" type="Control"]
 layout_mode = 3

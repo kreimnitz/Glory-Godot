@@ -8,7 +8,7 @@ public partial class TowerShotSprite : Sprite2D
 	public TowerSprite TowerSprite { get; private set; }
 	public EnemySprite TargetSprite { get; private set; }
 
-	private static PackedScene _scene = GD.Load<PackedScene>("res://TowerShotSprite.tscn");
+	private static PackedScene _scene = GD.Load<PackedScene>("res://Sprite/TowerShotSprite.tscn");
 	public static TowerShotSprite CreateTowerShotSprite(TowerShot model, TowerSprite towerSprite, EnemySprite targetSprite)
 	{
 		var shot = _scene.Instantiate() as TowerShotSprite;

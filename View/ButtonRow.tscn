@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cv3p4lstm5ns7"]
 
-[ext_resource type="PackedScene" uid="uid://fop0wb4aejle" path="res://Button.tscn" id="1_tyksk"]
+[ext_resource type="PackedScene" uid="uid://fop0wb4aejle" path="res://View/Button.tscn" id="1_tyksk"]
 
 [node name="ButtonRow" type="HBoxContainer"]
 custom_minimum_size = Vector2(200, 50)

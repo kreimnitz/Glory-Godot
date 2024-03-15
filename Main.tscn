@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://ccnfw7hme4k7w"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_botxg"]
-[ext_resource type="PackedScene" uid="uid://datlm1a8l16aa" path="res://UiBar.tscn" id="1_e0vua"]
-[ext_resource type="PackedScene" uid="uid://2543b3vjpe1e" path="res://TopBar.tscn" id="2_m6jq6"]
-[ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://TowerSprite.tscn" id="2_uknex"]
+[ext_resource type="PackedScene" uid="uid://datlm1a8l16aa" path="res://View/UiBar.tscn" id="1_e0vua"]
+[ext_resource type="PackedScene" uid="uid://2543b3vjpe1e" path="res://View/TopBar.tscn" id="2_m6jq6"]
+[ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/TowerSprite.tscn" id="2_uknex"]
 
 [sub_resource type="Curve2D" id="Curve2D_7skea"]
 _data = {

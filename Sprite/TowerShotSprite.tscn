@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://27unx6yhhu7p"]
+
+[ext_resource type="Texture2D" uid="uid://5vceg2es7idw" path="res://Resources/RedDot.bmp" id="1_g65ca"]
+[ext_resource type="Script" path="res://Sprite/TowerShotSprite.cs" id="2_bdfgp"]
+
+[node name="TowerShotSprite" type="Sprite2D"]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_g65ca")
+script = ExtResource("2_bdfgp")

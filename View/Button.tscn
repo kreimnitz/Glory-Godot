@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://fop0wb4aejle"]
 
-[ext_resource type="Texture2D" uid="uid://c7e4nyqeu8ciy" path="res://ButtonIcon.bmp" id="1_e1axg"]
+[ext_resource type="Texture2D" uid="uid://c7e4nyqeu8ciy" path="res://Resources/ButtonIcon.bmp" id="1_hvyt2"]
 
 [node name="MarginContainer" type="MarginContainer"]
 custom_minimum_size = Vector2(60, 60)
@@ -14,4 +14,4 @@ theme_override_constants/margin_bottom = 5
 [node name="TextureButton" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-texture_normal = ExtResource("1_e1axg")
+texture_normal = ExtResource("1_hvyt2")

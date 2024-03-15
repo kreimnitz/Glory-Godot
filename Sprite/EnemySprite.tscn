@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://6lon646mi8wc"]
+
+[ext_resource type="Texture2D" uid="uid://ba8ccx5hnwmy3" path="res://Resources/BlackDot.bmp" id="1_hyhmm"]
+[ext_resource type="Script" path="res://Sprite/EnemySprite.cs" id="2_xoylk"]
+
+[node name="EnemySprite2" type="Sprite2D"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_hyhmm")
+script = ExtResource("2_xoylk")

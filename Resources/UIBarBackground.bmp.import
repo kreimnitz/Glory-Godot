@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dffmuakrxqtc5"
-path="res://.godot/imported/Dot.bmp-3b4340a72db1d269b7631582aa1da32d.ctex"
+uid="uid://do0txehoimol5"
+path="res://.godot/imported/UIBarBackground.bmp-c2e05e7780290bf047b388fa2c281626.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Dot.bmp"
-dest_files=["res://.godot/imported/Dot.bmp-3b4340a72db1d269b7631582aa1da32d.ctex"]
+source_file="res://Resources/UIBarBackground.bmp"
+dest_files=["res://.godot/imported/UIBarBackground.bmp-c2e05e7780290bf047b388fa2c281626.ctex"]
 
 [params]
 

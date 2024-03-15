@@ -11,7 +11,7 @@ public partial class EnemySprite : Sprite2D
 
 	public Enemy Model { get; private set; }
 
-	private static PackedScene _scene = GD.Load<PackedScene>("res://EnemySprite.tscn");
+	private static PackedScene _scene = GD.Load<PackedScene>("res://Sprite/EnemySprite.tscn");
 	public static EnemySprite CreateEnemy(Enemy model, Path2D path)
 	{
 		var enemy = _scene.Instantiate() as EnemySprite;

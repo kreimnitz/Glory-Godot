@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dglf173oay0qw"]
 
-[ext_resource type="PackedScene" uid="uid://cv3p4lstm5ns7" path="res://ButtonRow.tscn" id="1_to6h8"]
+[ext_resource type="PackedScene" uid="uid://cv3p4lstm5ns7" path="res://View/ButtonRow.tscn" id="1_to6h8"]
 
 [node name="ButtonGroup" type="VBoxContainer"]
 offset_right = 200.0

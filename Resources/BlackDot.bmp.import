@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba8ccx5hnwmy3"
-path="res://.godot/imported/BlackDot.bmp-4241e965b3188e09fe6c7c45b1a60406.ctex"
+path="res://.godot/imported/BlackDot.bmp-012cdae5dc40d4ecf97e890131848605.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BlackDot.bmp"
-dest_files=["res://.godot/imported/BlackDot.bmp-4241e965b3188e09fe6c7c45b1a60406.ctex"]
+source_file="res://Resources/BlackDot.bmp"
+dest_files=["res://.godot/imported/BlackDot.bmp-012cdae5dc40d4ecf97e890131848605.ctex"]
 
 [params]
 
