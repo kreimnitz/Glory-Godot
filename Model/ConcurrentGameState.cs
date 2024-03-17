@@ -1,131 +1,115 @@
-using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using ProtoBuf;
+using System.Timers;
+using Utilities.Comms;
 
-[ProtoContract]
 public class ConcurrentGameState
 {
-    private object _lock = new();
-
+    private const int LoopRateMs = 4;
+    private Timer _loopTimer = new(LoopRateMs);
+    private ServerMessageTransmitter _serverMessenger;
+    private ActionQueue _actionQueue = new();
     private Tower Tower { get; set; } =  new Tower();
 
-    [ProtoMember(1)]
-    public Player Player { get; set; } = new Player();
+    private Player _player = new();
 
-    [ProtoMember(2)]
-    public List<Enemy> Enemies { get; } =  new List<Enemy>();
+    private List<Enemy> _enemies = new();
 
-    [ProtoMember(3)]
-    public List<TowerShot> TowerShots { get; } = new List<TowerShot>();
+    private List<TowerShot> _towerShots = new();
+
+    public ConcurrentGameState()
+    {
+    }
+
+    public ConcurrentGameState(ServerMessageTransmitter serverMessenger)
+    {
+        _serverMessenger = serverMessenger;
+        _loopTimer.Elapsed += (s, a) => DoLoop(a);
+    }
+
+    public void Start()
+    {
+        _loopTimer.Start();
+    }
+
+    private void DoLoop(ElapsedEventArgs a)
+    {
+        _actionQueue.ExecuteActions();
+        UpdateProgress();
+        CheckLifetimes();
+        CheckForNewShot();
+        SendGameStateMessage();
+    }
+
+    private void SendGameStateMessage()
+    {
+        var messageData = SerializationUtilities.ToByteArray(this);
+        var message = new Message(0, messageData);
+        _serverMessenger.SendMessage(message, 0);
+    }
 
     public void HandleClientRequest(ClientRequests request)
     {
-        lock (_lock)
+        switch (request)
         {
-            switch (request)
-            {
-                case ClientRequests.AddFollower:
-                    HandleAddFollowerRequest();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    public void HandleAddFollowerRequest()
-    {
-        if (Player.Glory < Player.FollowerCost)
-        {
-            return;
-        }
-        
-        Player.Glory -= Player.FollowerCost;
-        var action = new DelayedAction(() => AddFollower(), Player.FollowerDelayMs);
-        action.Start();
-    }
-
-    private void AddFollower()
-    {
-        lock (_lock)
-        {
-            Player.FollowerCount += 1;
+            case ClientRequests.AddFollower:
+                _player.HandleAddFollowerRequest();
+                break;
+            default:
+                break;
         }
     }
 
     public void AddEnemy(Enemy enemy)
     {
-        lock (_lock)
-        {
-            Enemies.Add(enemy);
-        }
+        _enemies.Add(enemy);
     }
 
     public void UpdateProgress()
     {
-        lock (_lock)
+        foreach (var enemy in _enemies)
         {
-            foreach (var enemy in Enemies)
-            {
-                enemy.UpdateProgressRatio();
-            }
-            foreach (var towerShot in TowerShots)
-            {
-                towerShot.UpdateProgressRatio();
-            }
+            enemy.DoLoop();
+        }
+        foreach (var towerShot in _towerShots)
+        {
+            towerShot.DoLoop();
         }
     }
 
     public void CheckForNewShot()
     {
-        lock (_lock)
+        var shot = Tower.CheckForNewShot(_enemies);
+        if (shot is not null)
         {
-            var shot = Tower.CheckForNewShot(Enemies);
-            if (shot is not null)
-            {
-                TowerShots.Add(shot);
-            }
-        }
-    }
-
-    public void ApplyIncome()
-    {
-        lock (_lock)
-        {
-            Player.ApplyIncome();
+            _towerShots.Add(shot);
         }
     }
 
     public void CheckLifetimes()
     {
-        lock (_lock)
+        int index = 0;
+        while (index < _enemies.Count)
         {
-            int index = 0;
-            while (index < Enemies.Count)
+            if (_enemies[0].Info.ProgressRatio >= 1)
             {
-                if (Enemies[0].ProgressRatio >= 1)
-                {
-                    Enemies.RemoveAt(0);
-                }
-                else
-                {
-                    index++;
-                }
+                _enemies.RemoveAt(0);
             }
-
-            index = 0;
-            while (index < TowerShots.Count)
+            else
             {
-                if (TowerShots[0].ProgressRatio >= 1)
-                {
-                    TowerShots.RemoveAt(0);
-                }
-                else
-                {
-                    index++;
-                }
+                index++;
+            }
+        }
+
+        index = 0;
+        while (index < _towerShots.Count)
+        {
+            if (_towerShots[0].Info.ProgressRatio >= 1)
+            {
+                _towerShots.RemoveAt(0);
+            }
+            else
+            {
+                index++;
             }
         }
     }

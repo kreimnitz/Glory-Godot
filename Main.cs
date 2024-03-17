@@ -44,7 +44,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
     }
 
     private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();
-    private EnemySprite CreateEnemySprite(Enemy model)
+    private EnemySprite CreateEnemySprite(EnemyInfo model)
     {
 		if (_hiddenEnemies.TryDequeue(out EnemySprite toRecycle))
 		{
@@ -74,7 +74,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
     {
 		if (message.MessageTypeId == 0)
 		{
-			var serverGameState = SerializationUtilities.FromByteArray<ConcurrentGameState>(message.Data);
+			var serverGameState = SerializationUtilities.FromByteArray<GameStateInfo>(message.Data);
 			var updateInfo = _gameState.UpdateFrom(serverGameState);
 			_actions.Enqueue(() => CreateSpritesFromUpdate(updateInfo));
 		}

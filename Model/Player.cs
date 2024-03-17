@@ -1,31 +1,44 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using ProtoBuf;
+using System.Collections.Concurrent;
 
-[ProtoContract]
 public class Player
 {
-    public const int IncomePerFollower = 50;
-    public const int FollowerCost = 500;
-    public const int FollowerDelayMs = 3000;
+    public const int StartingGlory = 0;
+    public const int StartingFollowerCount = 10;
+    public const int IncomePerFollower = 1;
+    public const int FollowerCost = 50;
+    public const int FollowerTrainDuration = 10000;
+    public const int IncomeTimerMs = 1000;
 
-    public Queue<DelayedAction> AddFollowersQueue { get; } = new();
+    public int Glory { get; set; } = StartingGlory;
+    public int FollowerCount { get; set; } = StartingFollowerCount;
+    public ConcurrentQueue<DelayedAction> InProgressQueue { get; } = new();
 
-    [ProtoMember(1)]
-    public int Glory { get; set; } = 0;
-
-    [ProtoMember(2)]
-    public int FollowerCount { get; set; } = 1;
-
-    public void UpdateFrom(Player p)
+    public void DoLoop()
     {
-        Glory = p.Glory;
-        FollowerCount = p.FollowerCount;
+        ApplyIncome();
+        if (InProgressQueue.TryPeek(out DelayedAction delayedAction) && delayedAction.Ready)
+        {
+            if (InProgressQueue.TryDequeue(out delayedAction))
+            {
+                delayedAction.Action();
+            }
+        }
     }
 
-    public void ApplyIncome()
+    private void ApplyIncome()
     {
         Glory += FollowerCount * IncomePerFollower;
+    }
+
+    public void HandleAddFollowerRequest()
+    {
+        if (Glory < FollowerCost)
+        {
+            return;
+        }
+
+        Glory -= FollowerCost;
+        var delayedAction = new DelayedAction(() => FollowerCount++, FollowerTrainDuration);
+        InProgressQueue.Enqueue(delayedAction);
     }
 }

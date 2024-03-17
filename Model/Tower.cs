@@ -20,8 +20,8 @@ public class Tower
             return null;
         }
 
-        var closestEnemy = enemies.OrderByDescending(e => e.ProgressRatio).First();
-        if (closestEnemy.ProgressRatio < .5)
+        var closestEnemy = enemies.OrderByDescending(e => e.Info.ProgressRatio).First();
+        if (closestEnemy.Info.ProgressRatio < .5)
         {
             return null;
         }

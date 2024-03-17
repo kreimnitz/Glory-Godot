@@ -4,13 +4,13 @@ using System.Linq;
 
 public class ClientGameState
 {
-    public Player Player { get; set; } = new Player();
+    public PlayerInfo Player { get; set; } = new();
 
-    public Dictionary<Guid, Enemy> Enemies { get; } = new();
+    public Dictionary<Guid, EnemyInfo> Enemies { get; } = new();
 
-    public Dictionary<Guid, TowerShot> TowerShots { get; } = new();
+    public Dictionary<Guid, TowerShotInfo> TowerShots { get; } = new();
 
-    public GameStateUpdateInfo UpdateFrom(ConcurrentGameState serverGameState)
+    public GameStateUpdateInfo UpdateFrom(GameStateInfo serverGameState)
     {
         var updateInfo = new GameStateUpdateInfo();
         Player.UpdateFrom(serverGameState.Player);
@@ -20,13 +20,13 @@ public class ClientGameState
         return updateInfo;
     }
 
-    private (List<Enemy> NewEnemies, List<Enemy> RemovedEnemies) UpdateEnemies(ConcurrentGameState serverGameState)
+    private (List<EnemyInfo> NewEnemies, List<EnemyInfo> RemovedEnemies) UpdateEnemies(GameStateInfo serverGameState)
     {
-        var newEnemies = new List<Enemy>();
-        var removedEnemies = new List<Enemy>();
+        var newEnemies = new List<EnemyInfo>();
+        var removedEnemies = new List<EnemyInfo>();
         foreach (var serverEnemy in serverGameState.Enemies)
         {
-            if (Enemies.TryGetValue(serverEnemy.Id, out Enemy matchingEnemy))
+            if (Enemies.TryGetValue(serverEnemy.Id, out EnemyInfo matchingEnemy))
             {
                 matchingEnemy.UpdateFrom(serverEnemy);
             }
@@ -51,13 +51,13 @@ public class ClientGameState
         return (newEnemies, removedEnemies);
     }
 
-    private (List<TowerShot> NewShots, List<TowerShot> RemovedShots) UpdateTowerShots(ConcurrentGameState serverGameState)
+    private (List<TowerShotInfo> NewShots, List<TowerShotInfo> RemovedShots) UpdateTowerShots(GameStateInfo serverGameState)
     {
-        var newTowerShots = new List<TowerShot>();
-        var removedTowerShots = new List<TowerShot>();
+        var newTowerShots = new List<TowerShotInfo>();
+        var removedTowerShots = new List<TowerShotInfo>();
         foreach (var serverTowerShot in serverGameState.TowerShots)
         {
-            if (TowerShots.TryGetValue(serverTowerShot.Id, out TowerShot matchingTowerShot))
+            if (TowerShots.TryGetValue(serverTowerShot.Id, out TowerShotInfo matchingTowerShot))
             {
                 matchingTowerShot.UpdateFrom(serverTowerShot);
             }
@@ -85,8 +85,8 @@ public class ClientGameState
 
 public class GameStateUpdateInfo
 {
-    public List<Enemy> NewEnemies { get; set; } = new();
-    public List<Enemy> RemovedEnemies { get; set; } = new();
-    public List<TowerShot> NewTowerShots { get; set; } = new();
-    public List<TowerShot> RemovedTowerShots { get; set; } = new();
+    public List<EnemyInfo> NewEnemies { get; set; } = new();
+    public List<EnemyInfo> RemovedEnemies { get; set; } = new();
+    public List<TowerShotInfo> NewTowerShots { get; set; } = new();
+    public List<TowerShotInfo> RemovedTowerShots { get; set; } = new();
 }

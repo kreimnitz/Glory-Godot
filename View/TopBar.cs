@@ -9,7 +9,7 @@ public partial class TopBar : Control
 	private Label _followersLabel;
 	private const string FollowersLabelPrefix = "Followers: ";
 
-	public Player Player { get; set; }
+	public PlayerInfo Player { get; set; }
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -17,7 +17,7 @@ public partial class TopBar : Control
 	{
 		_gloryLabel = GetNode<Label>("GloryLabel");
 		_followersLabel = GetNode<Label>("FollowersLabel");
-		Player = new Player();
+		Player = new();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

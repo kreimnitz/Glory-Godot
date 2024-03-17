@@ -1,31 +1,19 @@
 using System;
-using ProtoBuf;
 
-[ProtoContract]
 public class Enemy
 {
     private int _durationMs = 5000;
     private DateTime _creationTime;
 
-    [ProtoMember(1)]
-    public Guid Id { get; }
-
-    [ProtoMember(2)]
-    public double ProgressRatio { get; private set; }
+    public EnemyInfo Info { get; set; } = new();
 
     public Enemy()
     {
         _creationTime = DateTime.UtcNow;
-        Id = IdGenerator.Generate();
     }
 
-    public void UpdateProgressRatio()
+    public void DoLoop()
     {
-        ProgressRatio = (DateTime.UtcNow - _creationTime).TotalMilliseconds / _durationMs;
-    }
-
-    public void UpdateFrom(Enemy other)
-    {
-        ProgressRatio = other.ProgressRatio;
+        Info.ProgressRatio = (DateTime.UtcNow - _creationTime).TotalMilliseconds / _durationMs;
     }
 }
