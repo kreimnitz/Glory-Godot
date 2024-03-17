@@ -14,6 +14,6 @@ public class Enemy
 
     public void DoLoop()
     {
-        Info.ProgressRatio = (DateTime.UtcNow - _creationTime).TotalMilliseconds / _durationMs;
+        Info.ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
     }
 }

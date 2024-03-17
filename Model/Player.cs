@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Linq;
+using System.Timers;
 
 public class Player
 {
@@ -9,36 +11,42 @@ public class Player
     public const int FollowerTrainDuration = 10000;
     public const int IncomeTimerMs = 1000;
 
-    public int Glory { get; set; } = StartingGlory;
-    public int FollowerCount { get; set; } = StartingFollowerCount;
-    public ConcurrentQueue<DelayedAction> InProgressQueue { get; } = new();
+    private ActionQueue _actionQueue = new();
+    private Timer _incomeTimer = new(IncomeTimerMs);
+
+    public DelayedActionQueue InProgressQueue { get; } = new();
+
+    public PlayerInfo Info { get; } = new();
+
+    public Player()
+    {
+        Info.Glory = StartingGlory;
+        Info.FollowerCount = StartingFollowerCount;
+        _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(() => ApplyIncome());
+        _incomeTimer.Start();
+    }
 
     public void DoLoop()
     {
-        ApplyIncome();
-        if (InProgressQueue.TryPeek(out DelayedAction delayedAction) && delayedAction.Ready)
-        {
-            if (InProgressQueue.TryDequeue(out delayedAction))
-            {
-                delayedAction.Action();
-            }
-        }
+        _actionQueue.ExecuteActions();
+        InProgressQueue.ApplyNextActionIfReady();
+        Info.TaskQueue = InProgressQueue.Actions.Select(da => da.ToProgressItem()).ToList();
     }
 
     private void ApplyIncome()
     {
-        Glory += FollowerCount * IncomePerFollower;
+        Info.Glory += Info.FollowerCount * IncomePerFollower;
     }
 
     public void HandleAddFollowerRequest()
     {
-        if (Glory < FollowerCost)
+        if (Info.Glory < FollowerCost)
         {
             return;
         }
 
-        Glory -= FollowerCost;
-        var delayedAction = new DelayedAction(() => FollowerCount++, FollowerTrainDuration);
+        Info.Glory -= FollowerCost;
+        var delayedAction = new DelayedAction(() => Info.FollowerCount++, FollowerTrainDuration);
         InProgressQueue.Enqueue(delayedAction);
     }
 }

@@ -2,7 +2,7 @@ using System;
 using ProtoBuf;
 
 [ProtoContract]
-public class TowerShotInfo
+public class TowerShotInfo : IUpdateFrom<TowerShotInfo>
 {
     [ProtoMember(1)]
     public Guid Id { get; set; } = IdGenerator.Generate();

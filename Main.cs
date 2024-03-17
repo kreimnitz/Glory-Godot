@@ -82,13 +82,13 @@ public partial class Main : Node, IServerMessageReceivedHandler
 
 	private void CreateSpritesFromUpdate(GameStateUpdateInfo info)
 	{
-		foreach (var enemy in info.NewEnemies)
+		foreach (var enemy in info.EnemyUpdates.Added)
 		{
 			var sprite = CreateEnemySprite(enemy);
 			_enemyIdToSprite[enemy.Id] = sprite;
 		}
 
-		foreach (var enemy in info.RemovedEnemies)
+		foreach (var enemy in info.EnemyUpdates.Removed)
 		{
 			if (_enemyIdToSprite.TryGetValue(enemy.Id, out EnemySprite enemySprite))
 			{
@@ -97,7 +97,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 			}
 		}
 
-		foreach (var towerShot in info.NewTowerShots)
+		foreach (var towerShot in info.TowerShotUpdates.Added)
 		{
 			if (_enemyIdToSprite.TryGetValue(towerShot.TargetId, out EnemySprite enemySprite))
 			{
@@ -105,7 +105,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 			}
 		}
 
-		foreach (var towerShot in info.RemovedTowerShots)
+		foreach (var towerShot in info.TowerShotUpdates.Removed)
 		{
 			_tower.KillTowerShotSprite(towerShot.Id);
 		}

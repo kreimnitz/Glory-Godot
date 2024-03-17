@@ -1,26 +1,34 @@
 using System;
 
-public class DelayedAction : ProgressItem
+public class DelayedAction
 {
     private int _durationMs;
-    private DateTime _creationTime;
+    private DateTime _startTime;
 
     public Action Action { get; }
 
-    public override double ProgressRatio
+    public ProgressItem ToProgressItem()
     { 
-        get
+        return new ProgressItem()
         {
-            return StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
-        }
+            ProgressRatio = StaticUtilites.GetTimeProgressRatio(_startTime, _durationMs)
+        };
     }
 
-    public bool Ready => ProgressRatio > 1.0;
+    public bool Ready => StaticUtilites.GetTimeProgressRatio(_startTime, _durationMs) > 1.0;
 
     public DelayedAction(Action action, int durationMs)
     {
-        _creationTime = DateTime.UtcNow;
+        _startTime = DateTime.MaxValue;
         _durationMs = durationMs;
         Action = action;
+    }
+
+    public void Start()
+    {
+        if (_startTime == DateTime.MaxValue)
+        {
+            _startTime = DateTime.UtcNow;
+        }
     }
 }

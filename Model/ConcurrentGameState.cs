@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Timers;
 using Utilities.Comms;
+using ProtoBuf;
+using System.Linq;
 
 public class ConcurrentGameState
 {
@@ -14,35 +16,57 @@ public class ConcurrentGameState
 
     private List<Enemy> _enemies = new();
 
-    private List<TowerShot> _towerShots = new();
+    private Timer _enemyTimer = new(5000);
 
-    public ConcurrentGameState()
-    {
-    }
+    private List<TowerShot> _towerShots = new();
 
     public ConcurrentGameState(ServerMessageTransmitter serverMessenger)
     {
         _serverMessenger = serverMessenger;
         _loopTimer.Elapsed += (s, a) => DoLoop(a);
+
+        _enemyTimer.Elapsed += (s, a) => _actionQueue.Add(() => AddEnemy(new Enemy()));
     }
 
     public void Start()
     {
         _loopTimer.Start();
+        _enemyTimer.Start();
     }
 
     private void DoLoop(ElapsedEventArgs a)
     {
         _actionQueue.ExecuteActions();
-        UpdateProgress();
+        DoChildrenLoops();
+
         CheckLifetimes();
         CheckForNewShot();
         SendGameStateMessage();
     }
 
+    private void DoChildrenLoops()
+    {
+        _player.DoLoop();
+        foreach (var enemy in _enemies)
+        {
+            enemy.DoLoop();
+        }
+        foreach (var towerShot in _towerShots)
+        {
+            towerShot.DoLoop();
+        }
+    }
+
     private void SendGameStateMessage()
     {
-        var messageData = SerializationUtilities.ToByteArray(this);
+        var gameStateInfo = new GameStateInfo
+        {
+            Player = _player.Info,
+            Enemies = _enemies.Select(e => e.Info).ToList(),
+            TowerShots = _towerShots.Select(t => t.Info).ToList()
+        };
+
+        var messageData = SerializationUtilities.ToByteArray(gameStateInfo);
         var message = new Message(0, messageData);
         _serverMessenger.SendMessage(message, 0);
     }
@@ -62,18 +86,6 @@ public class ConcurrentGameState
     public void AddEnemy(Enemy enemy)
     {
         _enemies.Add(enemy);
-    }
-
-    public void UpdateProgress()
-    {
-        foreach (var enemy in _enemies)
-        {
-            enemy.DoLoop();
-        }
-        foreach (var towerShot in _towerShots)
-        {
-            towerShot.DoLoop();
-        }
     }
 
     public void CheckForNewShot()
@@ -99,11 +111,11 @@ public class ConcurrentGameState
                 index++;
             }
         }
-
+        
         index = 0;
         while (index < _towerShots.Count)
         {
-            if (_towerShots[0].Info.ProgressRatio >= 1)
+            if (_towerShots[0].IsComplete)
             {
                 _towerShots.RemoveAt(0);
             }

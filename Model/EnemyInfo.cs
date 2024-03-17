@@ -2,7 +2,7 @@ using System;
 using ProtoBuf;
 
 [ProtoContract]
-public class EnemyInfo
+public class EnemyInfo : IUpdateFrom<EnemyInfo>
 {
     [ProtoMember(1)]
     public Guid Id { get; set; } = IdGenerator.Generate();
