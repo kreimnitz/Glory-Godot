@@ -6,10 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/TowerSprite.tscn" id="2_uknex"]
 
 [sub_resource type="Curve2D" id="Curve2D_7skea"]
+bake_interval = 1.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 1040, 414, 0, 0, 0, 0, 564, 414, 0, 0, 0, 0, 272, 414, 0, 0, 0, 0, 272, 208, 0, 0, 0, 0, 404, 208, 0, 0, 0, 0, 404, 294)
+"points": PackedVector2Array(0, 0, 0, 0, 1050, 450, 0, 0, 0, 0, 200, 450, 0, 0, 0, 0, 200, 150, 0, 0, 0, 0, 400, 150, 0, 0, 0, 0, 400, 300)
 }
-point_count = 6
+point_count = 5
 
 [node name="Main" type="Node"]
 script = ExtResource("1_botxg")
@@ -19,7 +20,7 @@ script = ExtResource("1_botxg")
 [node name="BottomBar" parent="." instance=ExtResource("1_e0vua")]
 
 [node name="TowerSprite" parent="." instance=ExtResource("2_uknex")]
-position = Vector2(404, 295)
+position = Vector2(400, 300)
 
 [node name="EnemyPath" type="Path2D" parent="."]
 curve = SubResource("Curve2D_7skea")

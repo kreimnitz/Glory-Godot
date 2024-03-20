@@ -19,6 +19,7 @@ public partial class EnemySprite : Sprite2D
 		enemy.Model = model;
 		var pathFollow = new PathFollow2D();
 		pathFollow.Loop = false;
+		pathFollow.Rotates = true;
 		path.AddChild(pathFollow);
 		enemy._pathFollow = pathFollow;
 		return enemy;

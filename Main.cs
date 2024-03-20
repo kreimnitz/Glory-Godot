@@ -62,7 +62,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 	private ConcurrentQueue<Action> _actions = new ConcurrentQueue<Action>();
 	private void ExecuteActions()
 	{
-        while (_actions.TryDequeue(out Action tempAction)) tempAction();
+		while (_actions.TryDequeue(out Action tempAction)) tempAction();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -71,7 +71,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		ExecuteActions();
 	}
 
-    public void HandleServerMessage(Message message)
+	public void HandleServerMessage(Message message)
     {
 		if (message.MessageTypeId == 0)
 		{

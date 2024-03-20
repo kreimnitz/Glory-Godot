@@ -6,7 +6,8 @@ using System.Linq;
 
 public class ConcurrentGameState
 {
-    private const int LoopRateMs = 4;
+    // shoot for server to update 120 times per second
+    private const double LoopRateMs = 1000 / 120;
     private Timer _loopTimer = new(LoopRateMs);
     private ServerMessageTransmitter _serverMessenger;
     private ActionQueue _actionQueue = new();
