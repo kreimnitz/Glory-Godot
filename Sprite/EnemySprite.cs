@@ -6,6 +6,7 @@ public partial class EnemySprite : Sprite2D
 {
 	private PathFollow2D _pathFollow;
 	private int _speed = 200;
+	private ProgressBar _hpBar;
 
 	public float ProgressRatio => _pathFollow.ProgressRatio;
 
@@ -38,6 +39,8 @@ public partial class EnemySprite : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_hpBar = GetNode<ProgressBar>("HealthBar");
+		_hpBar.MaxValue = Model.HpMax;
 		Position = _pathFollow.Position;
 	}
 
@@ -51,5 +54,7 @@ public partial class EnemySprite : Sprite2D
 
 		_pathFollow.ProgressRatio = (float)Model.ProgressRatio;
 		Position = _pathFollow.Position;
+
+		_hpBar.Value = Model.HpCurrent;
 	}
 }
