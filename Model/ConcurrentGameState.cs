@@ -25,7 +25,15 @@ public class ConcurrentGameState
         _serverMessenger = serverMessenger;
         _loopTimer.Elapsed += (s, a) => DoLoop(a);
 
-        _enemyTimer.Elapsed += (s, a) => _actionQueue.Add(() => AddEnemy(new Enemy()));
+        _enemyTimer.Elapsed += (s, a) => _actionQueue.Add(() => AddEnemy(CreateBasicEnemy()));
+    }
+
+    private Enemy CreateBasicEnemy()
+    {
+        var enemy = new Enemy();
+        enemy.Info.HpMax = 10;
+        enemy.Info.HpCurrent = 10;
+        return enemy;
     }
 
     public void Start()
@@ -102,7 +110,7 @@ public class ConcurrentGameState
         int index = 0;
         while (index < _enemies.Count)
         {
-            if (_enemies[0].Info.ProgressRatio >= 1)
+            if (_enemies[0].IsDead())
             {
                 _enemies.RemoveAt(0);
             }

@@ -35,6 +35,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 
 		_bottomBar = GetNode<UiBar>("BottomBar");
 		_bottomBar.AddFollowerButton.Pressed += TryAddFollower;
+		_bottomBar.ProgressQueueUi.SetPlayerInfo(_gameState.Player);
 	}
 
     private void TryAddFollower()

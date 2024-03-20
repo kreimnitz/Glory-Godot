@@ -4,19 +4,13 @@ public class TowerShot
 {
     private DateTime _creationTime;
     private int _durationMs = 200;
+    private int _damage = 4;
 
-    private bool _complete = false;
-    public bool IsComplete
-    { 
-        get
-        {
-            if (_complete) { return true; }
-            _complete = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs) > 1;
-            return _complete;
-        }
-    }
+    public bool IsComplete => Info.ProgressRatio > 1;
 
     public TowerShotInfo Info { get; } = new();
+
+    public Enemy Target { get; }
 
     public TowerShot()
     {
@@ -26,11 +20,16 @@ public class TowerShot
     public TowerShot(Enemy target)
     {
         _creationTime = DateTime.UtcNow;
+        Target = target;
         Info.TargetId = target.Info.Id;
     }
 
     public void DoLoop()
     {
         Info.ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
+        if (IsComplete)
+        {
+            Target.TakeDamage(_damage);
+        }
     }
 }

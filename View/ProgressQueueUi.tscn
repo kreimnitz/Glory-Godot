@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0l2u6c5f5fx"]
+
+[ext_resource type="Script" path="res://View/ProgressQueueUi.cs" id="1_fnaxl"]
+[ext_resource type="PackedScene" uid="uid://fop0wb4aejle" path="res://View/ButtonContainer.tscn" id="1_khl52"]
+[ext_resource type="Texture2D" uid="uid://c7e4nyqeu8ciy" path="res://Resources/ButtonIcon.bmp" id="2_tqtsb"]
+[ext_resource type="Theme" uid="uid://c8ie148w28pfn" path="res://Themes/ProgressBarTheme.tres" id="2_y3m3l"]
+
+[node name="ProgressQueueUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1100.0
+offset_bottom = -600.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fnaxl")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 275.0
+offset_top = 150.0
+offset_right = 425.0
+offset_bottom = 170.0
+theme = ExtResource("2_y3m3l")
+show_percentage = false
+
+[node name="ButtonContainer0" parent="." instance=ExtResource("1_khl52")]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 115.0
+offset_right = 260.0
+offset_bottom = 175.0
+
+[node name="ButtonContainer1" parent="." instance=ExtResource("1_khl52")]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 185.0
+offset_right = 260.0
+offset_bottom = 245.0
+
+[node name="ButtonContainer2" parent="." instance=ExtResource("1_khl52")]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 185.0
+offset_right = 320.0
+offset_bottom = 245.0
+
+[node name="ButtonContainer3" parent="." instance=ExtResource("1_khl52")]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 185.0
+offset_right = 380.0
+offset_bottom = 245.0
+
+[node name="ButtonContainer4" parent="." instance=ExtResource("1_khl52")]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 185.0
+offset_right = 440.0
+offset_bottom = 245.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 100.0
+offset_right = 155.0
+offset_bottom = 180.0
+texture = ExtResource("2_tqtsb")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 50.0
+offset_right = 300.0
+offset_bottom = 75.0
+text = "Demigod"
+horizontal_alignment = 1

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://2543b3vjpe1e"]
 
 [ext_resource type="Script" path="res://View/TopBar.cs" id="1_fak58"]
-[ext_resource type="LabelSettings" uid="uid://c81ht12l0wsjp" path="res://View/TopBar.tres" id="2_oyax5"]
+[ext_resource type="LabelSettings" uid="uid://c81ht12l0wsjp" path="res://Themes/TopBar.tres" id="2_oyax5"]
 
 [sub_resource type="Theme" id="Theme_shgwj"]
 
