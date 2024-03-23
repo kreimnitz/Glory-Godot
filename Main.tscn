@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://ccnfw7hme4k7w"]
+[gd_scene load_steps=8 format=3 uid="uid://ccnfw7hme4k7w"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_botxg"]
 [ext_resource type="PackedScene" uid="uid://datlm1a8l16aa" path="res://View/UiBar.tscn" id="1_e0vua"]
 [ext_resource type="PackedScene" uid="uid://2543b3vjpe1e" path="res://View/TopBar.tscn" id="2_m6jq6"]
 [ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/TowerSprite.tscn" id="2_uknex"]
+[ext_resource type="PackedScene" uid="uid://bobfwx2afn1v0" path="res://View/ServerWindow.tscn" id="5_t4488"]
+[ext_resource type="PackedScene" uid="uid://fop0wb4aejle" path="res://View/ButtonContainer.tscn" id="6_5px4q"]
 
 [sub_resource type="Curve2D" id="Curve2D_7skea"]
 bake_interval = 1.0
@@ -24,3 +26,16 @@ position = Vector2(400, 300)
 
 [node name="EnemyPath" type="Path2D" parent="."]
 curve = SubResource("Curve2D_7skea")
+
+[node name="ServerWindow" parent="." instance=ExtResource("5_t4488")]
+position = Vector2i(50, 50)
+visible = false
+
+[node name="ServerButtonContainer" parent="." instance=ExtResource("6_5px4q")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_right = 0.0
+offset_bottom = 60.0
+grow_horizontal = 0

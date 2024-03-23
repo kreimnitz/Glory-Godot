@@ -2,15 +2,11 @@ using Godot;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Schema;
 using Utilities.Comms;
 
 public partial class Main : Node, IServerMessageReceivedHandler
 {
-	private GloryServer _server;
-	private ClientMessageTransmitter _client;
-
+	private ServerWindow _serverWindow;
 	private TowerSprite _tower;
 	private Path2D _enemyPath;
 	private TopBar _topBar;
@@ -23,9 +19,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_server = new GloryServer();
 		_gameState = new();
-		_client = new(this);
 
 		_tower = GetNode<TowerSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
@@ -36,12 +30,19 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		_bottomBar = GetNode<UiBar>("BottomBar");
 		_bottomBar.AddFollowerButton.Pressed += TryAddFollower;
 		_bottomBar.ProgressQueueUi.SetPlayerInfo(_gameState.Player);
+
+		_serverWindow = GetNode<ServerWindow>("ServerWindow");
+		_serverWindow.SetClientHandler(this);
+		_serverWindow.Show();
+
+		var serverButton = GetNode<ButtonContainer>("ServerButtonContainer").Button;
+		serverButton.Pressed += _serverWindow.Show;
 	}
 
     private void TryAddFollower()
     {
 		var message = new Message((int)ClientRequests.AddFollower, Array.Empty<byte>());
-        _client.SendMessage(message);
+        _serverWindow.Client.SendMessage(message);
     }
 
     private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();

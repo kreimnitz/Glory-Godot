@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Timers;
 
@@ -18,6 +20,12 @@ public class Player
 
     public PlayerInfo Info { get; } = new();
 
+    public Tower Tower { get; } = new();
+
+    public List<Enemy> Enemies { get; } = new();
+
+    public List<TowerShot> TowerShots { get; } = new();
+
     public Player()
     {
         Info.Glory = StartingGlory;
@@ -31,6 +39,17 @@ public class Player
         _actionQueue.ExecuteActions();
         InProgressQueue.ApplyNextActionIfReady();
         Info.TaskQueue = InProgressQueue.Actions.Select(da => da.ToProgressItem()).ToList();
+        foreach (var enemy in Enemies)
+        {
+            enemy.DoLoop();
+        }
+        foreach (var towerShot in TowerShots)
+        {
+            towerShot.DoLoop();
+        }
+
+        CheckForNewShot();
+        CheckLifetimes();
     }
 
     private void ApplyIncome()
@@ -48,5 +67,51 @@ public class Player
         Info.Glory -= FollowerCost;
         var delayedAction = new DelayedAction(() => Info.FollowerCount++, FollowerTrainDuration);
         InProgressQueue.Enqueue(delayedAction);
+    }
+
+    public void AddEnemy(Enemy enemy)
+    {
+        Enemies.Add(enemy);
+    }
+
+    public void CheckForNewShot()
+    {
+        var shot = Tower.CheckForNewShot(Enemies);
+        if (shot is not null)
+        {
+            TowerShots.Add(shot);
+            Info.TowerShots.Add(shot.Info);
+        }
+    }
+
+    public void CheckLifetimes()
+    {
+        int index = 0;
+        while (index < Enemies.Count)
+        {
+            var enemy = Enemies[0];
+            if (enemy.IsDead())
+            {
+                Enemies.RemoveAt(0);
+                Info.Enemies.Remove(enemy.Info);
+            }
+            else
+            {
+                index++;
+            }
+        }
+
+        index = 0;
+        while (index < TowerShots.Count)
+        {
+            if (TowerShots[0].IsComplete)
+            {
+                TowerShots.RemoveAt(0);
+            }
+            else
+            {
+                index++;
+            }
+        }
     }
 }

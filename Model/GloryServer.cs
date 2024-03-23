@@ -7,16 +7,20 @@ public class GloryServer : IClientMessageRecievedHandler
     private ConcurrentGameState _gameState;
     private ServerMessageTransmitter _serverMessenger;
 
-    public GloryServer()
+    public GloryServer(bool solo)
     {
-        _serverMessenger = new(this);
+        _serverMessenger = new(this, solo);
         _gameState = new(_serverMessenger);
-        _gameState.Start();
     }
 
     public void HandleClientMessage(Message message, int playerId)
     {
         var request = (ClientRequests)message.MessageTypeId;
         _gameState.HandleClientRequest(request);
+    }
+
+    public void StartGame()
+    {
+        _gameState.Start();
     }
 }

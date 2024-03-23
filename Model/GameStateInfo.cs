@@ -5,11 +5,8 @@ using ProtoBuf;
 public class GameStateInfo
 {
     [ProtoMember(1)]
-    public virtual PlayerInfo Player { get; set; }
+    public virtual PlayerInfo Player1Info { get; set; }
 
     [ProtoMember(2)]
-    public virtual List<EnemyInfo> Enemies { get; set; } = new();
-
-    [ProtoMember(3)]
-    public virtual List<TowerShotInfo> TowerShots { get; set; } = new();
+    public virtual PlayerInfo Player2Info { get; set; }
 }

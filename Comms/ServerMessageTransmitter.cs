@@ -7,6 +7,7 @@ namespace Utilities.Comms
 {
     public class ServerMessageTransmitter
     {
+        private bool _isSolo = false;
         private bool _runReceivers = true;
         private Socket _acceptingSocket;
         private TaskCompletionSource<bool> _waitForReady;
@@ -17,8 +18,9 @@ namespace Utilities.Comms
 
         public bool Connected => _waitForReady.Task.IsCompleted;
 
-        public ServerMessageTransmitter(IClientMessageRecievedHandler handler)
+        public ServerMessageTransmitter(IClientMessageRecievedHandler handler, bool isSolo)
         {
+            _isSolo = isSolo;
             _handler = handler;
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
@@ -42,13 +44,17 @@ namespace Utilities.Comms
         {
             _runReceivers = false;
             _communicationSockets[0].Close();
-            _communicationSockets[1].Close();
+            _communicationSockets[1]?.Close();
             _acceptingSocket.Close();
         }
 
         private readonly object _sendLock = new();
         public bool SendMessage(Message message, int playerId)
         {
+            if (playerId != 0 && _isSolo)
+            {
+                return false;
+            }
             lock (_sendLock)
             {
                 var socket = _communicationSockets[playerId];
@@ -74,8 +80,14 @@ namespace Utilities.Comms
             {
                 _communicationSockets[0] = handler;
                 var ignoredTask = StartReceiverAsync(handler, 0);
-                _waitForReady.SetResult(true); // only 1 player for now
-                // _acceptingSocket.BeginAccept(new AsyncCallback(AcceptCallback), _acceptingSocket);
+                if (!_isSolo)
+                {
+                    _acceptingSocket.BeginAccept(new AsyncCallback(AcceptCallback), _acceptingSocket);
+                }
+                else
+                {
+                    _waitForReady.SetResult(true);
+                }
             }
             else
             {

@@ -17,6 +17,12 @@ public class PlayerInfo : IUpdateFrom<PlayerInfo>
     [ProtoMember(4)]
     public virtual List<ProgressItem> TaskQueue { get; set; } = new();
 
+    [ProtoMember(5)]
+    public virtual List<EnemyInfo> Enemies { get; set; } = new();
+
+    [ProtoMember(6)]
+    public virtual List<TowerShotInfo> TowerShots { get; set; } = new();
+
     public void UpdateFrom(PlayerInfo p)
     {
         Glory = p.Glory;
