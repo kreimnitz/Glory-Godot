@@ -46,7 +46,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
     }
 
     private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();
-    private EnemySprite CreateEnemySprite(EnemyInfo model)
+    private EnemySprite CreateEnemySprite(Enemy model)
     {
 		if (_hiddenEnemies.TryDequeue(out EnemySprite toRecycle))
 		{

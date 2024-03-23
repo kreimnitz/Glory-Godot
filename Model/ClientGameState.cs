@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 public class ClientGameState
 {
-    public PlayerInfo Player { get; set; } = new();
+    public Player Player { get; set; } = new();
 
-    public Dictionary<Guid, EnemyInfo> Enemies { get; } = new();
+    public Dictionary<Guid, Enemy> Enemies { get; } = new();
 
-    public Dictionary<Guid, TowerShotInfo> TowerShots { get; } = new();
+    public Dictionary<Guid, TowerShot> TowerShots { get; } = new();
 
     public GameStateUpdateInfo UpdateFrom(GameStateInfo serverGameState)
     {
         var updateInfo = new GameStateUpdateInfo();
-        Player.UpdateFrom(serverGameState.Player);
+        Player.UpdateFrom(serverGameState.PlayerInfo);
 
-        updateInfo.EnemyUpdates = UpdateUtilites.UpdateMany(Enemies, serverGameState.Enemies);
-        updateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany(TowerShots, serverGameState.TowerShots);
+        updateInfo.EnemyUpdates = UpdateUtilites.UpdateMany(Enemies, serverGameState.PlayerInfo.Enemies);
+        updateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany(TowerShots, serverGameState.PlayerInfo.TowerShots);
 
         return updateInfo;
     }
@@ -23,6 +23,6 @@ public class ClientGameState
 
 public class GameStateUpdateInfo
 {
-    public UpdateInfo<EnemyInfo> EnemyUpdates { get; set; } = new();
-    public UpdateInfo<TowerShotInfo> TowerShotUpdates { get; set; } = new();
+    public UpdateInfo<Enemy> EnemyUpdates { get; set; } = new();
+    public UpdateInfo<TowerShot> TowerShotUpdates { get; set; } = new();
 }

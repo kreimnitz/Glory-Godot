@@ -10,7 +10,7 @@ public partial class TowerSprite : Sprite2D
 	private int _cooldownMs = 500;
 
 	private Queue<TowerShotSprite> _hiddenShots = new Queue<TowerShotSprite>();
-	public TowerShotSprite CreateTowerShotSprite(TowerShotInfo towerShot, EnemySprite targetSprite)
+	public TowerShotSprite CreateTowerShotSprite(TowerShot towerShot, EnemySprite targetSprite)
 	{
 		if (_hiddenShots.TryDequeue(out TowerShotSprite toRecycle))
 		{

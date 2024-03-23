@@ -10,10 +10,10 @@ public partial class EnemySprite : Sprite2D
 
 	public float ProgressRatio => _pathFollow.ProgressRatio;
 
-	public EnemyInfo Model { get; private set; }
+	public Enemy Model { get; private set; }
 
 	private static PackedScene _scene = GD.Load<PackedScene>("res://Sprite/EnemySprite.tscn");
-	public static EnemySprite CreateEnemy(EnemyInfo model, Path2D path)
+	public static EnemySprite CreateEnemy(Enemy model, Path2D path)
 	{
 		var enemy = _scene.Instantiate() as EnemySprite;
 		enemy.Model = model;
@@ -31,7 +31,7 @@ public partial class EnemySprite : Sprite2D
 		Model = null;
 	}
 
-	public void Reset(EnemyInfo model)
+	public void Reset(Enemy model)
 	{
 		Model = model;
 		Show();

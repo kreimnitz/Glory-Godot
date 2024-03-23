@@ -9,7 +9,7 @@ public partial class TopBar : Control
 	private Label _followersLabel;
 	private const string FollowersLabelPrefix = "Followers: ";
 
-	public PlayerInfo Player { get; set; }
+	public Player Player { get; set; }
 
 
 	// Called when the node enters the scene tree for the first time.

@@ -1,29 +1,26 @@
 using System;
+using ProtoBuf;
 
-public class Enemy
+[ProtoContract]
+[ProtoInclude(7, typeof(ServerEnemy))]
+public class Enemy : IUpdateFrom<Enemy>
 {
-    private int _durationMs = 5000;
-    private DateTime _creationTime;
+    [ProtoMember(1)]
+    public Guid Id { get; set; } = IdGenerator.Generate();
 
-    public EnemyInfo Info { get; set; } = new();
+    [ProtoMember(2)]
+    public double ProgressRatio { get; set; }
 
-    public Enemy()
+    [ProtoMember(3)]
+    public int HpMax { get; set; }
+
+    [ProtoMember(4)]
+    public int HpCurrent { get; set; }
+
+    public void UpdateFrom(Enemy other)
     {
-        _creationTime = DateTime.UtcNow;
-    }
-
-    public void TakeDamage(int damage)
-    {
-        Info.HpCurrent -= damage;
-    }
-
-    public bool IsDead()
-    {
-        return Info.ProgressRatio > 1 || Info.HpCurrent <= 0;
-    }
-
-    public void DoLoop()
-    {
-        Info.ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
+        ProgressRatio = other.ProgressRatio;
+        HpMax = other.HpMax;
+        HpCurrent = other.HpCurrent;
     }
 }

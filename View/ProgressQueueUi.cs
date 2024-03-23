@@ -4,14 +4,14 @@ using System;
 public partial class ProgressQueueUi : Control
 {
 	private const int ButttonCount = 5;
-	private PlayerInfo _playerInfo = new();
+	private Player _playerInfo = new();
 
 	private ProgressBar _progressBar;
 
 	private TextureRect _mainTexture;
 	private TextureButton[] _buttons = new TextureButton[ButttonCount];
 
-	public void SetPlayerInfo(PlayerInfo playerInfo)
+	public void SetPlayerInfo(Player playerInfo)
 	{
 		_playerInfo = playerInfo;
 	}
@@ -56,7 +56,7 @@ public partial class ProgressQueueUi : Control
 		}
 	}
 
-	public void UpdateFrom(PlayerInfo playerInfo)
+	public void UpdateFrom(Player playerInfo)
 	{
 		_playerInfo.UpdateFrom(playerInfo);
 	}

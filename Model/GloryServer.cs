@@ -10,13 +10,13 @@ public class GloryServer : IClientMessageRecievedHandler
     public GloryServer(bool solo)
     {
         _serverMessenger = new(this, solo);
-        _gameState = new(_serverMessenger);
+        _gameState = new(_serverMessenger, solo);
     }
 
     public void HandleClientMessage(Message message, int playerId)
     {
         var request = (ClientRequests)message.MessageTypeId;
-        _gameState.HandleClientRequest(request);
+        _gameState.HandleClientRequest(request, playerId);
     }
 
     public void StartGame()

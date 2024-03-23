@@ -3,13 +3,13 @@ using Godot;
 public partial class TowerShotSprite : Sprite2D
 {
 	private Vector2 _lastTargetPosition = new();
-	public TowerShotInfo Model { get; private set; }
+	public TowerShot Model { get; private set; }
 
 	public TowerSprite TowerSprite { get; private set; }
 	public EnemySprite TargetSprite { get; private set; }
 
 	private static PackedScene _scene = GD.Load<PackedScene>("res://Sprite/TowerShotSprite.tscn");
-	public static TowerShotSprite CreateTowerShotSprite(TowerShotInfo model, TowerSprite towerSprite, EnemySprite targetSprite)
+	public static TowerShotSprite CreateTowerShotSprite(TowerShot model, TowerSprite towerSprite, EnemySprite targetSprite)
 	{
 		var shot = _scene.Instantiate() as TowerShotSprite;
 		shot.Model = model;
@@ -26,7 +26,7 @@ public partial class TowerShotSprite : Sprite2D
 		Hide();
 	}
 
-	public void Reset(TowerShotInfo towerShot, TowerSprite towerSprite, EnemySprite targetSprite)
+	public void Reset(TowerShot towerShot, TowerSprite towerSprite, EnemySprite targetSprite)
 	{
 		TowerSprite = towerSprite;
 		TargetSprite = targetSprite;

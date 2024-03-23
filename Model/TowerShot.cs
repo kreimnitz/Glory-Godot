@@ -1,35 +1,23 @@
 using System;
+using ProtoBuf;
 
-public class TowerShot
+[ProtoContract]
+[ProtoInclude(7, typeof(ServerTowerShot))]
+public class TowerShot : IUpdateFrom<TowerShot>
 {
-    private DateTime _creationTime;
-    private int _durationMs = 200;
-    private int _damage = 4;
+    [ProtoMember(1)]
+    public Guid Id { get; set; } = IdGenerator.Generate();
 
-    public bool IsComplete => Info.ProgressRatio > 1;
+    [ProtoMember(2)]
+    public double ProgressRatio { get; set; }
 
-    public TowerShotInfo Info { get; } = new();
+    [ProtoMember(3)]
+    public Guid TargetId { get; set; }
 
-    public Enemy Target { get; }
-
-    public TowerShot()
+    public void UpdateFrom(TowerShot other)
     {
-        _creationTime = DateTime.UtcNow;
-    }
-
-    public TowerShot(Enemy target)
-    {
-        _creationTime = DateTime.UtcNow;
-        Target = target;
-        Info.TargetId = target.Info.Id;
-    }
-
-    public void DoLoop()
-    {
-        Info.ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
-        if (IsComplete)
-        {
-            Target.TakeDamage(_damage);
-        }
+        Id = other.Id;
+        ProgressRatio = other.ProgressRatio;
+        TargetId = other.TargetId;
     }
 }
