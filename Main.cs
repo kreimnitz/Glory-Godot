@@ -12,24 +12,23 @@ public partial class Main : Node, IServerMessageReceivedHandler
 	private TopBar _topBar;
 	private UiBar _bottomBar;
 
-	private ClientGameState _gameState;
+	private Player _player;
 
 	private Dictionary<Guid, EnemySprite> _enemyIdToSprite = new();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_gameState = new();
-
+		_player = new();
 		_tower = GetNode<TowerSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
 
 		_topBar = GetNode<TopBar>("TopBar");
-		_topBar.Player = _gameState.Player;
+		_topBar.Player = _player;
 
 		_bottomBar = GetNode<UiBar>("BottomBar");
 		_bottomBar.AddFollowerButton.Pressed += TryAddFollower;
-		_bottomBar.ProgressQueueUi.SetPlayerInfo(_gameState.Player);
+		_bottomBar.ProgressQueueUi.SetTasks(_player.TaskQueue);
 
 		_serverWindow = GetNode<ServerWindow>("ServerWindow");
 		_serverWindow.SetClientHandler(this);
@@ -77,12 +76,11 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		if (message.MessageTypeId == 0)
 		{
 			var serverGameState = SerializationUtilities.FromByteArray<GameStateInfo>(message.Data);
-			var updateInfo = _gameState.UpdateFrom(serverGameState);
+			var updateInfo = _player.UpdateAndGetInfo(serverGameState.PlayerInfo);
 			_actions.Enqueue(() => CreateSpritesFromUpdate(updateInfo));
 		}
     }
-
-	private void CreateSpritesFromUpdate(GameStateUpdateInfo info)
+	private void CreateSpritesFromUpdate(PlayerUpdateInfo info)
 	{
 		foreach (var enemy in info.EnemyUpdates.Added)
 		{

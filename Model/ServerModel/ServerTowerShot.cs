@@ -15,9 +15,10 @@ public class ServerTowerShot : TowerShot
         _creationTime = DateTime.UtcNow;
     }
 
-    public ServerTowerShot(ServerEnemy target)
+    public ServerTowerShot(ServerEnemy target, int damage)
     {
         _creationTime = DateTime.UtcNow;
+        _damage = damage;
         Target = target;
         TargetId = target.Id;
     }

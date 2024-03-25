@@ -1,19 +1,20 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class ProgressQueueUi : Control
 {
 	private const int ButttonCount = 5;
-	private Player _playerInfo = new();
+	private List<ProgressItem> _taskList = new();
 
 	private ProgressBar _progressBar;
 
 	private TextureRect _mainTexture;
 	private TextureButton[] _buttons = new TextureButton[ButttonCount];
 
-	public void SetPlayerInfo(Player playerInfo)
+	public void SetTasks(List<ProgressItem> playerInfo)
 	{
-		_playerInfo = playerInfo;
+		_taskList = playerInfo;
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -35,9 +36,9 @@ public partial class ProgressQueueUi : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (_playerInfo.TaskQueue.Count > 0)
+		if (_taskList.Count > 0)
 		{
-			_progressBar.Value = _playerInfo.TaskQueue[0].ProgressRatio * 100;
+			_progressBar.Value = _taskList[0].ProgressRatio * 100;
 		}
 		else 
 		{
@@ -45,7 +46,7 @@ public partial class ProgressQueueUi : Control
 		}
 		for (int i = 0; i < ButttonCount; i++)
 		{
-			if (i >= _playerInfo.TaskQueue.Count)
+			if (i >= _taskList.Count)
 			{
 				_buttons[i].Disabled = true;
 			}
@@ -54,10 +55,5 @@ public partial class ProgressQueueUi : Control
 				_buttons[i].Disabled = false;
 			}
 		}
-	}
-
-	public void UpdateFrom(Player playerInfo)
-	{
-		_playerInfo.UpdateFrom(playerInfo);
 	}
 }

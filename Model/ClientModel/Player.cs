@@ -26,8 +26,24 @@ public class Player : IUpdateFrom<Player>
 
     public void UpdateFrom(Player p)
     {
+        UpdateAndGetInfo(p);
+    }
+
+    public PlayerUpdateInfo UpdateAndGetInfo(Player p)
+    {
         Glory = p.Glory;
         FollowerCount = p.FollowerCount;
         UpdateUtilites.UpdateMany(TaskQueue, p.TaskQueue);
+
+        PlayerUpdateInfo playerUpdateInfo = new();
+        playerUpdateInfo.EnemyUpdates = UpdateUtilites.UpdateMany(Enemies, p.Enemies);
+        playerUpdateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany(TowerShots, p.TowerShots);
+        return playerUpdateInfo;
     }
+}
+
+public class PlayerUpdateInfo
+{
+    public UpdateInfo<Enemy> EnemyUpdates { get; set; } = new();
+    public UpdateInfo<TowerShot> TowerShotUpdates { get; set; } = new();
 }

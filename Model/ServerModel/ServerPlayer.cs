@@ -27,7 +27,7 @@ public class ServerPlayer : Player
     {
         Glory = StartingGlory;
         FollowerCount = StartingFollowerCount;
-        _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(() => ApplyIncome());
+        _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(ApplyIncome);
         _incomeTimer.Start();
     }
 
