@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c23f1ofnahgy3"]
+
+[ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/TowerSprite.tscn" id="1_0s3xs"]
+[ext_resource type="Script" path="res://View/BaseView.cs" id="1_ywp6l"]
+
+[sub_resource type="Curve2D" id="Curve2D_oaq7p"]
+bake_interval = 1.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 750, 0, 0, 0, 0, 0, 600, 0, 0, 0, 0, 0, 600, 300, 0, 0, 0, 0, 450, 300, 0, 0, 0, 0, 450, 0, 0, 0, 0, 0, 300, 0, 0, 0, 0, 0, 300, 150, 0, 0, 0, 0, 150, 150)
+}
+point_count = 8
+
+[node name="BaseView" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ywp6l")
+
+[node name="EnemyPath" type="Path2D" parent="."]
+position = Vector2(100, 0)
+curve = SubResource("Curve2D_oaq7p")
+
+[node name="TowerSprite" parent="." instance=ExtResource("1_0s3xs")]
+position = Vector2(250, 150)

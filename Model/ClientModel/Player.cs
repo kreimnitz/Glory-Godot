@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ProtoBuf;
 
 [ProtoContract]
-[ProtoInclude(7, typeof(ServerPlayer))]
+[ProtoInclude(500, typeof(ServerPlayer))]
 public class Player : IUpdateFrom<Player>
 {
     [ProtoMember(1)]
@@ -24,6 +24,9 @@ public class Player : IUpdateFrom<Player>
     [ProtoMember(6)]
     public virtual List<TowerShot> TowerShots { get; set; } = new();
 
+    [ProtoMember(7)]
+    public Temple FireTemple { get; set; }
+
     public void UpdateFrom(Player p)
     {
         UpdateAndGetInfo(p);
@@ -33,6 +36,7 @@ public class Player : IUpdateFrom<Player>
     {
         Glory = p.Glory;
         FollowerCount = p.FollowerCount;
+        FireTemple.UpdateFrom(p.FireTemple);
         UpdateUtilites.UpdateMany(TaskQueue, p.TaskQueue);
 
         PlayerUpdateInfo playerUpdateInfo = new();

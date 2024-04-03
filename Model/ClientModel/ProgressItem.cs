@@ -10,8 +10,17 @@ public class ProgressItem : IUpdateFrom<ProgressItem>
     [ProtoMember(2)]
     public double ProgressRatio { get; set; }
 
+    [ProtoMember(3)]
+    public ProgressItemType Type { get; private set; }
+
     public void UpdateFrom(ProgressItem other)
     {
         ProgressRatio = other.ProgressRatio;
     }
+}
+
+public enum ProgressItemType
+{
+    RecruitingFollower = 1,
+    SummonElementalTemple = 2,
 }

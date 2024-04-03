@@ -1,7 +1,7 @@
 using System.Timers;
 using Utilities.Comms;
 
-public class ConcurrentGameState
+public class ServerGameState
 {
     // shoot for server to update 120 times per second
     private const double LoopRateMs = 1000 / 120;
@@ -13,29 +13,19 @@ public class ConcurrentGameState
     private ServerPlayer _player0 = new(0);
     private ServerPlayer _player1 = new(1);
 
-    private Timer _enemyTimer = new(5000);
-
-    public ConcurrentGameState(ServerMessageTransmitter serverMessenger, bool solo)
+    public ServerGameState(ServerMessageTransmitter serverMessenger, bool solo)
     {
         _solo = solo;
         _serverMessenger = serverMessenger;
         _loopTimer.Elapsed += (s, a) => DoLoop(a);
 
-        _enemyTimer.Elapsed += (s, a) => _actionQueue.Add(() => _player0.AddEnemy(CreateBasicEnemy()));
-    }
-
-    private ServerEnemy CreateBasicEnemy()
-    {
-        var enemy = new ServerEnemy();
-        enemy.HpMax = 10;
-        enemy.HpCurrent = 10;
-        return enemy;
+        _player0.OtherPlayer = _player1;
+        _player1.OtherPlayer = _player0;
     }
 
     public void Start()
     {
         _loopTimer.Start();
-        _enemyTimer.Start();
     }
 
     private void DoLoop(ElapsedEventArgs a)
@@ -73,17 +63,17 @@ public class ConcurrentGameState
 
     public void HandleClientRequest(ClientRequests request, int playerId)
     {
+        var player = playerId == 0 ? _player0 : _player1;
         switch (request)
         {
             case ClientRequests.AddFollower:
-                if (playerId == 0)
-                {
-                    _player0.HandleAddFollowerRequest();
-                }
-                else
-                {
-                    _player1.HandleAddFollowerRequest();
-                }
+                player.HandleAddFollowerRequest();
+                break;
+            case ClientRequests.AddFireTemple:
+                player.HandleAddFireTempleRequest();
+                break;
+            case ClientRequests.AddVent:
+                player.HandleAddVentSpawnerRequest();
                 break;
             default:
                 break;

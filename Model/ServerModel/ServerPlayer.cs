@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Timers;
 
 public class ServerPlayer : Player
@@ -8,7 +9,7 @@ public class ServerPlayer : Player
     public const int StartingFollowerCount = 10;
     public const int IncomePerFollower = 1;
     public const int FollowerCost = 50;
-    public const int FollowerTrainDuration = 10000;
+    public const int FollowerTrainDurationMs = 10000;
     public const int IncomeTimerMs = 1000;
 
     private ActionQueue _actionQueue = new();
@@ -22,6 +23,8 @@ public class ServerPlayer : Player
 
     private IEnumerable<ServerEnemy> ServerEnemies => Enemies.Cast<ServerEnemy>();
     private IEnumerable<ServerTowerShot> ServerTowerShots => TowerShots.Cast<ServerTowerShot>();
+
+    public ServerPlayer OtherPlayer { get; set; }
 
     public ServerPlayer()
     {
@@ -67,13 +70,52 @@ public class ServerPlayer : Player
         }
 
         Glory -= FollowerCost;
-        var delayedAction = new DelayedAction(() => FollowerCount++, FollowerTrainDuration);
+        var delayedAction = new DelayedAction(() => FollowerCount++, FollowerTrainDurationMs);
         InProgressQueue.Enqueue(delayedAction);
+    }
+
+    public void HandleAddFireTempleRequest()
+    {
+        if (Glory < ServerTemple.Cost)
+        {
+            return;
+        }
+
+        Glory -= ServerTemple.Cost;
+        var delayedAction = new DelayedAction(() => FireTemple.IsActive = true, ServerTemple.CreateDurationMs);
+        InProgressQueue.Enqueue(delayedAction);
+    }
+
+    public void HandleAddVentSpawnerRequest()
+    {
+        var fireTemple = (ServerTemple)FireTemple;
+        if (!fireTemple.IsActive || Glory < Spawners.VentSpawnerCost)
+        {
+            return;
+        }
+
+        Glory -= Spawners.VentSpawnerCost;
+        var ventSpawner = Spawners.CreateVentSpawner(fireTemple);
+        var delayedAction = new DelayedAction(() => ventSpawner.Activate(), Spawners.VentCreateDurationMs);
+        InProgressQueue.Enqueue(delayedAction);
+    }
+
+    public void HandleSpawnFireImpRequest()
+    {
+        var impSpawner = ((ServerTemple)FireTemple).GetSpawnerForType(EnemyType.FireImp);
+        if (Glory < EnemyUtilites.FireImpCost || !impSpawner.DecrementQueue())
+        {
+            return;
+        }
+
+        Glory -= EnemyUtilites.FireImpCost;
+        var imp = EnemyUtilites.CreateFireImp();
+        AddEnemy(imp);
     }
 
     public void AddEnemy(ServerEnemy enemy)
     {
-        Enemies.Add(enemy);
+        _actionQueue.Add(() => Enemies.Add(enemy));
     }
 
     public void CheckForNewShot()

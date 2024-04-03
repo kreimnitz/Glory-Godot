@@ -4,7 +4,7 @@ using SysTimer = System.Timers.Timer;
 
 public class GloryServer : IClientMessageRecievedHandler
 {
-    private ConcurrentGameState _gameState;
+    private ServerGameState _gameState;
     private ServerMessageTransmitter _serverMessenger;
 
     public GloryServer(bool solo)

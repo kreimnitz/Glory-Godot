@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class ProgressQueueUi : Control
@@ -27,7 +26,7 @@ public partial class ProgressQueueUi : Control
 		for (int i = 0; i < ButttonCount; i++)
 		{
 			_buttons[i] = GetNode<ButtonContainer>("ButtonContainer" + i).Button;
-			_buttons[i].TextureNormal = Resources.FollowerIcon;
+			_buttons[i].TextureNormal = Resources.BlankIcon;
 			_buttons[i].TextureDisabled = Resources.BlankIcon;
 			_buttons[i].Disabled = true;
 		}

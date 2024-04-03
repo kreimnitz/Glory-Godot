@@ -10,6 +10,12 @@ public class ServerEnemy : Enemy
         _creationTime = DateTime.UtcNow;
     }
 
+    public ServerEnemy(int hp) : this()
+    {
+        HpMax = hp;
+        HpCurrent = hp;
+    }
+
     public void TakeDamage(int damage)
     {
         HpCurrent -= damage;

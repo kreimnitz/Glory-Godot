@@ -1,18 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://ccnfw7hme4k7w"]
+[gd_scene load_steps=7 format=3 uid="uid://ccnfw7hme4k7w"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_botxg"]
 [ext_resource type="PackedScene" uid="uid://datlm1a8l16aa" path="res://View/UiBar.tscn" id="1_e0vua"]
 [ext_resource type="PackedScene" uid="uid://2543b3vjpe1e" path="res://View/TopBar.tscn" id="2_m6jq6"]
-[ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/TowerSprite.tscn" id="2_uknex"]
 [ext_resource type="PackedScene" uid="uid://bobfwx2afn1v0" path="res://View/ServerWindow.tscn" id="5_t4488"]
 [ext_resource type="PackedScene" uid="uid://fop0wb4aejle" path="res://View/ButtonContainer.tscn" id="6_5px4q"]
-
-[sub_resource type="Curve2D" id="Curve2D_7skea"]
-bake_interval = 1.0
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 1050, 450, 0, 0, 0, 0, 200, 450, 0, 0, 0, 0, 200, 150, 0, 0, 0, 0, 400, 150, 0, 0, 0, 0, 400, 300)
-}
-point_count = 5
+[ext_resource type="PackedScene" uid="uid://c23f1ofnahgy3" path="res://View/BaseView.tscn" id="6_xru06"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_botxg")
@@ -20,12 +13,6 @@ script = ExtResource("1_botxg")
 [node name="TopBar" parent="." instance=ExtResource("2_m6jq6")]
 
 [node name="BottomBar" parent="." instance=ExtResource("1_e0vua")]
-
-[node name="TowerSprite" parent="." instance=ExtResource("2_uknex")]
-position = Vector2(400, 300)
-
-[node name="EnemyPath" type="Path2D" parent="."]
-curve = SubResource("Curve2D_7skea")
 
 [node name="ServerWindow" parent="." instance=ExtResource("5_t4488")]
 position = Vector2i(50, 50)
@@ -39,3 +26,7 @@ offset_left = -60.0
 offset_right = 0.0
 offset_bottom = 60.0
 grow_horizontal = 0
+
+[node name="BaseView" parent="." instance=ExtResource("6_xru06")]
+offset_top = 150.0
+offset_bottom = 150.0

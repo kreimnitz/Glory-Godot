@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public static class Resources
@@ -59,4 +60,10 @@ public static class Resources
             return _demigodIcon;
         }
     }
+
+    public static readonly Dictionary<ProgressItemType, Texture2D> ProgressItemTextures = new()
+    {
+        { ProgressItemType.RecruitingFollower, FollowerIcon },
+        { ProgressItemType.SummonElementalTemple, BlankIcon }
+    };
 }
