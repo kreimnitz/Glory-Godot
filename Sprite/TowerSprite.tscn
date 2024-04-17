@@ -1,8 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://7sctp4ikh68m"]
+[gd_scene load_steps=4 format=3 uid="uid://7sctp4ikh68m"]
 
 [ext_resource type="Texture2D" uid="uid://5vceg2es7idw" path="res://Resources/RedDot.bmp" id="1_w3j2l"]
 [ext_resource type="Script" path="res://Sprite/TowerSprite.cs" id="2_vvupw"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_2sspp"]
+radius = 25.0799
+
 [node name="TowerSprite" type="Sprite2D"]
 texture = ExtResource("1_w3j2l")
 script = ExtResource("2_vvupw")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_2sspp")

@@ -1,14 +1,32 @@
+using System.Collections.Generic;
 using System.Linq;
 
 public class ServerTemple : Temple
 {
+    public const int StartingFollowerCount = 10;
+    public const int IncomePerFollower = 1;
+    public const int FollowerCost = 50;
+    public const int FollowerTrainDurationMs = 10000;
     public const int CreateDurationMs = 20000;
     public const int Cost = 150;
 
-    public const string FireTempleName = "FireRegion";
-    public ServerTemple(string name)
+    public DelayedActionQueue InProgressQueue { get; } = new();
+
+    public override List<ProgressItem> TaskQueue
     {
-        Name = name;
+        get => InProgressQueue.ToProgressItemList();
+        protected set => base.TaskQueue = value;
+    }
+
+    public void DoLoop()
+    {
+        InProgressQueue.ApplyNextActionIfReady();
+    }
+
+    public void QueueNewFollower()
+    {
+        var delayedAction = new DelayedAction(() => FollowerCount++, FollowerTrainDurationMs);
+        InProgressQueue.Enqueue(delayedAction);
     }
 
     public ServerSpawner GetSpawnerForType(EnemyType enemyType)

@@ -15,8 +15,8 @@ public class GloryServer : IClientMessageRecievedHandler
 
     public void HandleClientMessage(Message message, int playerId)
     {
-        var request = (ClientRequests)message.MessageTypeId;
-        _gameState.HandleClientRequest(request, playerId);
+        var request = (ClientRequestType)message.MessageTypeId;
+        _gameState.HandleClientRequest(request, message.Data, playerId);
     }
 
     public void StartGame()

@@ -1,15 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Timers;
 
 public class ServerPlayer : Player
 {
     public const int StartingGlory = 0;
-    public const int StartingFollowerCount = 10;
-    public const int IncomePerFollower = 1;
-    public const int FollowerCost = 50;
-    public const int FollowerTrainDurationMs = 10000;
     public const int IncomeTimerMs = 1000;
 
     private ActionQueue _actionQueue = new();
@@ -19,17 +14,22 @@ public class ServerPlayer : Player
 
     public DelayedActionQueue InProgressQueue { get; } = new();
 
+    public override List<ProgressItem> TaskQueue
+    { 
+        get => InProgressQueue.ToProgressItemList();
+        protected set => base.TaskQueue = value;
+    }
+
     public Tower Tower { get; } = new();
 
     private IEnumerable<ServerEnemy> ServerEnemies => Enemies.Cast<ServerEnemy>();
     private IEnumerable<ServerTowerShot> ServerTowerShots => TowerShots.Cast<ServerTowerShot>();
 
-    public ServerPlayer OtherPlayer { get; set; }
+    public ServerPlayer Opponent { get; set; }
 
     public ServerPlayer()
     {
         Glory = StartingGlory;
-        FollowerCount = StartingFollowerCount;
         _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(ApplyIncome);
         _incomeTimer.Start();
     }
@@ -43,7 +43,10 @@ public class ServerPlayer : Player
     {
         _actionQueue.ExecuteActions();
         InProgressQueue.ApplyNextActionIfReady();
-        TaskQueue = InProgressQueue.Actions.Select(da => da.ToProgressItem()).ToList();
+        foreach (var temple in Temples)
+        {
+            ((ServerTemple)temple).DoLoop();
+        }
         foreach (var enemy in ServerEnemies)
         {
             enemy.DoLoop();
@@ -59,58 +62,10 @@ public class ServerPlayer : Player
 
     private void ApplyIncome()
     {
-        Glory += FollowerCount * IncomePerFollower;
-    }
-
-    public void HandleAddFollowerRequest()
-    {
-        if (Glory < FollowerCost)
+        for (int i = 0; i < TempleCount; i++)
         {
-            return;
+            Glory += Temples[i].FollowerCount * ServerTemple.IncomePerFollower;
         }
-
-        Glory -= FollowerCost;
-        var delayedAction = new DelayedAction(() => FollowerCount++, FollowerTrainDurationMs);
-        InProgressQueue.Enqueue(delayedAction);
-    }
-
-    public void HandleAddFireTempleRequest()
-    {
-        if (Glory < ServerTemple.Cost)
-        {
-            return;
-        }
-
-        Glory -= ServerTemple.Cost;
-        var delayedAction = new DelayedAction(() => FireTemple.IsActive = true, ServerTemple.CreateDurationMs);
-        InProgressQueue.Enqueue(delayedAction);
-    }
-
-    public void HandleAddVentSpawnerRequest()
-    {
-        var fireTemple = (ServerTemple)FireTemple;
-        if (!fireTemple.IsActive || Glory < Spawners.VentSpawnerCost)
-        {
-            return;
-        }
-
-        Glory -= Spawners.VentSpawnerCost;
-        var ventSpawner = Spawners.CreateVentSpawner(fireTemple);
-        var delayedAction = new DelayedAction(() => ventSpawner.Activate(), Spawners.VentCreateDurationMs);
-        InProgressQueue.Enqueue(delayedAction);
-    }
-
-    public void HandleSpawnFireImpRequest()
-    {
-        var impSpawner = ((ServerTemple)FireTemple).GetSpawnerForType(EnemyType.FireImp);
-        if (Glory < EnemyUtilites.FireImpCost || !impSpawner.DecrementQueue())
-        {
-            return;
-        }
-
-        Glory -= EnemyUtilites.FireImpCost;
-        var imp = EnemyUtilites.CreateFireImp();
-        AddEnemy(imp);
     }
 
     public void AddEnemy(ServerEnemy enemy)

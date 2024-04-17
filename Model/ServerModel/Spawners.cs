@@ -1,10 +1,10 @@
 public static class Spawners
 {
-    public const int VentSpawnerTimerMs = 5000;
-    public const int VentSpawnerCost = 150;
-    public const int VentCreateDurationMs = 10000;
-    public static ServerSpawner CreateVentSpawner(ServerTemple temple)
+    public const int FireImpSpawnerTimerMs = 5000;
+    public const int FireImpUnlockCost = 150;
+    public const int FireImpUnlockDurationMs = 10000;
+    public static ServerSpawner CreateFireImpSpawner()
     {
-        return new ServerSpawner(temple, VentSpawnerTimerMs, EnemyType.FireImp);
+        return new ServerSpawner(FireImpSpawnerTimerMs, EnemyType.FireImp);
     }
 }

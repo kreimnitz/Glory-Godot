@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 public class DelayedActionQueue
 {
@@ -29,5 +30,10 @@ public class DelayedActionQueue
                 }
             }
         }
+    }
+
+    public List<ProgressItem> ToProgressItemList()
+    {
+        return Enumerable.Cast<ProgressItem>(Actions).ToList();
     }
 }

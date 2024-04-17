@@ -6,14 +6,28 @@ public partial class BaseView : Control
 {
 	private TowerSprite _tower;
 	private Path2D _enemyPath;
-
+	private const int TempleCount = 3;
+	private TextureButton[] _templeButtons = new TextureButton[3];
 	private Dictionary<Guid, EnemySprite> _enemyIdToSprite = new();
+
+	public void Initialize(Player player, SelectionManager selectionManager)
+	{
+		for (int i = 0; i < TempleCount; i++)
+		{
+			_templeButtons[i].Pressed += () => selectionManager.SelectTemple(player, i);
+		}
+	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_tower = GetNode<TowerSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
+		for (int i = 0; i < TempleCount; i++)
+		{
+			var templeButton = GetNode<TextureButton>($"Temple{i}");
+			_templeButtons[i] = templeButton;
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

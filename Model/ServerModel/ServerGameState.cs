@@ -12,6 +12,8 @@ public class ServerGameState
     private bool _solo;
     private ServerPlayer _player0 = new(0);
     private ServerPlayer _player1 = new(1);
+    private ClientRequestHandler _player0RequestHandler;
+    private ClientRequestHandler _player1RequestHandler;
 
     public ServerGameState(ServerMessageTransmitter serverMessenger, bool solo)
     {
@@ -19,8 +21,11 @@ public class ServerGameState
         _serverMessenger = serverMessenger;
         _loopTimer.Elapsed += (s, a) => DoLoop(a);
 
-        _player0.OtherPlayer = _player1;
-        _player1.OtherPlayer = _player0;
+        _player0.Opponent = _player1;
+        _player1.Opponent = _player0;
+
+        _player0RequestHandler = new(_player0);
+        _player1RequestHandler = new(_player1);
     }
 
     public void Start()
@@ -61,20 +66,28 @@ public class ServerGameState
         _serverMessenger.SendMessage(message, player.PlayerNumber);
     }
 
-    public void HandleClientRequest(ClientRequests request, int playerId)
+    public void HandleClientRequest(ClientRequestType request, byte[] data, int playerId)
     {
-        var player = playerId == 0 ? _player0 : _player1;
+        var handler = playerId == 0 ? _player0RequestHandler : _player1RequestHandler;
         switch (request)
         {
-            case ClientRequests.AddFollower:
-                player.HandleAddFollowerRequest();
+            case ClientRequestType.AddFollower:
+            {
+                var convertTempleData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
+                handler.HandleAddFollowerRequest(convertTempleData);
                 break;
-            case ClientRequests.AddFireTemple:
-                player.HandleAddFireTempleRequest();
+            }
+            case ClientRequestType.ConvertToFireTemple:
+            {
+                var convertTempleData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
+                handler.HandleConvertToFireTempleRequest(convertTempleData);
                 break;
-            case ClientRequests.AddVent:
-                player.HandleAddVentSpawnerRequest();
+            }
+            case ClientRequestType.UnlockFireImp:
+            {
+                handler.HandleUnlockFireImpRequest();
                 break;
+            }
             default:
                 break;
         }

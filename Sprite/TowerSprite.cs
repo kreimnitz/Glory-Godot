@@ -7,10 +7,11 @@ public partial class TowerSprite : Sprite2D
 	private PackedScene _towerShotScene;
 	private Dictionary<Guid, TowerShotSprite> _idToTowerShotSprite = new();
 
-	private int _cooldownMs = 500;
-
 	private Queue<TowerShotSprite> _hiddenShots = new Queue<TowerShotSprite>();
-	public TowerShotSprite CreateTowerShotSprite(TowerShot towerShot, EnemySprite targetSprite)
+
+    public event EventHandler Selected;
+
+    public TowerShotSprite CreateTowerShotSprite(TowerShot towerShot, EnemySprite targetSprite)
 	{
 		if (_hiddenShots.TryDequeue(out TowerShotSprite toRecycle))
 		{
@@ -38,7 +39,16 @@ public partial class TowerSprite : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
+		var area = GetNode<Area2D>("Area2D");
+		area.InputEvent += HandleInputEvent;
+	}
+
+    private void HandleInputEvent(Node viewport, InputEvent e, long shapeIndex)
+	{
+		if (ViewUtilites.IsLeftMouseRelease(e))
+		{
+			
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

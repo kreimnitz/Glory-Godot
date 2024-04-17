@@ -11,6 +11,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 	private UiBar _bottomBar;
 	private BaseView _baseView;
 	private Player _player;
+	private SelectionManager _selectionManager;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -22,20 +23,20 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		_topBar.Player = _player;
 
 		_bottomBar = GetNode<UiBar>("BottomBar");
-		_bottomBar.AddFollowerButton.Pressed += () => SendMessage(ClientRequests.AddFollower);
-		_bottomBar.AddFireTempleButton.Pressed += () => SendMessage(ClientRequests.AddFireTemple);
-		_bottomBar.AddVentButton.Pressed += () => SendMessage(ClientRequests.AddVent);		
-		_bottomBar.DemigodProgressUi.SetTasks(_player.TaskQueue);
-
+		_bottomBar.ProgressQueueUi.SetTasks(_player.TaskQueue);
+		
 		_serverWindow = GetNode<ServerWindow>("ServerWindow");
 		_serverWindow.SetClientHandler(this);
 		_serverWindow.Show();
 
 		var serverButton = GetNode<ButtonContainer>("ServerButtonContainer").Button;
 		serverButton.Pressed += _serverWindow.Show;
+
+		_selectionManager.Initialize(_bottomBar, _serverWindow.Client);
+		_baseView.Initialize(_player, _selectionManager);
 	}
 
-	private void SendMessage(ClientRequests request)
+	private void SendMessage(ClientRequestType request)
 	{
 		var message = new Message((int)request, Array.Empty<byte>());
 		_serverWindow.Client.SendMessage(message);

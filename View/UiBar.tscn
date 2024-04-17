@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://datlm1a8l16aa"]
+[gd_scene load_steps=7 format=3 uid="uid://datlm1a8l16aa"]
 
 [ext_resource type="Texture2D" uid="uid://do0txehoimol5" path="res://Resources/UIBarBackground.bmp" id="1_3krxh"]
 [ext_resource type="Script" path="res://View/UiBar.cs" id="1_gka31"]
 [ext_resource type="PackedScene" uid="uid://dglf173oay0qw" path="res://View/ButtonGroup.tscn" id="2_nabhb"]
 [ext_resource type="PackedScene" uid="uid://fop0wb4aejle" path="res://View/ButtonContainer.tscn" id="3_2ipvm"]
+[ext_resource type="Script" path="res://View/ButtonGroup.cs" id="4_jfv3x"]
 [ext_resource type="PackedScene" uid="uid://b0l2u6c5f5fx" path="res://View/ProgressQueueUi.tscn" id="5_maoi0"]
 
 [node name="UiBar" type="Control"]
@@ -28,6 +29,7 @@ offset_left = 1207.0
 offset_top = 22.0
 offset_right = 1523.0
 offset_bottom = 274.0
+script = ExtResource("4_jfv3x")
 
 [node name="RecruitFollowerButtonContainer" parent="." instance=ExtResource("3_2ipvm")]
 layout_mode = 0

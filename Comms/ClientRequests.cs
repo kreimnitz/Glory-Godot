@@ -1,12 +1,21 @@
-public enum ClientRequests
+using ProtoBuf;
+
+public enum ClientRequestType
 {
     AddFollower = 1,
 
     UpgradeTowerDamage = 2,
     UpgradeTowerAttackSpeed = 3,
 
-    AddFireTemple = 10,
-    AddVent = 11,
+    ConvertToFireTemple = 10,
 
+    UnlockFireImp = 20,
     SpawnFireImp = 21
+}
+
+[ProtoContract]
+public class TempleIndexData
+{
+    [ProtoMember(1)]
+    public int TempleIndex { get; set; }
 }

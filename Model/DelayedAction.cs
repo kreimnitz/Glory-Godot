@@ -1,18 +1,16 @@
 using System;
 
-public class DelayedAction
+public class DelayedAction : ProgressItem
 {
     private int _durationMs;
     private DateTime _startTime;
 
     public Action Action { get; }
 
-    public ProgressItem ToProgressItem()
+    public override double ProgressRatio
     { 
-        return new ProgressItem()
-        {
-            ProgressRatio = StaticUtilites.GetTimeProgressRatio(_startTime, _durationMs)
-        };
+        get => StaticUtilites.GetTimeProgressRatio(_startTime, _durationMs);
+        protected set => base.ProgressRatio = value; 
     }
 
     public bool Ready => StaticUtilites.GetTimeProgressRatio(_startTime, _durationMs) > 1.0;

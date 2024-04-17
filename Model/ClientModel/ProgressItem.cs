@@ -8,7 +8,7 @@ public class ProgressItem : IUpdateFrom<ProgressItem>
     public Guid Id { get; private set; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
-    public double ProgressRatio { get; set; }
+    public virtual double ProgressRatio { get; protected set; }
 
     [ProtoMember(3)]
     public ProgressItemType Type { get; private set; }

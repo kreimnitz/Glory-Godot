@@ -6,17 +6,16 @@ using ProtoBuf;
 [ProtoInclude(500, typeof(ServerPlayer))]
 public class Player : IUpdateFrom<Player>
 {
+    public const int TempleCount = 3;
+
     [ProtoMember(1)]
     public Guid Id { get; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
     public int Glory { get; set; }
 
-    [ProtoMember(3)]
-    public int FollowerCount { get; set; }
-
     [ProtoMember(4)]
-    public virtual List<ProgressItem> TaskQueue { get; set; } = new();
+    public virtual List<ProgressItem> TaskQueue { get; protected set; } = new();
 
     [ProtoMember(5)]
     public virtual List<Enemy> Enemies { get; set; } = new();
@@ -25,7 +24,10 @@ public class Player : IUpdateFrom<Player>
     public virtual List<TowerShot> TowerShots { get; set; } = new();
 
     [ProtoMember(7)]
-    public Temple FireTemple { get; set; }
+    public Temple[] Temples { get; set; } = new Temple[3];
+
+    [ProtoMember(8)]
+    public PlayerTech Tech { get; set; } = new();
 
     public void UpdateFrom(Player p)
     {
@@ -35,14 +37,25 @@ public class Player : IUpdateFrom<Player>
     public PlayerUpdateInfo UpdateAndGetInfo(Player p)
     {
         Glory = p.Glory;
-        FollowerCount = p.FollowerCount;
-        FireTemple.UpdateFrom(p.FireTemple);
+        UpdateTemples(p.Temples);
         UpdateUtilites.UpdateMany(TaskQueue, p.TaskQueue);
 
         PlayerUpdateInfo playerUpdateInfo = new();
         playerUpdateInfo.EnemyUpdates = UpdateUtilites.UpdateMany(Enemies, p.Enemies);
         playerUpdateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany(TowerShots, p.TowerShots);
         return playerUpdateInfo;
+    }
+
+    private void UpdateTemples(Temple[] otherTemples)
+    {
+        for (int i = 0; i < TempleCount; i++)
+        {
+            if (Temples[i] == null)
+            {
+                continue;
+            }
+            Temples[i].UpdateFrom(otherTemples[i]);
+        }
     }
 }
 
