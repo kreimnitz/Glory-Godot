@@ -50,20 +50,20 @@ public class ServerGameState
         _player1.DoLoop();
     }
 
-    private void SendGameStateMessage(ServerPlayer player)
+    private void SendGameStateMessage(ServerPlayer serverPlayer)
     {
-        if (player == null)
+        if (serverPlayer == null)
         {
             return;
         }
         var gameStateInfo = new GameStateInfo
         {
-            PlayerInfo = player
+            PlayerInfo = serverPlayer.Player
         };
 
         var messageData = SerializationUtilities.ToByteArray(gameStateInfo);
         var message = new Message(0, messageData);
-        _serverMessenger.SendMessage(message, player.PlayerNumber);
+        _serverMessenger.SendMessage(message, serverPlayer.PlayerNumber);
     }
 
     public void HandleClientRequest(ClientRequestType request, byte[] data, int playerId)
@@ -73,19 +73,25 @@ public class ServerGameState
         {
             case ClientRequestType.AddFollower:
             {
-                var convertTempleData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
-                handler.HandleAddFollowerRequest(convertTempleData);
+                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
+                handler.HandleAddFollowerRequest(templeIndexData);
                 break;
             }
             case ClientRequestType.ConvertToFireTemple:
             {
-                var convertTempleData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
-                handler.HandleConvertToFireTempleRequest(convertTempleData);
+                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
+                handler.HandleConvertToFireTempleRequest(templeIndexData);
                 break;
             }
             case ClientRequestType.UnlockFireImp:
             {
                 handler.HandleUnlockFireImpRequest();
+                break;
+            }
+            case ClientRequestType.SpawnFireImp:
+            {
+                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
+                handler.HandleSpawnFireImpRequest(templeIndexData);
                 break;
             }
             default:

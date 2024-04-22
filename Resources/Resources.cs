@@ -61,9 +61,66 @@ public static class Resources
         }
     }
 
+    private const string ImpIconPath = ResourcesPrefix + "ImpIcon.png";
+    private static Texture2D _impIcon;
+    public static Texture2D ImpIcon
+    {
+        get
+        {
+            if (_impIcon is null)
+            {
+                _impIcon = GD.Load<Texture2D>(ImpIconPath);
+            }
+            return _impIcon;
+        }
+    }
+
+    private const string FlameIconPath = ResourcesPrefix + "FlameIcon.png";
+    private static Texture2D _flameIcon;
+    public static Texture2D FlameIcon
+    {
+        get
+        {
+            if (_flameIcon is null)
+            {
+                _flameIcon = GD.Load<Texture2D>(FlameIconPath);
+            }
+            return _flameIcon;
+        }
+    }
+
+    private const string TempleIconPath = ResourcesPrefix + "Temple.png";
+    private static Texture2D _templeIcon;
+    public static Texture2D TempleIcon
+    {
+        get
+        {
+            if (_templeIcon is null)
+            {
+                _templeIcon = GD.Load<Texture2D>(TempleIconPath);
+            }
+            return _templeIcon;
+        }
+    }
+
+    private const string TempleFoundationIconPath = ResourcesPrefix + "TempleFoundation.png";
+    private static Texture2D _templeFoundationIcon;
+    public static Texture2D TempleFoundationIcon
+    {
+        get
+        {
+            if (_templeFoundationIcon is null)
+            {
+                _templeFoundationIcon = GD.Load<Texture2D>(TempleFoundationIconPath);
+            }
+            return _templeFoundationIcon;
+        }
+    }
+
     public static readonly Dictionary<ProgressItemType, Texture2D> ProgressItemTextures = new()
     {
         { ProgressItemType.RecruitingFollower, FollowerIcon },
-        { ProgressItemType.SummonElementalTemple, BlankIcon }
+        { ProgressItemType.ConvertToFireTemple, FlameIcon },
+        { ProgressItemType.UnlockFireImp, ImpIcon }
     };
 }

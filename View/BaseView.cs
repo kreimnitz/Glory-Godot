@@ -4,18 +4,15 @@ using System.Collections.Generic;
 
 public partial class BaseView : Control
 {
+	private Player _player;
 	private TowerSprite _tower;
 	private Path2D _enemyPath;
-	private const int TempleCount = 3;
-	private TextureButton[] _templeButtons = new TextureButton[3];
+	private TempleView[] _templeViews = new TempleView[Player.TempleCount];
 	private Dictionary<Guid, EnemySprite> _enemyIdToSprite = new();
 
-	public void Initialize(Player player, SelectionManager selectionManager)
+	public void Initialize(Player player)
 	{
-		for (int i = 0; i < TempleCount; i++)
-		{
-			_templeButtons[i].Pressed += () => selectionManager.SelectTemple(player, i);
-		}
+		_player = player;
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -23,16 +20,15 @@ public partial class BaseView : Control
 	{
 		_tower = GetNode<TowerSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
-		for (int i = 0; i < TempleCount; i++)
-		{
-			var templeButton = GetNode<TextureButton>($"Temple{i}");
-			_templeButtons[i] = templeButton;
-		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		foreach (var templeView in _templeViews)
+		{
+			templeView?._Process();
+		}
 	}
 
 	private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();
@@ -50,8 +46,13 @@ public partial class BaseView : Control
 		return enemy;
 	}
 
-	public void CreateSpritesFromUpdate(PlayerUpdateInfo info)
+	public void ProcessModelUpdate(PlayerUpdateInfo info)
 	{
+		if (_templeViews[0] is null)
+		{
+			CreateTempleViews();
+		}
+
 		foreach (var enemy in info.EnemyUpdates.Added)
 		{
 			var sprite = CreateEnemySprite(enemy);
@@ -78,6 +79,15 @@ public partial class BaseView : Control
 		foreach (var towerShot in info.TowerShotUpdates.Removed)
 		{
 			_tower.KillTowerShotSprite(towerShot.Id);
+		}
+	}
+
+	private void CreateTempleViews()
+	{
+		for (int i = 0; i < Player.TempleCount; i++)
+		{
+			var templeButton = GetNode<TextureButton>($"Temple{i}");
+			_templeViews[i] = new TempleView(_player.Temples[i], templeButton, _player);
 		}
 	}
 }

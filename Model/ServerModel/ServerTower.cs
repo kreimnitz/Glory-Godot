@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Tower
+public class ServerTower
 {
     private readonly int[] _damageLevels = { 4, 6, 8, 10 };
     private int DamageLevel { get; set; } = 0;
@@ -25,8 +25,8 @@ public class Tower
             return null;
         }
 
-        var closestEnemy = enemies.OrderByDescending(e => e.ProgressRatio).First();
-        if (closestEnemy.ProgressRatio < .5)
+        var closestEnemy = enemies.OrderByDescending(e => e.Enemy.ProgressRatio).First();
+        if (closestEnemy.Enemy.ProgressRatio < .5)
         {
             return null;
         }

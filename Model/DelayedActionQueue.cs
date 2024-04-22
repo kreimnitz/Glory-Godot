@@ -34,6 +34,6 @@ public class DelayedActionQueue
 
     public List<ProgressItem> ToProgressItemList()
     {
-        return Enumerable.Cast<ProgressItem>(Actions).ToList();
+        return Actions.Select(a => a.GetProgressItem()).ToList();
     }
 }

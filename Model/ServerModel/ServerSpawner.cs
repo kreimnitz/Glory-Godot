@@ -1,9 +1,11 @@
 using System;
 using System.Timers;
 
-public class ServerSpawner : Spawner
+public class ServerSpawner
 {
     private Timer _spawnTimer;
+
+    public Spawner Spawner { get; } = new();
 
     public ServerSpawner()
     {
@@ -16,7 +18,7 @@ public class ServerSpawner : Spawner
         _spawnTimer = new Timer(timerMs);
         _spawnTimer.AutoReset = true;
         _spawnTimer.Elapsed += (s, a) => IncrementQueue();
-        EnemyType = enemyType;
+        Spawner.EnemyType = enemyType;
     }
 
     private object _queueLock = new();
@@ -24,10 +26,10 @@ public class ServerSpawner : Spawner
     {
         lock (_queueLock)
         {
-            if (CurrentValue < Max)
+            if (Spawner.CurrentValue < Spawner.Max)
             {
-                CurrentValue++;
-                if (CurrentValue == Max)
+                Spawner.CurrentValue++;
+                if (Spawner.CurrentValue == Spawner.Max)
                 {
                     _spawnTimer.Stop();
                 }
@@ -39,9 +41,9 @@ public class ServerSpawner : Spawner
     {
         lock (_queueLock)
         {
-            if (CurrentValue > 0)
+            if (Spawner.CurrentValue > 0)
             {
-                CurrentValue--;
+                Spawner.CurrentValue--;
                 _spawnTimer.Start();
                 return true;
             }

@@ -2,60 +2,61 @@ using System.Linq;
 
 public class ClientRequestHandler
 {
-    private ServerPlayer _player;
+    private ServerPlayer _serverPlayer;
+
     public ClientRequestHandler(ServerPlayer player)
     {
-        _player = player;
+        _serverPlayer = player;
     }
 
     public void HandleAddFollowerRequest(TempleIndexData data)
     {
-        if (_player.Glory < ServerTemple.FollowerCost)
+        if (_serverPlayer.Player.Glory < ServerTemple.FollowerCost)
         {
             return;
         }
 
-        _player.Glory -= ServerTemple.FollowerCost;
-        var temple = (ServerTemple)_player.Temples[data.TempleIndex];
-        temple.QueueNewFollower();
+        _serverPlayer.Player.Glory -= ServerTemple.FollowerCost;
+        _serverPlayer.ServerTemples[data.TempleIndex].QueueNewFollower();
     }
 
     public void HandleConvertToFireTempleRequest(TempleIndexData data)
     {
-        if (_player.Glory < ServerTemple.Cost)
+        if (_serverPlayer.Player.Glory < ServerTemple.BuildCost)
         {
             return;
         }
 
-        _player.Glory -= ServerTemple.Cost;
-
-        var delayedAction = new DelayedAction(() => _player.Temples[data.TempleIndex].Element = Element.Fire, ServerTemple.CreateDurationMs);
-        _player.InProgressQueue.Enqueue(delayedAction);
+        _serverPlayer.Player.Glory -= ServerTemple.BuildCost;
+        _serverPlayer.ServerTemples[data.TempleIndex].QueueConvertToElement(Element.Fire);
     }
 
     public void HandleUnlockFireImpRequest()
     {
-        var validTemples = _player.Temples.Where(t => t.IsActive && t.Element == Element.Fire);
-        if (!validTemples.Any() || _player.Glory < Spawners.FireImpUnlockCost)
+        var validTemples = _serverPlayer.Player.Temples.Where(t => t.IsActive && t.Element == Element.Fire);
+        if (!validTemples.Any() || _serverPlayer.Player.Glory < Spawners.FireImpUnlockCost)
         {
             return;
         }
 
         var fireImpSpawner = Spawners.CreateFireImpSpawner();
-        var delayedAction = new DelayedAction(() => fireImpSpawner.Activate(), Spawners.FireImpUnlockDurationMs);
-        _player.InProgressQueue.Enqueue(delayedAction);
+        var delayedAction = new DelayedAction(
+            ProgressItemType.UnlockFireImp,
+            () => fireImpSpawner.Activate(),
+            Spawners.FireImpUnlockDurationMs);
+        _serverPlayer.InProgressQueue.Enqueue(delayedAction);
     }
 
-    public void HandleSpawnFireImpRequest()
+    public void HandleSpawnFireImpRequest(TempleIndexData data)
     {
-        var impSpawner = ((ServerTemple)_player.Temples[0]).GetSpawnerForType(EnemyType.FireImp);
-        if (_player.Glory < EnemyUtilites.FireImpCost || !impSpawner.DecrementQueue())
+        var impSpawner = _serverPlayer.ServerTemples[data.TempleIndex].GetSpawnerForType(EnemyType.FireImp);
+        if (_serverPlayer.Player.Glory < EnemyUtilites.FireImpCost || !impSpawner.DecrementQueue())
         {
             return;
         }
 
-        _player.Glory -= EnemyUtilites.FireImpCost;
+        _serverPlayer.Player.Glory -= EnemyUtilites.FireImpCost;
         var imp = EnemyUtilites.CreateFireImp();
-        _player.Opponent.AddEnemy(imp);
+        _serverPlayer.Opponent.AddEnemy(imp);
     }
 }

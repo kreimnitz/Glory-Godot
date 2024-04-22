@@ -1,31 +1,28 @@
 using System;
 
-public class ServerTowerShot : TowerShot
+public class ServerTowerShot
 {
     private DateTime _creationTime;
     private int _durationMs = 200;
     private int _damage = 4;
 
-    public bool IsComplete => ProgressRatio > 1;
+    public bool IsComplete => TowerShot.ProgressRatio > 1;
 
     public ServerEnemy Target { get; }
 
-    public ServerTowerShot()
-    {
-        _creationTime = DateTime.UtcNow;
-    }
+    public TowerShot TowerShot { get; private set; } = new();
 
     public ServerTowerShot(ServerEnemy target, int damage)
     {
         _creationTime = DateTime.UtcNow;
         _damage = damage;
         Target = target;
-        TargetId = target.Id;
+        TowerShot.TargetId = target.Enemy.Id;
     }
 
     public void DoLoop()
     {
-        ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
+        TowerShot.ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
         if (IsComplete)
         {
             Target.TakeDamage(_damage);

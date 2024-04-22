@@ -13,9 +13,13 @@ public partial class QueueButtonContainer : Control
 		} 
 		set
 		{
+			if (value == null)
+			{
+				_label.Hide();
+			}
 			var lastValue = _queueInfo;
 			_queueInfo = value;
-			if (lastValue == null)
+			if (lastValue is null && value is not null)
 			{
 				_label.Show();
 			}

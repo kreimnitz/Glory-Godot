@@ -2,7 +2,7 @@ using System;
 using ProtoBuf;
 
 [ProtoContract]
-[ProtoInclude(7, typeof(ServerTowerShot))]
+[ProtoInclude(500, typeof(ServerTowerShot))]
 public class TowerShot : IUpdateFrom<TowerShot>
 {
     [ProtoMember(1)]

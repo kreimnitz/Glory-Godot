@@ -9,8 +9,6 @@ public partial class TowerSprite : Sprite2D
 
 	private Queue<TowerShotSprite> _hiddenShots = new Queue<TowerShotSprite>();
 
-    public event EventHandler Selected;
-
     public TowerShotSprite CreateTowerShotSprite(TowerShot towerShot, EnemySprite targetSprite)
 	{
 		if (_hiddenShots.TryDequeue(out TowerShotSprite toRecycle))
@@ -47,7 +45,7 @@ public partial class TowerSprite : Sprite2D
 	{
 		if (ViewUtilites.IsLeftMouseRelease(e))
 		{
-			
+			// select tower
 		}
 	}
 

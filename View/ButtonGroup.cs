@@ -7,55 +7,57 @@ public partial class ButtonGroup : VBoxContainer
 	public const int RowCount = 4;
 	public const int ColumnCount = ButtonRow.ButtonCount;
 
-	public void SetContext(IEnumerable<ButtonContext> buttonContexts)
+	private IButtonGroupHandler _handler;
+
+	public void SetHandlerAndVisuals(IButtonGroupHandler handler, IEnumerable<ButtonContext> buttonContexts)
 	{
 		Clear();
+		_handler = handler;
 		foreach (var c in buttonContexts)
 		{
-			_actions[c.Row][c.Column] = c.Action;
 			var container = _buttonContainers[c.Row][c.Column];
 			container.Button.TextureNormal = c.Texture;
-			container.Show();
 			container.QueueInfo = c.LabelInfo;
+			container.Show();
 		}
 	}
 
 	private QueueButtonContainer[][] _buttonContainers = new QueueButtonContainer[RowCount][]; 
-	private Action[][] _actions = new Action[RowCount][];
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		for (int i = 0; i < RowCount; i++)
 		{
-			_actions[i] = new Action[ColumnCount];
 			_buttonContainers[i] = new QueueButtonContainer[ColumnCount];
 			var row = GetNode<ButtonRow>($"ButtonRow{i}");
 			for (int j = 0; j < ColumnCount; j++)
 			{
 				var container = row.ButtonsContainers[j];
 				_buttonContainers[i][j] = container;
-				container.Button.Pressed += () => InvokeAction(i, j);
+				var tempI = i;
+				var tempJ = j;
+				container.Button.Pressed += () => InvokeAction(tempI, tempJ);
 			}
 		}
 	}
 
 	private void InvokeAction(int row, int column)
 	{
-		if (_actions[row][column] != null)
+		if (_handler != null)
 		{
-			_actions[row][column]();
+			_handler.Execute(row, column);
 		}
 	}
 
-	private void Clear()
+	public void Clear()
 	{
+		_handler = null;
 		for (int i = 0; i < RowCount; i++)
 		{
 			for (int j = 0; j < ColumnCount; j++)
 			{
 				_buttonContainers[i][j].Hide();
-				_actions[i][j] = null;
 			}
 		}
 	}
@@ -66,11 +68,15 @@ public partial class ButtonGroup : VBoxContainer
 	}
 }
 
+public interface IButtonGroupHandler
+{
+	public void Execute(int row, int column);
+}
+
 public class ButtonContext
 {
-	public int Row { get; }
-	public int Column { get; }
-	public Action Action { get; }
-	public Texture2D Texture { get; }
-	public IProgressInfo LabelInfo { get; }
+	public int Row { get; set; }
+	public int Column { get; set; }
+	public Texture2D Texture { get; set; }
+	public IProgressInfo LabelInfo { get; set; }
 }

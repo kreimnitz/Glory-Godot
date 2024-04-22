@@ -8,7 +8,10 @@ public partial class ProgressQueueUi : Control
 
 	private ProgressBar _progressBar;
 
-	private TextureRect _mainTexture;
+	public TextureRect MainTexture { get; private set; }
+
+	public Label Label { get; private set; }
+
 	private TextureButton[] _buttons = new TextureButton[ButttonCount];
 
 	public void SetTasks(List<ProgressItem> playerInfo)
@@ -19,8 +22,11 @@ public partial class ProgressQueueUi : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_mainTexture = GetNode<TextureRect>("TextureRect");
-		_mainTexture.Texture = Resources.DemigodIcon;
+		MainTexture = GetNode<TextureRect>("TextureRect");
+		MainTexture.Texture = Resources.BlankIcon;
+
+		Label = GetNode<Label>("Label");
+		Label.Text = "<LabelText>";
 
 		_progressBar = GetNode<ProgressBar>("ProgressBar");
 		for (int i = 0; i < ButttonCount; i++)
@@ -51,6 +57,11 @@ public partial class ProgressQueueUi : Control
 			}
 			else
 			{
+				var texture = Resources.ProgressItemTextures[_taskList[i].Type];
+				if (_buttons[i].TextureNormal != texture)
+				{
+					_buttons[i].TextureNormal = texture;
+				}
 				_buttons[i].Disabled = false;
 			}
 		}

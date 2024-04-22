@@ -4,11 +4,10 @@ using System.Linq;
 using ProtoBuf;
 
 [ProtoContract]
-[ProtoInclude(500, typeof(ServerTemple))]
 public class Temple : IUpdateFrom<Temple>
 {
     [ProtoMember(1)]
-    public Guid Id { get; } = IdGenerator.Generate();
+    public Guid Id { get; private set; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
     public int FollowerCount { get; set; }
@@ -23,13 +22,26 @@ public class Temple : IUpdateFrom<Temple>
     public Element Element { get; set; } = Element.None;
 
     [ProtoMember(6)]
-    public virtual List<ProgressItem> TaskQueue { get; protected set; } = new();
+    public virtual List<ProgressItem> TaskQueue { get; set; } = new();
+
+    public Spawner GetSpawnerForType(EnemyType enemyType)
+    {
+        if (!IsActive)
+        {
+            return null;
+        }
+        return Spawners.FirstOrDefault(s => s.EnemyType == enemyType);
+    }
 
     public void UpdateFrom(Temple other)
     {
+        Id = other.Id;
         IsActive = other.IsActive;
         FollowerCount = other.FollowerCount;
+        Element = other.Element;
+        
         UpdateUtilites.UpdateMany(Spawners, other.Spawners);
+        UpdateUtilites.UpdateMany(TaskQueue, other.TaskQueue);
     }
 }
 

@@ -2,7 +2,6 @@ using System;
 using ProtoBuf;
 
 [ProtoContract]
-[ProtoInclude(7, typeof(ServerEnemy))]
 public class Enemy : IUpdateFrom<Enemy>
 {
     [ProtoMember(1)]

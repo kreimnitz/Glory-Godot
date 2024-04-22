@@ -1,9 +1,11 @@
 using System;
 
-public class ServerEnemy : Enemy
+public class ServerEnemy
 {
     private int _durationMs = 5000;
     private DateTime _creationTime;
+
+    public Enemy Enemy { get; private set; }
 
     public ServerEnemy()
     {
@@ -12,22 +14,22 @@ public class ServerEnemy : Enemy
 
     public ServerEnemy(int hp) : this()
     {
-        HpMax = hp;
-        HpCurrent = hp;
+        Enemy.HpMax = hp;
+        Enemy.HpCurrent = hp;
     }
 
     public void TakeDamage(int damage)
     {
-        HpCurrent -= damage;
+        Enemy.HpCurrent -= damage;
     }
 
     public bool IsDead()
     {
-        return ProgressRatio > 1 || HpCurrent <= 0;
+        return Enemy.ProgressRatio > 1 || Enemy.HpCurrent <= 0;
     }
 
     public void DoLoop()
     {
-        ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
+        Enemy.ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
     }
 }

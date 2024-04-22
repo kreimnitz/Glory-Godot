@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 
-public class ServerPlayer : Player
+public class ServerPlayer
 {
     public const int StartingGlory = 0;
     public const int IncomeTimerMs = 1000;
 
+    public Player Player { get; } = new();
     private ActionQueue _actionQueue = new();
     private Timer _incomeTimer = new(IncomeTimerMs);
 
@@ -14,44 +15,52 @@ public class ServerPlayer : Player
 
     public DelayedActionQueue InProgressQueue { get; } = new();
 
-    public override List<ProgressItem> TaskQueue
-    { 
-        get => InProgressQueue.ToProgressItemList();
-        protected set => base.TaskQueue = value;
-    }
+    public ServerTower Tower { get; } = new();
 
-    public Tower Tower { get; } = new();
-
-    private IEnumerable<ServerEnemy> ServerEnemies => Enemies.Cast<ServerEnemy>();
-    private IEnumerable<ServerTowerShot> ServerTowerShots => TowerShots.Cast<ServerTowerShot>();
+    private SyncedList<ServerEnemy, Enemy> _serverEnemies;
+    private SyncedList<ServerTowerShot, TowerShot> _serverTowerShots;
+    public SyncedList<ServerTemple, Temple> ServerTemples { get; }
 
     public ServerPlayer Opponent { get; set; }
 
     public ServerPlayer()
     {
-        Glory = StartingGlory;
-        _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(ApplyIncome);
-        _incomeTimer.Start();
     }
 
-    public ServerPlayer(int playerNumber) : this()
+    public ServerPlayer(int playerNumber)
     {
+        _serverEnemies = new(Player.Enemies, (serverEnemy) => serverEnemy.Enemy);
+        _serverTowerShots = new(Player.TowerShots, (serverTowerShot) => serverTowerShot.TowerShot);
+        ServerTemples = new(Player.Temples, (serverTemple) => serverTemple.Temple);
+
+
+        Player.Glory = StartingGlory;
+        _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(ApplyIncome);
+        _incomeTimer.Start();
         PlayerNumber = playerNumber;
+
+        for (int i = 0; i < Player.TempleCount; i++)
+        {
+            ServerTemples.Add(new ServerTemple());
+        }
+        ServerTemples[0].Temple.IsActive = true;
+        ServerTemples[0].Temple.FollowerCount = 10;
     }
 
     public void DoLoop()
     {
         _actionQueue.ExecuteActions();
         InProgressQueue.ApplyNextActionIfReady();
-        foreach (var temple in Temples)
+        Player.TaskQueue = InProgressQueue.ToProgressItemList();
+        foreach (var temple in ServerTemples)
         {
-            ((ServerTemple)temple).DoLoop();
+            temple.DoLoop();
         }
-        foreach (var enemy in ServerEnemies)
+        foreach (var enemy in _serverEnemies)
         {
             enemy.DoLoop();
         }
-        foreach (var towerShot in ServerTowerShots)
+        foreach (var towerShot in _serverTowerShots)
         {
             towerShot.DoLoop();
         }
@@ -62,35 +71,35 @@ public class ServerPlayer : Player
 
     private void ApplyIncome()
     {
-        for (int i = 0; i < TempleCount; i++)
+        for (int i = 0; i < Player.TempleCount; i++)
         {
-            Glory += Temples[i].FollowerCount * ServerTemple.IncomePerFollower;
+            Player.Glory += Player.Temples[i].FollowerCount * ServerTemple.IncomePerFollower;
         }
     }
 
     public void AddEnemy(ServerEnemy enemy)
     {
-        _actionQueue.Add(() => Enemies.Add(enemy));
+        _actionQueue.Add(() => _serverEnemies.Add(enemy));
     }
 
     public void CheckForNewShot()
     {
-        var shot = Tower.CheckForNewShot(ServerEnemies);
+        var shot = Tower.CheckForNewShot(_serverEnemies);
         if (shot is not null)
         {
-            TowerShots.Add(shot);
+            _serverTowerShots.Add(shot);
         }
     }
 
     public void CheckLifetimes()
     {
         int index = 0;
-        while (index < Enemies.Count)
+        while (index < _serverEnemies.Count)
         {
-            ServerEnemy enemy = (ServerEnemy)Enemies[0];
+            var enemy = _serverEnemies[0];
             if (enemy.IsDead())
             {
-                Enemies.RemoveAt(0);
+                _serverEnemies.RemoveAt(0);
             }
             else
             {
@@ -99,11 +108,11 @@ public class ServerPlayer : Player
         }
 
         index = 0;
-        while (index < TowerShots.Count)
+        while (index < _serverTowerShots.Count)
         {
-            if (((ServerTowerShot)TowerShots[0]).IsComplete)
+            if (_serverTowerShots[0].IsComplete)
             {
-                TowerShots.RemoveAt(0);
+                _serverTowerShots.RemoveAt(0);
             }
             else
             {
