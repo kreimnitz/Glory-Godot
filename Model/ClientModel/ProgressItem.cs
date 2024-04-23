@@ -1,22 +1,55 @@
 using System;
-using System.Collections;
+using System.ComponentModel;
 using ProtoBuf;
 
 [ProtoContract]
-public class ProgressItem : IUpdateFrom<ProgressItem>
+public class ProgressItem : IUpdateFrom<ProgressItem>, INotifyPropertyChanged
 {
+    private double _progressRatio;
+    private ProgressItemType _type;
+
     [ProtoMember(1)]
     public Guid Id { get; private set; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
-    public virtual double ProgressRatio { get; set; }
+    public double ProgressRatio
+    {
+        get { return _progressRatio; }
+        set
+        {
+            if (value != _progressRatio)
+            {
+                _progressRatio = value;
+                NotifyPropertyChanged(nameof(ProgressRatio));
+            }
+        }
+    }
 
     [ProtoMember(3)]
-    public ProgressItemType Type { get; set; }
+    public ProgressItemType Type
+    {
+        get { return _type; }
+        set
+        {
+            if (value != _type)
+            {
+                _type = value;
+                NotifyPropertyChanged(nameof(Type));
+            }
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 
     public void UpdateFrom(ProgressItem other)
     {
         ProgressRatio = other.ProgressRatio;
+        Type = other.Type;
+    }
+
+    private void NotifyPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 

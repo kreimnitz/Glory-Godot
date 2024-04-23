@@ -4,7 +4,7 @@ using System.Timers;
 
 public class ServerPlayer
 {
-    public const int StartingGlory = 0;
+    public const int StartingGlory = 1000; // 0;
     public const int IncomeTimerMs = 1000;
 
     public Player Player { get; } = new();
@@ -41,7 +41,7 @@ public class ServerPlayer
 
         for (int i = 0; i < Player.TempleCount; i++)
         {
-            ServerTemples.Add(new ServerTemple());
+            ServerTemples.Add(new ServerTemple(this));
         }
         ServerTemples[0].Temple.IsActive = true;
         ServerTemples[0].Temple.FollowerCount = 10;
@@ -67,6 +67,20 @@ public class ServerPlayer
 
         CheckForNewShot();
         CheckLifetimes();
+    }
+
+    public void UnlockFlameImp()
+    {
+        Player.Tech.FireTech |= FireTech.FlameImp;
+        foreach (var temple in ServerTemples)
+        {
+            if (temple.Temple.Element == Element.Fire)
+            {
+                var spawner = Spawners.CreateFireImpSpawner();
+                temple.ServerSpawners.Add(spawner);
+                spawner.Activate();
+            }
+        }
     }
 
     private void ApplyIncome()

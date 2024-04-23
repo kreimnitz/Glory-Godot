@@ -5,7 +5,9 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_xtr8o"]
 font_size = 12
-font_color = Color(0, 0, 0, 1)
+font_color = Color(0.980392, 0.980392, 0.980392, 1)
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [node name="QueueButtonContainer" type="Control"]
 custom_minimum_size = Vector2(60, 60)

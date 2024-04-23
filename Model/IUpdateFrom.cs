@@ -10,7 +10,7 @@ public interface IUpdateFrom<T>
 
 public static class UpdateUtilites
 {
-    public static UpdateInfo<T> UpdateMany<T>(List<T> items, List<T> otherItems) where T : IUpdateFrom<T>
+    public static ListUpdateInfo<T> UpdateMany<T>(List<T> items, List<T> otherItems) where T : IUpdateFrom<T>
     {
         var dict = items.ToDictionary(i => i.Id);
         var otherDict = otherItems.ToDictionary(i => i.Id);
@@ -26,9 +26,9 @@ public static class UpdateUtilites
         return updateInfo;
     }
 
-    public static UpdateInfo<T> UpdateMany<T>(Dictionary<Guid, T> items, Dictionary<Guid, T> otherItems) where T : IUpdateFrom<T>
+    public static ListUpdateInfo<T> UpdateMany<T>(Dictionary<Guid, T> items, Dictionary<Guid, T> otherItems) where T : IUpdateFrom<T>
     {
-        var updateInfo = new UpdateInfo<T>();
+        var updateInfo = new ListUpdateInfo<T>();
         foreach (var otherKvp in otherItems)
         {
             if (items.TryGetValue(otherKvp.Key, out T matchingItem))
@@ -57,7 +57,7 @@ public static class UpdateUtilites
     }
 }
 
-public class UpdateInfo<T> where T : IUpdateFrom<T>
+public class ListUpdateInfo<T> where T : IUpdateFrom<T>
 {
     public List<T> Added { get; } = new();
     public List<T> Removed { get; } = new();

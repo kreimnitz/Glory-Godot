@@ -31,7 +31,7 @@ public class ClientRequestHandler
         _serverPlayer.ServerTemples[data.TempleIndex].QueueConvertToElement(Element.Fire);
     }
 
-    public void HandleUnlockFireImpRequest()
+    public void HandleUnlockFireImpRequest(TempleIndexData data)
     {
         var validTemples = _serverPlayer.Player.Temples.Where(t => t.IsActive && t.Element == Element.Fire);
         if (!validTemples.Any() || _serverPlayer.Player.Glory < Spawners.FireImpUnlockCost)
@@ -39,12 +39,7 @@ public class ClientRequestHandler
             return;
         }
 
-        var fireImpSpawner = Spawners.CreateFireImpSpawner();
-        var delayedAction = new DelayedAction(
-            ProgressItemType.UnlockFireImp,
-            () => fireImpSpawner.Activate(),
-            Spawners.FireImpUnlockDurationMs);
-        _serverPlayer.InProgressQueue.Enqueue(delayedAction);
+        _serverPlayer.ServerTemples[data.TempleIndex].QueueUnlockFlameImp();
     }
 
     public void HandleSpawnFireImpRequest(TempleIndexData data)

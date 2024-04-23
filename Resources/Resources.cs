@@ -103,6 +103,20 @@ public static class Resources
         }
     }
 
+    private const string FireTempleIconPath = ResourcesPrefix + "FireTemple.png";
+    private static Texture2D _fireTempleIcon;
+    public static Texture2D FireTempleIcon
+    {
+        get
+        {
+            if (_fireTempleIcon is null)
+            {
+                _fireTempleIcon = GD.Load<Texture2D>(FireTempleIconPath);
+            }
+            return _fireTempleIcon;
+        }
+    }
+
     private const string TempleFoundationIconPath = ResourcesPrefix + "TempleFoundation.png";
     private static Texture2D _templeFoundationIcon;
     public static Texture2D TempleFoundationIcon

@@ -19,6 +19,8 @@ public class ServerSpawner
         _spawnTimer.AutoReset = true;
         _spawnTimer.Elapsed += (s, a) => IncrementQueue();
         Spawner.EnemyType = enemyType;
+        Spawner.Max = 5;
+        Spawner.CurrentValue = 0;
     }
 
     private object _queueLock = new();

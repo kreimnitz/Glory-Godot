@@ -85,7 +85,8 @@ public class ServerGameState
             }
             case ClientRequestType.UnlockFireImp:
             {
-                handler.HandleUnlockFireImpRequest();
+                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
+                handler.HandleUnlockFireImpRequest(templeIndexData);
                 break;
             }
             case ClientRequestType.SpawnFireImp:

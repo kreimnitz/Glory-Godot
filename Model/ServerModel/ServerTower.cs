@@ -26,7 +26,7 @@ public class ServerTower
         }
 
         var closestEnemy = enemies.OrderByDescending(e => e.Enemy.ProgressRatio).First();
-        if (closestEnemy.Enemy.ProgressRatio < .5)
+        if (closestEnemy.Enemy.ProgressRatio < .8)
         {
             return null;
         }

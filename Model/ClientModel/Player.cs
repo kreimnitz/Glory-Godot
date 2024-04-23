@@ -43,6 +43,7 @@ public class Player
         PlayerUpdateInfo playerUpdateInfo = new();
         playerUpdateInfo.EnemyUpdates = UpdateUtilites.UpdateMany(Enemies, p.Enemies);
         playerUpdateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany(TowerShots, p.TowerShots);
+        playerUpdateInfo.AddedTech = Tech.UpdateFrom(p.Tech);
         return playerUpdateInfo;
     }
 
@@ -59,6 +60,7 @@ public class Player
 
 public class PlayerUpdateInfo
 {
-    public UpdateInfo<Enemy> EnemyUpdates { get; set; } = new();
-    public UpdateInfo<TowerShot> TowerShotUpdates { get; set; } = new();
+    public PlayerTech AddedTech { get; set; }
+    public ListUpdateInfo<Enemy> EnemyUpdates { get; set; } = new();
+    public ListUpdateInfo<TowerShot> TowerShotUpdates { get; set; } = new();
 }

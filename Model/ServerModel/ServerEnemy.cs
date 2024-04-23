@@ -5,15 +5,11 @@ public class ServerEnemy
     private int _durationMs = 5000;
     private DateTime _creationTime;
 
-    public Enemy Enemy { get; private set; }
+    public Enemy Enemy { get; private set; } = new();
 
-    public ServerEnemy()
+    public ServerEnemy(int hp)
     {
         _creationTime = DateTime.UtcNow;
-    }
-
-    public ServerEnemy(int hp) : this()
-    {
         Enemy.HpMax = hp;
         Enemy.HpCurrent = hp;
     }

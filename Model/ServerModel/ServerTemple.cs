@@ -6,10 +6,12 @@ public class ServerTemple
     public const int IncomePerFollower = 1;
     public const int FollowerCost = 50;
     public const int FollowerTrainDurationMs = 10000;
-    public const int CreateDurationMs = 20000;
+    public const int CreateDurationMs = 2000;
     public const int BuildCost = 200;
-    public const int ConvertDurationMs = 20000;
+    public const int ConvertDurationMs = 2000;
     public const int ConvertCost = 200;
+
+    private ServerPlayer _player;
 
     public DelayedActionQueue InProgressQueue { get; } = new();
 
@@ -17,8 +19,9 @@ public class ServerTemple
 
     public SyncedList<ServerSpawner, Spawner> ServerSpawners { get; }
 
-    public ServerTemple()
+    public ServerTemple(ServerPlayer player)
     {
+        _player = player;
         ServerSpawners = new(Temple.Spawners, serverSpawner => serverSpawner.Spawner);
     }
 
@@ -47,6 +50,15 @@ public class ServerTemple
     {
         var itemType = ProgressItemTypeHelpers.ConvertToElementProgressType(element);
         var delayedAction = new DelayedAction(itemType, () => Temple.Element = element, ConvertDurationMs);
+        InProgressQueue.Enqueue(delayedAction);
+    }
+
+    public void QueueUnlockFlameImp()
+    {
+        var delayedAction = new DelayedAction(
+            ProgressItemType.UnlockFireImp,
+            () => _player.UnlockFlameImp(),
+            Spawners.FireImpUnlockDurationMs);
         InProgressQueue.Enqueue(delayedAction);
     }
 }
