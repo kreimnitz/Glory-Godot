@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Godot;
@@ -10,6 +9,8 @@ public class TempleView : IButtonGroupHandler
     private Player _player;
     private Temple _temple;
     private int _templeIndex;
+    private ActionQueue _actionQueue = new();
+
     public TextureButton Button { get; }
 
     public TempleView(Temple temple, TextureButton button, Player player)
@@ -17,6 +18,7 @@ public class TempleView : IButtonGroupHandler
         _temple = temple;
         _player = player;
         Button = button;
+        Button.TextureNormal = GetTempleTexture();
         Button.Pressed += () => SelectTemple();
 
         for (int i = 0; i < Player.TempleCount; i++)
@@ -28,13 +30,27 @@ public class TempleView : IButtonGroupHandler
         }
 
         temple.PropertyChanged += OnModelChanged;
+        player.Tech.OnTechUpdate += OnTechUpdate;
+    }
+
+    public void _Process()
+    {
+        _actionQueue.ExecuteActions();
+    }
+
+    private void OnTechUpdate(object sender, TechUpdateEventArgs e)
+    {
+        if (e.NewTech.FireTech.HasFlag(FireTech.FlameImp))
+        {
+            _actionQueue.Add(RefreshVisuals);
+        }
     }
 
     private void OnModelChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Temple.Element) || e.PropertyName == nameof(Temple.IsActive))
         {
-            RefreshVisuals();
+            _actionQueue.Add(RefreshVisuals);
         }
     }
 
@@ -51,7 +67,7 @@ public class TempleView : IButtonGroupHandler
     {
         SelectionManager.Instance.Selection = this;
         SelectionManager.Instance.ShowButtonGroup(this, GetButtonContext());
-        SelectionManager.Instance.ShowProgressQueue(Resources.TempleIcon, TempleLabel, _temple.TaskQueue);
+        SelectionManager.Instance.ShowProgressQueue(GetTempleTexture(), TempleLabel, _temple.TaskQueue);
     }
 
     private Texture2D GetTempleTexture()

@@ -25,6 +25,10 @@ public partial class BaseView : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		foreach (var templeView in _templeViews)
+		{
+			templeView?._Process();
+		}
 	}
 
 	private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();
