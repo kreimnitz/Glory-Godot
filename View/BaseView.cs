@@ -20,8 +20,6 @@ public partial class BaseView : Control
 	{
 		_tower = GetNode<TowerSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
-
-		EnemySprite.EnemyPathOffset = _enemyPath.Position;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

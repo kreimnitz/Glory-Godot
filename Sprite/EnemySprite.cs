@@ -2,8 +2,6 @@ using Godot;
 
 public partial class EnemySprite : Sprite2D
 {
-	public static Vector2 EnemyPathOffset = new();
-
 	private PathFollow2D _pathFollow;
 	private int _speed = 20;
 	private ProgressBar _hpBar;
