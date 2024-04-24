@@ -2,7 +2,7 @@ using Godot;
 
 public class ServerTowerShot
 {
-    private double _speedPxPerS = 400.0;
+    private double _speedPxPerS = 600.0;
     private double _speedPxPerLoop;
     private int _damage = 4;
 
