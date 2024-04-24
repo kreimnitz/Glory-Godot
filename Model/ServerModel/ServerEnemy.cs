@@ -1,17 +1,22 @@
-using System;
+using Godot;
 
 public class ServerEnemy
 {
-    private int _durationMs = 5000;
-    private DateTime _creationTime;
+    private double _speedPxPerS = 200.0;
+    private double _speedPxPerLoop;
+    private EnemyPath _path;
 
     public Enemy Enemy { get; private set; } = new();
+    public Vector2 Position { get; private set; } = new();
 
-    public ServerEnemy(int hp)
+    public ServerEnemy(int hp, EnemyPath path)
     {
-        _creationTime = DateTime.UtcNow;
+        _speedPxPerLoop = _speedPxPerS * ServerGameState.LoopRateMs / 1000;
+        _path = path;
         Enemy.HpMax = hp;
         Enemy.HpCurrent = hp;
+        Enemy.Progress = 0;
+        Position = path.GetPosition(0);
     }
 
     public void TakeDamage(int damage)
@@ -21,11 +26,16 @@ public class ServerEnemy
 
     public bool IsDead()
     {
-        return Enemy.ProgressRatio > 1 || Enemy.HpCurrent <= 0;
+        return Enemy.Progress > _path.Length || Enemy.HpCurrent <= 0;
     }
 
     public void DoLoop()
     {
-        Enemy.ProgressRatio = StaticUtilites.GetTimeProgressRatio(_creationTime, _durationMs);
+        if (IsDead())
+        {
+            return;
+        }
+        Enemy.Progress += (float)_speedPxPerLoop;
+        Position = _path.GetPosition(Enemy.Progress);
     }
 }

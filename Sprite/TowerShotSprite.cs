@@ -2,7 +2,6 @@ using Godot;
 
 public partial class TowerShotSprite : Sprite2D
 {
-	private Vector2 _lastTargetPosition = new();
 	public TowerShot Model { get; private set; }
 
 	public TowerSprite TowerSprite { get; private set; }
@@ -37,36 +36,20 @@ public partial class TowerShotSprite : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		UpdatePostion();
+		UpdatePosition();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		UpdatePostion();
+		UpdatePosition();
 	}
 
-	private void UpdatePostion()
+	private void UpdatePosition()
 	{
-		if (!Visible)
+		if (Model != null)
 		{
-			return;
-		}
-
-		UpdateLastTargetPosition();
-		var offset = _lastTargetPosition - TowerSprite.Position;
-		Position = offset * (float)Model.ProgressRatio;
-	}
-
-	private void UpdateLastTargetPosition()
-	{
-		if (TargetSprite is not null && TargetSprite.Visible)
-		{
-			_lastTargetPosition = TargetSprite.Position;
-		}
-		else
-		{
-			TargetSprite = null;
+			Position = new Vector2(Model.PositionX, Model.PositionY);
 		}
 	}
 }

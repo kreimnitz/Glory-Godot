@@ -19,7 +19,6 @@ public partial class TowerSprite : Sprite2D
 		}
 
 		var shotSprite = TowerShotSprite.CreateTowerShotSprite(towerShot, this, targetSprite);
-		AddChild(shotSprite);
 		shotSprite.Hidden += () => _hiddenShots.Enqueue(shotSprite);
 		_idToTowerShotSprite[towerShot.Id] = shotSprite;
 		return shotSprite;

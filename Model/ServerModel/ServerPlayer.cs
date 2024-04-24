@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Timers;
+using Godot;
 
 public class ServerPlayer
 {
@@ -9,7 +11,7 @@ public class ServerPlayer
 
     public Player Player { get; } = new();
     private ActionQueue _actionQueue = new();
-    private Timer _incomeTimer = new(IncomeTimerMs);
+    private System.Timers.Timer _incomeTimer = new(IncomeTimerMs);
 
     public int PlayerNumber { get; }
 
@@ -22,6 +24,8 @@ public class ServerPlayer
     public SyncedList<ServerTemple, Temple> ServerTemples { get; }
 
     public ServerPlayer Opponent { get; set; }
+
+    public EnemyPath EnemyPath { get; set; }
 
     public ServerPlayer()
     {
@@ -45,6 +49,8 @@ public class ServerPlayer
         }
         ServerTemples[0].Temple.IsActive = true;
         ServerTemples[0].Temple.FollowerCount = 10;
+
+        EnemyPath = new EnemyPath(EnemyPath.CreateWindingPathCurve());
     }
 
     public void DoLoop()

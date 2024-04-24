@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 public class ServerTower
 {
@@ -12,9 +13,11 @@ public class ServerTower
 
     private DateTime _lastShotTime = DateTime.MinValue;
 
+    public Vector2 Position { get; private set; } = new(0, 150);
+
     public ServerTowerShot Shoot(ServerEnemy target)
     {
-        return new ServerTowerShot(target, _damageLevels[DamageLevel]);
+        return new ServerTowerShot(Position, target, _damageLevels[DamageLevel]);
     }
 
     public ServerTowerShot CheckForNewShot(IEnumerable<ServerEnemy> enemies)
@@ -25,8 +28,8 @@ public class ServerTower
             return null;
         }
 
-        var closestEnemy = enemies.OrderByDescending(e => e.Enemy.ProgressRatio).First();
-        if (closestEnemy.Enemy.ProgressRatio < .8)
+        var closestEnemy = enemies.OrderByDescending(e => e.Enemy.Progress).First();
+        if (closestEnemy.Enemy.Progress < .2)
         {
             return null;
         }

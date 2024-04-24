@@ -24,7 +24,7 @@ public class ClientMessageManager
         SendMessage(requestType, serialized);
     }
 
-    private void SendMessage(ClientRequestType request)
+    public void SendMessage(ClientRequestType request)
     {
         SendMessage(request, Array.Empty<byte>());
     }

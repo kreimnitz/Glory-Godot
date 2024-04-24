@@ -40,6 +40,9 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		SelectionManager.CreateSingleton(_bottomBar);
 
 		_baseView.Initialize(_player);
+
+		_bottomBar.DebugButton0.Pressed +=
+			() => ClientMessageManager.Instance.SendMessage(ClientRequestType.DEBUG_SpawnEnemy);
 	}
 
 	private ConcurrentQueue<Action> _actions = new ConcurrentQueue<Action>();

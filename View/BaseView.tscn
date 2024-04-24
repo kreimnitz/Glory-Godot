@@ -7,7 +7,7 @@
 [sub_resource type="Curve2D" id="Curve2D_oaq7p"]
 bake_interval = 1.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 750, 0, 0, 0, 0, 0, 600, 0, 0, 0, 0, 0, 600, 300, 0, 0, 0, 0, 450, 300, 0, 0, 0, 0, 450, 0, 0, 0, 0, 0, 300, 0, 0, 0, 0, 0, 300, 150, 0, 0, 0, 0, 150, 150)
+"points": PackedVector2Array(0, 0, 0, 0, 600, 0, 0, 0, 0, 0, 450, 0, 0, 0, 0, 0, 450, 300, 0, 0, 0, 0, 300, 300, 0, 0, 0, 0, 300, 0, 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 150, 150, 0, 0, 0, 0, 0, 150)
 }
 point_count = 8
 
@@ -17,7 +17,7 @@ anchors_preset = 0
 script = ExtResource("1_ywp6l")
 
 [node name="EnemyPath" type="Path2D" parent="."]
-position = Vector2(100, 0)
+position = Vector2(250, 0)
 curve = SubResource("Curve2D_oaq7p")
 
 [node name="TowerSprite" parent="." instance=ExtResource("1_0s3xs")]

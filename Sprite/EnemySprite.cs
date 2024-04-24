@@ -1,14 +1,12 @@
 using Godot;
-using System;
-using System.IO;
 
 public partial class EnemySprite : Sprite2D
 {
-	private PathFollow2D _pathFollow;
-	private int _speed = 200;
-	private ProgressBar _hpBar;
+	public static Vector2 EnemyPathOffset = new();
 
-	public float ProgressRatio => _pathFollow.ProgressRatio;
+	private PathFollow2D _pathFollow;
+	private int _speed = 20;
+	private ProgressBar _hpBar;
 
 	public Enemy Model { get; private set; }
 
@@ -22,6 +20,7 @@ public partial class EnemySprite : Sprite2D
 		pathFollow.Rotates = true;
 		path.AddChild(pathFollow);
 		enemy._pathFollow = pathFollow;
+		path.AddChild(enemy);
 		return enemy;
 	}
 
@@ -53,7 +52,7 @@ public partial class EnemySprite : Sprite2D
 			return;
 		}
 
-		_pathFollow.ProgressRatio = (float)Model.ProgressRatio;
+		_pathFollow.Progress = Model.Progress;
 		Position = _pathFollow.Position;
 
 		_hpBar.Value = Model.HpCurrent;

@@ -1,10 +1,11 @@
+using System.Diagnostics;
 using System.Timers;
 using Utilities.Comms;
 
 public class ServerGameState
 {
     // shoot for server to update 120 times per second
-    private const double LoopRateMs = 1000 / 120;
+    public const double LoopRateMs = 1000 / 120;
     private Timer _loopTimer = new(LoopRateMs);
     private ServerMessageTransmitter _serverMessenger;
     private ActionQueue _actionQueue = new();
@@ -93,6 +94,15 @@ public class ServerGameState
             {
                 var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
                 handler.HandleSpawnFireImpRequest(templeIndexData);
+                break;
+            }
+            case ClientRequestType.DEBUG_SpawnEnemy:
+            {
+                var imp0 = EnemyUtilites.CreateFireImp(_player0.EnemyPath);
+                _player0.AddEnemy(imp0);
+
+                var imp1 = EnemyUtilites.CreateFireImp(_player1.EnemyPath);
+                _player1.AddEnemy(imp1);
                 break;
             }
             default:

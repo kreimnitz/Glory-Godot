@@ -10,7 +10,9 @@ public enum ClientRequestType
     ConvertToFireTemple = 10,
 
     UnlockFireImp = 20,
-    SpawnFireImp = 21
+    SpawnFireImp = 21,
+
+    DEBUG_SpawnEnemy = 50,
 }
 
 [ProtoContract]

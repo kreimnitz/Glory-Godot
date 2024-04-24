@@ -31,24 +31,26 @@ offset_right = 1523.0
 offset_bottom = 274.0
 script = ExtResource("4_jfv3x")
 
-[node name="RecruitFollowerButtonContainer" parent="." instance=ExtResource("3_2ipvm")]
+[node name="DebugButtonContainer0" parent="." instance=ExtResource("3_2ipvm")]
 layout_mode = 0
-offset_right = 60.0
-offset_bottom = 60.0
+offset_left = 3.0
+offset_top = 52.0
+offset_right = 63.0
+offset_bottom = 112.0
 
-[node name="AddFireTempleButtonContainer" parent="." instance=ExtResource("3_2ipvm")]
+[node name="DebugButtonContainer1" parent="." instance=ExtResource("3_2ipvm")]
 layout_mode = 0
-offset_left = 20.0
-offset_top = 80.0
-offset_right = 80.0
-offset_bottom = 140.0
+offset_left = 80.0
+offset_top = 55.0
+offset_right = 140.0
+offset_bottom = 115.0
 
-[node name="AddVentButtonContainer" parent="." instance=ExtResource("3_2ipvm")]
+[node name="DebugButtonContainer2" parent="." instance=ExtResource("3_2ipvm")]
 layout_mode = 0
-offset_left = 90.0
-offset_top = 80.0
-offset_right = 150.0
-offset_bottom = 140.0
+offset_left = 158.0
+offset_top = 56.0
+offset_right = 218.0
+offset_bottom = 116.0
 
 [node name="ProgressQueueUi" parent="." instance=ExtResource("5_maoi0")]
 layout_mode = 1

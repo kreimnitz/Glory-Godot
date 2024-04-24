@@ -4,25 +4,22 @@ using Godot;
 public partial class UiBar : Control
 {
 	public ProgressQueueUi ProgressQueueUi { get; private set; }
-	public TextureButton AddFollowerButton { get; private set; }
-
-	public TextureButton AddFireTempleButton { get; private set; }
-
-	public TextureButton AddVentButton { get; private set; }
 
 	public ButtonGroup ButtonGroup { get; private set; }
+
+	public TextureButton DebugButton0 { get; private set; }
+	public TextureButton DebugButton1 { get; private set; }
+	public TextureButton DebugButton2 { get; private set; }
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		AddFollowerButton = GetNode<ButtonContainer>("RecruitFollowerButtonContainer").Button;
-		AddFollowerButton.TextureNormal = Resources.FollowerIcon;
+		DebugButton0 = GetNode<ButtonContainer>("DebugButtonContainer0").Button;
+		DebugButton1 = GetNode<ButtonContainer>("DebugButtonContainer1").Button;
+		DebugButton2 = GetNode<ButtonContainer>("DebugButtonContainer2").Button;
 
 		ProgressQueueUi = GetNode<ProgressQueueUi>("ProgressQueueUi");
-
-		AddFireTempleButton = GetNode<ButtonContainer>("AddFireTempleButtonContainer").Button;
-		AddVentButton = GetNode<ButtonContainer>("AddVentButtonContainer").Button;
-
 		ButtonGroup = GetNode<ButtonGroup>("MainButtonGroup");
 	}
 

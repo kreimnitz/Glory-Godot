@@ -5,7 +5,7 @@ using ProtoBuf;
 [ProtoContract]
 public class Enemy : IUpdateFrom<Enemy>, INotifyPropertyChanged
 {
-    private double _progressRatio;
+    private float _progress;
     private int _hpMax;
     private int _hpCurrent;
 
@@ -13,15 +13,15 @@ public class Enemy : IUpdateFrom<Enemy>, INotifyPropertyChanged
     public Guid Id { get; set; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
-    public double ProgressRatio
+    public float Progress
     { 
-        get { return _progressRatio; }
+        get { return _progress; }
         set 
         {
-            if (value != _progressRatio)
+            if (value != _progress)
             {
-                _progressRatio = value;
-                NotifyPropertyChanged(nameof(ProgressRatio));
+                _progress = value;
+                NotifyPropertyChanged(nameof(Progress));
             }
         }
     }
@@ -58,7 +58,7 @@ public class Enemy : IUpdateFrom<Enemy>, INotifyPropertyChanged
 
     public void UpdateFrom(Enemy other)
     {
-        ProgressRatio = other.ProgressRatio;
+        Progress = other.Progress;
         HpMax = other.HpMax;
         HpCurrent = other.HpCurrent;
         return ;

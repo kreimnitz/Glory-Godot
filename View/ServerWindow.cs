@@ -20,8 +20,14 @@ public partial class ServerWindow : Window
 		connectButton.Pressed += _connectionManager.ConnectToServer;
 
 		_startGameButton = GetNode<Button>("StartGameButton");
-		_startGameButton.Pressed += _connectionManager.StartGame;
+		_startGameButton.Pressed += StartGame;
 		_startGameButton.Disabled = true;
+	}
+
+	private void StartGame()
+	{
+		_connectionManager.StartGame();
+		Hide();
 	}
 
 	private void CreateServer()

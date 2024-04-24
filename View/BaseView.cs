@@ -20,6 +20,8 @@ public partial class BaseView : Control
 	{
 		_tower = GetNode<TowerSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
+
+		EnemySprite.EnemyPathOffset = _enemyPath.Position;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -41,7 +43,6 @@ public partial class BaseView : Control
 		}
 
 		var enemy = EnemySprite.CreateEnemy(model, _enemyPath);
-		AddChild(enemy);
 		enemy.Hidden += () => _hiddenEnemies.Enqueue(enemy);
 		return enemy;
 	}
@@ -72,7 +73,8 @@ public partial class BaseView : Control
 		{
 			if (_enemyIdToSprite.TryGetValue(towerShot.TargetId, out EnemySprite enemySprite))
 			{
-				_tower.CreateTowerShotSprite(towerShot, enemySprite);
+				var towerShotSprite = _tower.CreateTowerShotSprite(towerShot, enemySprite);
+				_enemyPath.AddChild(towerShotSprite);
 			}
 		}
 

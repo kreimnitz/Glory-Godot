@@ -51,7 +51,7 @@ public class ClientRequestHandler
         }
 
         _serverPlayer.Player.Glory -= EnemyUtilites.FireImpCost;
-        var imp = EnemyUtilites.CreateFireImp();
+        var imp = EnemyUtilites.CreateFireImp(_serverPlayer.EnemyPath);
         _serverPlayer.Opponent.AddEnemy(imp);
     }
 }

@@ -1,32 +1,48 @@
 using System;
 using System.ComponentModel;
+using Godot;
 using ProtoBuf;
 
 [ProtoContract]
 [ProtoInclude(500, typeof(ServerTowerShot))]
 public class TowerShot : IUpdateFrom<TowerShot>, INotifyPropertyChanged
 {
-    private double _progressRatio;
+    private float _positionX;
+    private float _positionY;
     private Guid _targetId;
 
     [ProtoMember(1)]
     public Guid Id { get; set; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
-    public double ProgressRatio
+    public float PositionX
     {
-        get { return _progressRatio; }
+        get { return _positionX; }
         set
         {
-            if (value != _progressRatio)
+            if (!_positionX.Equals(value))
             {
-                _progressRatio = value;
-                NotifyPropertyChanged(nameof(ProgressRatio));
+                _positionX = value;
+                NotifyPropertyChanged(nameof(PositionX));
             }
         }
     }
 
     [ProtoMember(3)]
+    public float PositionY
+    {
+        get { return _positionY; }
+        set
+        {
+            if (!_positionY.Equals(value))
+            {
+                _positionY = value;
+                NotifyPropertyChanged(nameof(PositionY));
+            }
+        }
+    }
+
+    [ProtoMember(4)]
     public Guid TargetId
     {
         get { return _targetId; }
@@ -45,7 +61,8 @@ public class TowerShot : IUpdateFrom<TowerShot>, INotifyPropertyChanged
     public void UpdateFrom(TowerShot other)
     {
         Id = other.Id;
-        ProgressRatio = other.ProgressRatio;
+        PositionX = other.PositionX;
+        PositionY = other.PositionY;
         TargetId = other.TargetId;
     }
 
