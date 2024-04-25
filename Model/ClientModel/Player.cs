@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ProtoBuf;
 
 [ProtoContract]
@@ -37,13 +38,14 @@ public class Player
     public PlayerUpdateInfo UpdateAndGetInfo(Player p)
     {
         Glory = p.Glory;
-        UpdateUtilites.UpdateMany(Temples, p.Temples);
+        var templeUpdate = UpdateUtilites.UpdateMany(Temples, p.Temples);
         UpdateUtilites.UpdateMany(TaskQueue, p.TaskQueue);
 
         PlayerUpdateInfo playerUpdateInfo = new();
         playerUpdateInfo.EnemyUpdates = UpdateUtilites.UpdateMany(Enemies, p.Enemies);
         playerUpdateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany(TowerShots, p.TowerShots);
         playerUpdateInfo.AddedTech = Tech.UpdateFrom(p.Tech);
+        playerUpdateInfo.NewTemples = templeUpdate.Added.Any();
         return playerUpdateInfo;
     }
 
@@ -60,6 +62,7 @@ public class Player
 
 public class PlayerUpdateInfo
 {
+    public bool NewTemples { get; set; }
     public PlayerTech AddedTech { get; set; }
     public ListUpdateInfo<Enemy> EnemyUpdates { get; set; } = new();
     public ListUpdateInfo<TowerShot> TowerShotUpdates { get; set; } = new();

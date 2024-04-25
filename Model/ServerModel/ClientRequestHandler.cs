@@ -45,6 +45,11 @@ public class ClientRequestHandler
     public void HandleSpawnFireImpRequest(TempleIndexData data)
     {
         var impSpawner = _serverPlayer.ServerTemples[data.TempleIndex].GetSpawnerForType(EnemyType.FireImp);
+        if (impSpawner is null)
+        {
+            return;
+        }
+
         if (_serverPlayer.Player.Glory < EnemyUtilites.FireImpCost || !impSpawner.DecrementQueue())
         {
             return;

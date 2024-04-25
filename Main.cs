@@ -43,6 +43,8 @@ public partial class Main : Node, IServerMessageReceivedHandler
 
 		_bottomBar.DebugButton0.Pressed +=
 			() => ClientMessageManager.Instance.SendMessage(ClientRequestType.DEBUG_SpawnEnemy);
+		_bottomBar.DebugButton1.Pressed +=
+			() => ClientMessageManager.Instance.SendMessage(ClientRequestType.DEBUG_ResetPlayers);
 	}
 
 	private ConcurrentQueue<Action> _actions = new ConcurrentQueue<Action>();

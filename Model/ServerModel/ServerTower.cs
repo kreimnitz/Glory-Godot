@@ -29,7 +29,7 @@ public class ServerTower
         }
 
         var closestEnemy = enemies.OrderByDescending(e => e.Enemy.Progress).First();
-        if (closestEnemy.Enemy.Progress < .2)
+        if (closestEnemy.Enemy.Progress < 150)
         {
             return null;
         }

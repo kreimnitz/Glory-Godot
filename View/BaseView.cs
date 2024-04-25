@@ -47,7 +47,7 @@ public partial class BaseView : Control
 
 	public void ProcessModelUpdate(PlayerUpdateInfo info)
 	{
-		if (_templeViews[0] is null)
+		if (info.NewTemples)
 		{
 			CreateTempleViews();
 		}

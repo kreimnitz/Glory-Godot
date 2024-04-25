@@ -11,8 +11,8 @@ public class ServerGameState
     private ActionQueue _actionQueue = new();
 
     private bool _solo;
-    private ServerPlayer _player0 = new(0);
-    private ServerPlayer _player1 = new(1);
+    private ServerPlayer _player0;
+    private ServerPlayer _player1;
     private ClientRequestHandler _player0RequestHandler;
     private ClientRequestHandler _player1RequestHandler;
 
@@ -22,6 +22,13 @@ public class ServerGameState
         _serverMessenger = serverMessenger;
         _loopTimer.Elapsed += (s, a) => DoLoop(a);
 
+        InitializePlayers();
+    }
+
+    private void InitializePlayers()
+    {
+        _player0 = new(0);
+        _player1 = new(1);
         _player0.Opponent = _player1;
         _player1.Opponent = _player0;
 
@@ -103,6 +110,11 @@ public class ServerGameState
 
                 var imp1 = EnemyUtilites.CreateFireImp(_player1.EnemyPath);
                 _player1.AddEnemy(imp1);
+                break;
+            }
+            case ClientRequestType.DEBUG_ResetPlayers:
+            {
+                InitializePlayers();
                 break;
             }
             default:

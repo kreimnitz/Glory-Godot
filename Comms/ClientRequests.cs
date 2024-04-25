@@ -13,6 +13,7 @@ public enum ClientRequestType
     SpawnFireImp = 21,
 
     DEBUG_SpawnEnemy = 50,
+    DEBUG_ResetPlayers = 51
 }
 
 [ProtoContract]
