@@ -1,3 +1,4 @@
+using System.Net;
 using Utilities.Comms;
 
 public class ConnectionManager
@@ -34,15 +35,28 @@ public class ConnectionManager
             return;
         }
         Server = new GloryServer(solo);
-        ConnectToServer();
+        ConnectToServer(null);
     }
 
-    public void ConnectToServer()
+    public void ConnectToServer(string ipString)
     {
         if (Client is not null)
         {
             return;
         }
-        Client = new(_serverMessageReceivedHandler);
+        if (ipString is null)
+        {
+            Client = new(_serverMessageReceivedHandler);
+            return;
+        }
+        try
+        {
+            var ipAddress = IPAddress.Parse(ipString);
+            Client = new(_serverMessageReceivedHandler, ipAddress);
+        }
+        catch
+        {
+
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Utilities.Comms
@@ -17,9 +18,19 @@ namespace Utilities.Comms
 
         public ClientMessageTransmitter(IServerMessageReceivedHandler handler)
         {
-            _handler = handler;
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPAddress ipAddress = ipHostInfo.AddressList[1];
+            Initialize(handler, ipAddress);
+        }
+
+        public ClientMessageTransmitter(IServerMessageReceivedHandler handler, IPAddress ipAddress)
+        {
+           Initialize(handler, ipAddress);
+        }
+
+        private void Initialize(IServerMessageReceivedHandler handler, IPAddress ipAddress)
+        {
+            _handler = handler;
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
             _initialSocket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _waitForReady = new TaskCompletionSource<bool>();

@@ -23,7 +23,7 @@ namespace Utilities.Comms
             _isSolo = isSolo;
             _handler = handler;
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPAddress ipAddress = ipHostInfo.AddressList[1];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
             _acceptingSocket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _waitForReady = new TaskCompletionSource<bool>();

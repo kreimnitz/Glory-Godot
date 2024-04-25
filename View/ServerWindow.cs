@@ -5,6 +5,7 @@ public partial class ServerWindow : Window
 	private ConnectionManager _connectionManager;
 	private CheckBox _soloCheckBox;
 	private Button _startGameButton;
+	private TextEdit _ipAddressInput;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -16,8 +17,10 @@ public partial class ServerWindow : Window
 		var createServerButton = GetNode<Button>("CreateServerButton");
 		createServerButton.Pressed += CreateServer;
 
+		_ipAddressInput = GetNode<TextEdit>("IPAddressInput");
+
 		var connectButton = GetNode<Button>("ConnectButton");
-		connectButton.Pressed += _connectionManager.ConnectToServer;
+		connectButton.Pressed += () => _connectionManager.ConnectToServer(_ipAddressInput.Text);
 
 		_startGameButton = GetNode<Button>("StartGameButton");
 		_startGameButton.Pressed += StartGame;
