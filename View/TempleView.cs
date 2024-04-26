@@ -5,6 +5,8 @@ using Godot;
 public class TempleView : IButtonGroupHandler
 {
     private const string TempleLabel = "Temple";
+    private const string TempleFoundationLabel = "Temple Foundation";
+    private const string FireTempleLabel = "Fire Temple";
 
     private Player _player;
     private Temple _temple;
@@ -67,7 +69,7 @@ public class TempleView : IButtonGroupHandler
     {
         SelectionManager.Instance.Selection = this;
         SelectionManager.Instance.ShowButtonGroup(this, GetButtonContext());
-        SelectionManager.Instance.ShowProgressQueue(GetTempleTexture(), TempleLabel, _temple.TaskQueue);
+        SelectionManager.Instance.ShowProgressQueue(GetTempleTexture(), GetTempleLabel(), _temple.TaskQueue);
     }
 
     private Texture2D GetTempleTexture()
@@ -80,6 +82,19 @@ public class TempleView : IButtonGroupHandler
         {
             case Element.Fire: return Resources.FireTempleIcon;
             default: return Resources.TempleIcon;
+        }
+    }
+
+    private string GetTempleLabel()
+    {
+        if (!_temple.IsActive)
+        {
+            return TempleFoundationLabel;
+        }
+        switch (_temple.Element)
+        {
+            case Element.Fire: return FireTempleLabel;
+            default: return TempleLabel;
         }
     }
 

@@ -13,14 +13,15 @@ public class EnemyPath
     public static Curve2D CreateWindingPathCurve()
     {
         var windingPath = new Curve2D();
-        windingPath.AddPoint(new Vector2(600, 0));
-        windingPath.AddPoint(new Vector2(450, 0));
-        windingPath.AddPoint(new Vector2(450, 300));
-        windingPath.AddPoint(new Vector2(300, 300));
-        windingPath.AddPoint(new Vector2(300, 0));
-        windingPath.AddPoint(new Vector2(150, 0));
-        windingPath.AddPoint(new Vector2(150, 150));
-        windingPath.AddPoint(new Vector2(0, 150));
+        windingPath.AddPoint(new Vector2(880, 470));
+        windingPath.AddPoint(new Vector2(880, 80));
+        windingPath.AddPoint(new Vector2(688, 80));
+        windingPath.AddPoint(new Vector2(688, 400));
+        windingPath.AddPoint(new Vector2(496, 400));
+        windingPath.AddPoint(new Vector2(496, 80));
+        windingPath.AddPoint(new Vector2(304, 80));
+        windingPath.AddPoint(new Vector2(304, 240));
+        windingPath.AddPoint(new Vector2(144, 240));
 
         return windingPath;
     }

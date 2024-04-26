@@ -9,7 +9,7 @@ public partial class TowerSprite : Sprite2D
 
 	private Queue<TowerShotSprite> _hiddenShots = new Queue<TowerShotSprite>();
 
-    public TowerShotSprite CreateTowerShotSprite(TowerShot towerShot, EnemySprite targetSprite)
+    public TowerShotSprite CreateTowerShotSprite(TowerShot towerShot, EnemySprite targetSprite, Node parent)
 	{
 		if (_hiddenShots.TryDequeue(out TowerShotSprite toRecycle))
 		{
@@ -21,6 +21,7 @@ public partial class TowerSprite : Sprite2D
 		var shotSprite = TowerShotSprite.CreateTowerShotSprite(towerShot, this, targetSprite);
 		shotSprite.Hidden += () => _hiddenShots.Enqueue(shotSprite);
 		_idToTowerShotSprite[towerShot.Id] = shotSprite;
+		parent.AddChild(shotSprite);
 		return shotSprite;
 	}
 

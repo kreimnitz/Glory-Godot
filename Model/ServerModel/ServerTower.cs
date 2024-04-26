@@ -13,7 +13,7 @@ public class ServerTower
 
     private DateTime _lastShotTime = DateTime.MinValue;
 
-    public Vector2 Position { get; private set; } = new(0, 150);
+    public Vector2 Position { get; private set; } = new(144, 240);
 
     public ServerTowerShot Shoot(ServerEnemy target)
     {

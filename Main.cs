@@ -29,7 +29,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		_topBar.Player = _player;
 
 		_bottomBar = GetNode<UiBar>("BottomBar");
-		_bottomBar.ProgressQueueUi.SetTasks(_player.TaskQueue);
+		_bottomBar.ClearSelection();
 
 		_serverWindow = GetNode<ServerWindow>("ServerWindow");
 		_serverWindow.Show();

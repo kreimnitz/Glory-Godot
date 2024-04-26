@@ -28,5 +28,7 @@ offset_bottom = 60.0
 grow_horizontal = 0
 
 [node name="BaseView" parent="." instance=ExtResource("6_xru06")]
-offset_top = 150.0
-offset_bottom = 150.0
+offset_left = 338.0
+offset_top = 88.0
+offset_right = 338.0
+offset_bottom = 88.0

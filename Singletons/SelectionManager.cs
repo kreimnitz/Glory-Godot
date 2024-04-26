@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using Godot;
 
 public class SelectionManager
@@ -19,11 +20,21 @@ public class SelectionManager
         }
     }
 
-    public object Selection { get; set; }
+    private object _selection;
+    public object Selection
+    { 
+        get { return _selection; }
+        set
+        {
+            _uiBar.ClearSelection();
+            _selection = value;
+        }
+    }
 
     public void ShowButtonGroup(IButtonGroupHandler handler, IEnumerable<ButtonContext> buttonContext)
     {
         _uiBar.ButtonGroup.SetHandlerAndVisuals(handler, buttonContext);
+        _uiBar.ButtonGroup.Show();
     }
 
     public void ShowProgressQueue(Texture2D texture, string label, List<ProgressItem> progressItems)
@@ -31,5 +42,6 @@ public class SelectionManager
         _uiBar.ProgressQueueUi.Label.Text = label;
         _uiBar.ProgressQueueUi.MainTexture.Texture = texture;
         _uiBar.ProgressQueueUi.SetTasks(progressItems);
+        _uiBar.ProgressQueueUi.Show();
     }
 }

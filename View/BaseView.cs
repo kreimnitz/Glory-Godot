@@ -20,6 +20,7 @@ public partial class BaseView : Control
 	{
 		_tower = GetNode<TowerSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
+		_enemyPath.Curve = EnemyPath.CreateWindingPathCurve();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -71,8 +72,7 @@ public partial class BaseView : Control
 		{
 			if (_enemyIdToSprite.TryGetValue(towerShot.TargetId, out EnemySprite enemySprite))
 			{
-				var towerShotSprite = _tower.CreateTowerShotSprite(towerShot, enemySprite);
-				_enemyPath.AddChild(towerShotSprite);
+				_tower.CreateTowerShotSprite(towerShot, enemySprite, this);
 			}
 		}
 
