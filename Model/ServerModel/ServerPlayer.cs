@@ -6,7 +6,7 @@ using Godot;
 
 public class ServerPlayer
 {
-    public const int StartingGlory = 1000; // 0;
+    public const int StartingGlory = 0;
     public const int IncomeTimerMs = 1000;
 
     public Player Player { get; } = new();

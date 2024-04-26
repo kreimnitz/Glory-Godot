@@ -102,7 +102,7 @@ public class TempleView : IButtonGroupHandler
     {
         if (!_temple.IsActive)
         {
-            // return build temple button
+            yield return GetBuildTempleButton();
             yield break;
         }
 
@@ -117,26 +117,19 @@ public class TempleView : IButtonGroupHandler
         }
     }
 
+    private ButtonContext GetBuildTempleButton()
+    {
+        return new ButtonContext(0, 0, Resources.TempleIcon);
+    }
+
     private ButtonContext GetRecruitFollowerButtonContext()
     {
-        return new ButtonContext()
-        {
-            Column = 0,
-            Row = 0,
-            Texture = Resources.FollowerIcon,
-            LabelInfo = null
-        };
+        return new ButtonContext(0, 0, Resources.FollowerIcon);
     }
 
     private ButtonContext GetConvertToFireTempleButtonContext()
     {
-        return new ButtonContext()
-        {
-            Column = 0,
-            Row = 1,
-            Texture = Resources.FlameIcon,
-            LabelInfo = null
-        };
+        return new ButtonContext(1, 0, Resources.FlameIcon);
     }
 
     private ButtonContext GetFireImpButtonContext()
@@ -151,16 +144,10 @@ public class TempleView : IButtonGroupHandler
             labelInfo = null;
         }
         
-        return new ButtonContext()
-        {
-            Column = 0,
-            Row = 1,
-            Texture = Resources.ImpIcon,
-            LabelInfo = labelInfo
-        };
+        return new ButtonContext(1, 0, Resources.ImpIcon, labelInfo);
     }
 
-    public void Execute(int row, int column)
+    public void ButtonPressed(int row, int column)
     {
         var requestType = GetRequestType(row, column);
         if (requestType is null)
@@ -172,6 +159,11 @@ public class TempleView : IButtonGroupHandler
 
     private ClientRequestType? GetRequestType(int row, int column)
     {
+        if (!_temple.IsActive)
+        {
+            return ClientRequestType.BuildTemple;
+        }
+
         if (row == 0 && column == 0)
         {
             return ClientRequestType.AddFollower;

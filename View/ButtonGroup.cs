@@ -46,7 +46,7 @@ public partial class ButtonGroup : VBoxContainer
 	{
 		if (_handler != null)
 		{
-			_handler.Execute(row, column);
+			_handler.ButtonPressed(row, column);
 		}
 	}
 
@@ -70,7 +70,7 @@ public partial class ButtonGroup : VBoxContainer
 
 public interface IButtonGroupHandler
 {
-	public void Execute(int row, int column);
+	public void ButtonPressed(int row, int column);
 }
 
 public class ButtonContext
@@ -79,4 +79,16 @@ public class ButtonContext
 	public int Column { get; set; }
 	public Texture2D Texture { get; set; }
 	public IProgressInfo LabelInfo { get; set; }
+
+	public ButtonContext(int row, int column, Texture2D texture) : this(row, column, texture, null)
+	{
+	}
+
+	public ButtonContext(int row, int column, Texture2D texture, IProgressInfo labelInfo)
+	{
+		Row = row;
+		Column = column;
+		Texture = texture;
+		LabelInfo = labelInfo;
+	}
 }

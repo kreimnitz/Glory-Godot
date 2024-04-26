@@ -135,6 +135,7 @@ public static class Resources
     {
         { ProgressItemType.RecruitingFollower, FollowerIcon },
         { ProgressItemType.ConvertToFireTemple, FlameIcon },
-        { ProgressItemType.UnlockFireImp, ImpIcon }
+        { ProgressItemType.UnlockFireImp, ImpIcon },
+        { ProgressItemType.BuildTemple, TempleIcon }
     };
 }

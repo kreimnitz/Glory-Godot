@@ -79,6 +79,12 @@ public class ServerGameState
         var handler = playerId == 0 ? _player0RequestHandler : _player1RequestHandler;
         switch (request)
         {
+            case ClientRequestType.BuildTemple:
+            {
+                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
+                handler.HandleBuildTempleRequest(templeIndexData);
+                break;
+            }
             case ClientRequestType.AddFollower:
             {
                 var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);

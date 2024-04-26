@@ -57,8 +57,9 @@ public enum ProgressItemType
 {
     Default = 0,
     RecruitingFollower = 1,
-    ConvertToFireTemple = 2,
-    UnlockFireImp = 3,
+    BuildTemple = 2,
+    ConvertToFireTemple = 3,
+    UnlockFireImp = 4,
 }
 
 public static class ProgressItemTypeHelpers

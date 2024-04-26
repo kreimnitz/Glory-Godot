@@ -20,25 +20,41 @@ public class ClientRequestHandler
         _serverPlayer.ServerTemples[data.TempleIndex].QueueNewFollower();
     }
 
-    public void HandleConvertToFireTempleRequest(TempleIndexData data)
+    public void HandleBuildTempleRequest(TempleIndexData data)
     {
-        if (_serverPlayer.Player.Glory < ServerTemple.BuildCost)
+        var serverTemple = _serverPlayer.ServerTemples[data.TempleIndex];
+        if (_serverPlayer.Player.Glory < ServerTemple.BuildCost || serverTemple.Temple.IsActive)
         {
             return;
         }
 
         _serverPlayer.Player.Glory -= ServerTemple.BuildCost;
-        _serverPlayer.ServerTemples[data.TempleIndex].QueueConvertToElement(Element.Fire);
+        serverTemple.QueueBuild();
     }
 
-    public void HandleUnlockFireImpRequest(TempleIndexData data)
+    public void HandleConvertToFireTempleRequest(TempleIndexData data)
     {
-        var validTemples = _serverPlayer.Player.Temples.Where(t => t.IsActive && t.Element == Element.Fire);
-        if (!validTemples.Any() || _serverPlayer.Player.Glory < Spawners.FireImpUnlockCost)
+        var serverTemple = _serverPlayer.ServerTemples[data.TempleIndex];
+        if (_serverPlayer.Player.Glory < ServerTemple.ConvertCost || serverTemple.Temple.Element != Element.None)
         {
             return;
         }
 
+        _serverPlayer.Player.Glory -= ServerTemple.ConvertCost;
+        serverTemple.QueueConvertToElement(Element.Fire);
+    }
+
+    public void HandleUnlockFireImpRequest(TempleIndexData data)
+    {
+        var temple = _serverPlayer.ServerTemples[data.TempleIndex];
+        if (temple.Temple.Element != Element.Fire 
+            || _serverPlayer.Player.Glory < Spawners.FireImpUnlockCost
+            || _serverPlayer.Player.Tech.FireTech.HasFlag(FireTech.FlameImp))
+        {
+            return;
+        }
+
+        _serverPlayer.Player.Glory -= Spawners.FireImpUnlockCost;
         _serverPlayer.ServerTemples[data.TempleIndex].QueueUnlockFlameImp();
     }
 

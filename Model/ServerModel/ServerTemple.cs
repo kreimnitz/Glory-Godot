@@ -6,9 +6,9 @@ public class ServerTemple
     public const int IncomePerFollower = 1;
     public const int FollowerCost = 50;
     public const int FollowerTrainDurationMs = 10000;
-    public const int CreateDurationMs = 2000;
-    public const int BuildCost = 200;
-    public const int ConvertDurationMs = 2000;
+    public const int BuildDurationMs = 20000;
+    public const int BuildCost = 400;
+    public const int ConvertDurationMs = 20000;
     public const int ConvertCost = 200;
 
     private ServerPlayer _player;
@@ -43,6 +43,12 @@ public class ServerTemple
     public void QueueNewFollower()
     {
         var delayedAction = new DelayedAction(ProgressItemType.RecruitingFollower, () => Temple.FollowerCount++, FollowerTrainDurationMs);
+        InProgressQueue.Enqueue(delayedAction);
+    }
+
+    public void QueueBuild()
+    {
+        var delayedAction = new DelayedAction(ProgressItemType.BuildTemple, () => Temple.IsActive = true, BuildDurationMs);
         InProgressQueue.Enqueue(delayedAction);
     }
 

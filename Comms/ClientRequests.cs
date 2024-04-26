@@ -3,9 +3,10 @@ using ProtoBuf;
 public enum ClientRequestType
 {
     AddFollower = 1,
+    BuildTemple = 2,
 
-    UpgradeTowerDamage = 2,
-    UpgradeTowerAttackSpeed = 3,
+    UpgradeTowerDamage = 5,
+    UpgradeTowerAttackSpeed = 6,
 
     ConvertToFireTemple = 10,
 
