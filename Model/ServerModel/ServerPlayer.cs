@@ -93,7 +93,7 @@ public class ServerPlayer
     {
         for (int i = 0; i < Player.TempleCount; i++)
         {
-            Player.Glory += Player.Temples[i].FollowerCount * ServerTemple.IncomePerFollower;
+            Player.Glory += Player.Temples[i].FollowerCount * Temple.IncomePerFollower;
         }
     }
 

@@ -119,32 +119,38 @@ public class TempleView : IButtonGroupHandler
 
     private ButtonContext GetBuildTempleButton()
     {
-        return new ButtonContext(0, 0, Resources.TempleIcon);
+        string tooltip = $"Build Temple\nCost: {Temple.BuildCost}";
+        return new ButtonContext(0, 0, Resources.TempleIcon, tooltip);
     }
 
     private ButtonContext GetRecruitFollowerButtonContext()
     {
-        return new ButtonContext(0, 0, Resources.FollowerIcon);
+        string tooltip = $"Recruit Follower\nCost: {Temple.FollowerCost}";
+        return new ButtonContext(0, 0, Resources.FollowerIcon, tooltip);
     }
 
     private ButtonContext GetConvertToFireTempleButtonContext()
     {
-        return new ButtonContext(1, 0, Resources.FlameIcon);
+        string tooltip = $"Upgrade to Fire Temple\nCost: {Temple.ConvertCost}";
+        return new ButtonContext(1, 0, Resources.FlameIcon, tooltip);
     }
 
     private ButtonContext GetFireImpButtonContext()
     {
         IProgressInfo labelInfo;
+        string tooltip;
         if (_player.Tech.FireTech.HasFlag(FireTech.FlameImp))
         {
+            tooltip = $"Summon Fire Imp\nCost: {EnemyUtilites.FireImpCost}";
             labelInfo = _temple.GetSpawnerForType(EnemyType.FireImp);
         }
         else
         {
+            tooltip = $"Unlock Fire Imp\nCost: {Spawners.FireImpUnlockCost}";
             labelInfo = null;
         }
         
-        return new ButtonContext(1, 0, Resources.ImpIcon, labelInfo);
+        return new ButtonContext(1, 0, Resources.ImpIcon, tooltip, labelInfo);
     }
 
     public void ButtonPressed(int row, int column)

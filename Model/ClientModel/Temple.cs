@@ -7,6 +7,15 @@ using ProtoBuf;
 [ProtoContract]
 public class Temple : IUpdateFrom<Temple>, INotifyPropertyChanged
 {
+    public const int StartingFollowerCount = 10;
+    public const int IncomePerFollower = 1;
+    public const int FollowerCost = 50;
+    public const int FollowerTrainDurationMs = 10000;
+    public const int BuildDurationMs = 20000;
+    public const int BuildCost = 400;
+    public const int ConvertDurationMs = 20000;
+    public const int ConvertCost = 200;
+    
     private Element _element = Element.None;
     private bool _isActive = false;
 

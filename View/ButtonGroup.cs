@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class ButtonGroup : VBoxContainer
@@ -17,6 +16,7 @@ public partial class ButtonGroup : VBoxContainer
 		{
 			var container = _buttonContainers[c.Row][c.Column];
 			container.Button.TextureNormal = c.Texture;
+			container.Button.TooltipText = c.Tooltip;
 			container.QueueInfo = c.LabelInfo;
 			container.Show();
 		}
@@ -38,7 +38,6 @@ public partial class ButtonGroup : VBoxContainer
 				var tempI = i;
 				var tempJ = j;
 				container.Button.Pressed += () => InvokeAction(tempI, tempJ);
-				container.TooltipText = "Tooltip text!!";
 			}
 		}
 	}
@@ -79,17 +78,20 @@ public class ButtonContext
 	public int Row { get; set; }
 	public int Column { get; set; }
 	public Texture2D Texture { get; set; }
+	public string Tooltip { get; set; }
 	public IProgressInfo LabelInfo { get; set; }
 
-	public ButtonContext(int row, int column, Texture2D texture) : this(row, column, texture, null)
+	public ButtonContext(int row, int column, Texture2D texture, string tooltip)
+		: this(row, column, texture, tooltip, null)
 	{
 	}
 
-	public ButtonContext(int row, int column, Texture2D texture, IProgressInfo labelInfo)
+	public ButtonContext(int row, int column, Texture2D texture, string tooltip, IProgressInfo labelInfo)
 	{
 		Row = row;
 		Column = column;
 		Texture = texture;
+		Tooltip = tooltip;
 		LabelInfo = labelInfo;
 	}
 }
