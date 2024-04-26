@@ -31,6 +31,6 @@ public class ClientMessageManager
     public void SendMessage(ClientRequestType request, byte[] data)
     {
         var message = new Message((int)request, data);
-        ConnectionManager.Instance.Client.SendMessage(message);
+        ConnectionManager.Instance.Client.TrySendMessage(message);
     }
 }

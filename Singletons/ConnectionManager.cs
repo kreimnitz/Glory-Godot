@@ -19,6 +19,8 @@ public class ConnectionManager
         _serverMessageReceivedHandler = handler;
     }
 
+    public bool Connected => (Server?.PlayersConnected ?? true) && (Client?.Connected ?? false);
+
     public GloryServer Server { get; private set; } = null;
 
     public ClientMessageTransmitter Client { get; private set; }
@@ -56,7 +58,13 @@ public class ConnectionManager
         }
         catch
         {
-
+            // do error handling
         }
+    }
+
+    public void CloseConnections()
+    {
+        Client?.Close();
+        Server?.ShutDown();
     }
 }

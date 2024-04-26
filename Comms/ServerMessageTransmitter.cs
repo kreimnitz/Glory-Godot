@@ -7,6 +7,7 @@ namespace Utilities.Comms
 {
     public class ServerMessageTransmitter
     {
+        private bool _connectionClosed = false;
         private bool _isSolo = false;
         private bool _runReceivers = true;
         private Socket _acceptingSocket;
@@ -16,7 +17,7 @@ namespace Utilities.Comms
 
         public Task WaitForReady => _waitForReady.Task;
 
-        public bool Connected => _waitForReady.Task.IsCompleted;
+        public bool Connected => !_connectionClosed && _waitForReady.Task.IsCompleted;
 
         public ServerMessageTransmitter(IClientMessageRecievedHandler handler, bool isSolo)
         {
@@ -42,6 +43,7 @@ namespace Utilities.Comms
 
         public void Close()
         {
+            _connectionClosed = true;
             _runReceivers = false;
             _communicationSockets[0].Close();
             _communicationSockets[1]?.Close();
@@ -62,11 +64,7 @@ namespace Utilities.Comms
                 {
                     return false;
                 }
-                var byteArrays = message.Serialize();
-                foreach (var byteArray in byteArrays)
-                {
-                    socket.Send(byteArray);
-                }
+                TrySendMessage(socket, message);
                 return true;
             }
         }
@@ -102,8 +100,35 @@ namespace Utilities.Comms
             while (_runReceivers)
             {
                 await Task.Delay(1);
-                var message = Message.ReceiveMessage(socket);
-                _handler.HandleClientMessage(message, playerNumber);
+                if (TryReceiveMessage(socket) is Message message && message != null)
+                {
+                    _handler.HandleClientMessage(message, playerNumber);
+                }
+            }
+        }
+
+        private void TrySendMessage(Socket socket, Message message)
+        {
+            try
+            {
+                Message.SendMessage(socket, message);
+            }
+            catch
+            {
+                Close();
+            }
+        }
+
+        private Message TryReceiveMessage(Socket socket)
+        {
+            try
+            {
+                return Message.ReceiveMessage(socket);
+            }
+            catch
+            {
+                Close();
+                return null;
             }
         }
     }

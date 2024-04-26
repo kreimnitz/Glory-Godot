@@ -1,11 +1,11 @@
-using System.Timers;
 using Utilities.Comms;
-using SysTimer = System.Timers.Timer;
 
 public class GloryServer : IClientMessageRecievedHandler
 {
     private ServerGameState _gameState;
     private ServerMessageTransmitter _serverMessenger;
+
+    public bool PlayersConnected => _serverMessenger.Connected;
 
     public GloryServer(bool solo)
     {
@@ -22,5 +22,10 @@ public class GloryServer : IClientMessageRecievedHandler
     public void StartGame()
     {
         _gameState.Start();
+    }
+
+    public void ShutDown()
+    {
+        _serverMessenger.Close();
     }
 }

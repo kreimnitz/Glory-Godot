@@ -48,6 +48,15 @@ namespace Utilities.Comms
             return new Message(messageTypeId, data);
         }
 
+        public static void SendMessage(Socket socket, Message message)
+        {
+            var byteArrays = message.Serialize();
+            foreach (var byteArray in byteArrays)
+            {
+                socket.Send(byteArray);
+            }
+        }
+
         public List<byte[]> Serialize()
         {
             List<byte[]> chunks = new List<byte[]>();

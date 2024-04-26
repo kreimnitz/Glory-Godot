@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Utilities.Comms
 {
     public class ClientMessageTransmitter
     {
+        private bool _connectionClosed = false;
         private bool _runReceiver = true;
         private Socket _initialSocket;
         private Socket _commsSocket;
@@ -15,6 +15,8 @@ namespace Utilities.Comms
         IServerMessageReceivedHandler _handler;
 
         public Task WaitForReady => _waitForReady.Task;
+
+        public bool Connected => !_connectionClosed && _waitForReady.Task.IsCompleted;
 
         public ClientMessageTransmitter(IServerMessageReceivedHandler handler)
         {
@@ -47,17 +49,34 @@ namespace Utilities.Comms
 
         public void Close()
         {
+            _connectionClosed = true;
             _runReceiver = false;
             _commsSocket.Close();
             _initialSocket.Close();
         }
 
-        public void SendMessage(Message message)
+        public void TrySendMessage(Message message)
         {
-            var byteArrays = message.Serialize();
-            foreach (var byteArray in byteArrays)
+            try
             {
-                _commsSocket.Send(byteArray);
+                Message.SendMessage(_commsSocket, message);
+            }
+            catch
+            {
+                Close();
+            }
+        }
+
+        private Message TryReceiveMessage(Socket socket)
+        {
+            try
+            {
+                return Message.ReceiveMessage(socket);
+            }
+            catch
+            {
+                Close();
+                return null;
             }
         }
 
@@ -75,8 +94,10 @@ namespace Utilities.Comms
             while (_runReceiver)
             {
                 await Task.Delay(1);
-                var message = Message.ReceiveMessage(socket);
-                _handler.HandleServerMessage(message);
+                if (TryReceiveMessage(socket) is Message message && message != null)
+                {
+                    _handler.HandleServerMessage(message);
+                }
             }
         }
     }

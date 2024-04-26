@@ -5,6 +5,7 @@ using Utilities.Comms;
 
 public partial class Main : Node, IServerMessageReceivedHandler
 {
+	private bool _gameStarted = false;
 	private ServerWindow _serverWindow;
 
 	private TopBar _topBar;
@@ -59,8 +60,24 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		ExecuteActions();
 	}
 
-	public void HandleServerMessage(Message message)
+    public override void _Notification(int what)
     {
+		if (what == NotificationWMCloseRequest)
+		{
+			ConnectionManager.Instance.CloseConnections();
+			GetTree().Quit();
+		}
+        base._Notification(what);
+    }
+
+    public void HandleServerMessage(Message message)
+    {
+		if (!_gameStarted)
+		{
+			_gameStarted = true;
+			_actions.Enqueue(() => _serverWindow.Hide());
+		}
+
 		if (message.MessageTypeId == 0)
 		{
 			var serverGameState = SerializationUtilities.FromByteArray<GameStateInfo>(message.Data);

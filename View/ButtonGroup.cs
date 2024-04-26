@@ -38,6 +38,7 @@ public partial class ButtonGroup : VBoxContainer
 				var tempI = i;
 				var tempJ = j;
 				container.Button.Pressed += () => InvokeAction(tempI, tempJ);
+				container.TooltipText = "Tooltip text!!";
 			}
 		}
 	}

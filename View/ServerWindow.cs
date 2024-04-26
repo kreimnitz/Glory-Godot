@@ -2,10 +2,16 @@ using Godot;
 
 public partial class ServerWindow : Window
 {
+	private const string PlayersConnectedStatus = "Server Status: All players connected!";
+	private const string NotConnectedStatus = "Server Status: No local server";
+	private const string WaitingStatus = "Server Status: Waiting for remote player...";
+
 	private ConnectionManager _connectionManager;
 	private CheckBox _soloCheckBox;
 	private Button _startGameButton;
-	private TextEdit _ipAddressInput;
+	private LineEdit _ipAddressInput;
+	
+	private Label _serverStatusLabel;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,7 +23,7 @@ public partial class ServerWindow : Window
 		var createServerButton = GetNode<Button>("CreateServerButton");
 		createServerButton.Pressed += CreateServer;
 
-		_ipAddressInput = GetNode<TextEdit>("IPAddressInput");
+		_ipAddressInput = GetNode<LineEdit>("IPAddressInput");
 
 		var connectButton = GetNode<Button>("ConnectButton");
 		connectButton.Pressed += () => _connectionManager.ConnectToServer(_ipAddressInput.Text);
@@ -25,6 +31,9 @@ public partial class ServerWindow : Window
 		_startGameButton = GetNode<Button>("StartGameButton");
 		_startGameButton.Pressed += StartGame;
 		_startGameButton.Disabled = true;
+
+		_serverStatusLabel = GetNode<Label>("ServerStatusLabel");
+		_serverStatusLabel.Text = NotConnectedStatus;
 	}
 
 	private void StartGame()
@@ -35,12 +44,17 @@ public partial class ServerWindow : Window
 
 	private void CreateServer()
 	{
+		_serverStatusLabel.Text = WaitingStatus;
 		_connectionManager.CreateServer(_soloCheckBox.ButtonPressed);
-		_startGameButton.Disabled = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (_connectionManager.Connected && _serverStatusLabel.Text != PlayersConnectedStatus)
+		{
+			_serverStatusLabel.Text = PlayersConnectedStatus;
+			_startGameButton.Disabled = _connectionManager.Server == null;
+		}
 	}
 }
