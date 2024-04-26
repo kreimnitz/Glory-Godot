@@ -111,14 +111,23 @@ public class ServerPlayer
         }
     }
 
+    public void TakeDamage(int damage)
+    {
+        Player.HpCurrent -= damage;
+    }
+
     public void CheckLifetimes()
     {
         int index = 0;
         while (index < _serverEnemies.Count)
         {
             var enemy = _serverEnemies[0];
-            if (enemy.IsDead())
+            if (enemy.IsDead)
             {
+                if (enemy.ReachedEndOfPath)
+                {
+                    TakeDamage(1);
+                }
                 _serverEnemies.RemoveAt(0);
             }
             else

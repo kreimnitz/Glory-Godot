@@ -56,6 +56,7 @@ offset_bottom = 263.0
 texture_normal = ExtResource("3_v7jag")
 
 [node name="Tower0" type="TextureButton" parent="."]
+layout_mode = 0
 offset_left = 375.0
 offset_top = 215.0
 offset_right = 425.0
@@ -63,6 +64,7 @@ offset_bottom = 265.0
 texture_normal = ExtResource("5_wc3ef")
 
 [node name="Tower1" type="TextureButton" parent="."]
+layout_mode = 0
 offset_left = 567.0
 offset_top = 215.0
 offset_right = 617.0
@@ -70,6 +72,7 @@ offset_bottom = 265.0
 texture_normal = ExtResource("5_wc3ef")
 
 [node name="Tower2" type="TextureButton" parent="."]
+layout_mode = 0
 offset_left = 759.0
 offset_top = 215.0
 offset_right = 809.0

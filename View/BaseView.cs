@@ -13,6 +13,7 @@ public partial class BaseView : Control
 	public void Initialize(Player player)
 	{
 		_player = player;
+		_tower.Player = player;
 	}
 
 	// Called when the node enters the scene tree for the first time.

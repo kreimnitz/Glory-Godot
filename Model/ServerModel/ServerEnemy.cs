@@ -1,4 +1,5 @@
 using Godot;
+using Godot.NativeInterop;
 
 public class ServerEnemy
 {
@@ -8,6 +9,10 @@ public class ServerEnemy
 
     public Enemy Enemy { get; private set; } = new();
     public Vector2 Position { get; private set; } = new();
+
+    public bool IsDead => ReachedEndOfPath || Enemy.HpCurrent <= 0;
+
+    public bool ReachedEndOfPath => Enemy.Progress >= _path.Length;
 
     public ServerEnemy(int hp, EnemyPath path)
     {
@@ -24,14 +29,9 @@ public class ServerEnemy
         Enemy.HpCurrent -= damage;
     }
 
-    public bool IsDead()
-    {
-        return Enemy.Progress > _path.Length || Enemy.HpCurrent <= 0;
-    }
-
     public void DoLoop()
     {
-        if (IsDead())
+        if (IsDead)
         {
             return;
         }

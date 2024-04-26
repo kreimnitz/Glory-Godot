@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Timers;
 using Utilities.Comms;
 
@@ -49,6 +48,15 @@ public class ServerGameState
         if (!_solo)
         {
             SendGameStateMessage(_player1);
+        }
+        CheckGameEnd();
+    }
+
+    public void CheckGameEnd()
+    {
+        if (_player0.Player.HpCurrent <= 0 || _player1.Player.HpCurrent <= 0)
+        {
+            _loopTimer.Stop();
         }
     }
 
@@ -121,6 +129,7 @@ public class ServerGameState
             case ClientRequestType.DEBUG_ResetPlayers:
             {
                 InitializePlayers();
+                Start();
                 break;
             }
             default:

@@ -7,12 +7,16 @@ using ProtoBuf;
 public class Player
 {
     public const int TempleCount = 3;
+    public const int HpMax = 20;
 
     [ProtoMember(1)]
     public Guid Id { get; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
     public int Glory { get; set; }
+
+    [ProtoMember(3)]
+    public int HpCurrent { get; set; } = HpMax;
 
     [ProtoMember(4)]
     public virtual List<ProgressItem> TaskQueue { get; set; } = new();
@@ -38,6 +42,7 @@ public class Player
     public PlayerUpdateInfo UpdateAndGetInfo(Player p)
     {
         Glory = p.Glory;
+        HpCurrent = p.HpCurrent;
         var templeUpdate = UpdateUtilites.UpdateMany(Temples, p.Temples);
         UpdateUtilites.UpdateMany(TaskQueue, p.TaskQueue);
 
