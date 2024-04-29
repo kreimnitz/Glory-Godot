@@ -11,8 +11,3 @@ public static class EnemyUtilites
         return enemy;
     }
 }
-
-public enum EnemyType
-{
-    FireImp = 1,
-}

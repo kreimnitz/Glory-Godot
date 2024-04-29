@@ -100,7 +100,7 @@ public class TempleRequestHandler
 
     private void HandleSpawnFireImpRequest(TempleRequestData data)
     {
-        var impSpawner = _serverPlayer.ServerTemples[data.TempleIndex].GetSpawnerForType(EnemyType.FireImp);
+        var impSpawner = _serverPlayer.ServerTemples[data.TempleIndex].GetSpawnerForType(UnitType.FireImp);
         if (impSpawner is null)
         {
             return;

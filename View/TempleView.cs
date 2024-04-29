@@ -141,7 +141,7 @@ public class TempleView : IButtonGroupHandler
         if (_player.Tech.FireTech.HasFlag(FireTech.FlameImp))
         {
             tooltip = $"Summon Fire Imp\nCost: {EnemyUtilites.FireImpCost}";
-            labelInfo = _temple.GetSpawnerForType(EnemyType.FireImp);
+            labelInfo = _temple.GetSpawnerForType(UnitType.FireImp);
         }
         else
         {

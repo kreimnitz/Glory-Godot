@@ -55,13 +55,13 @@ public class Temple : IUpdateFrom<Temple>, INotifyPropertyChanged
     [ProtoMember(6)]
     public virtual List<ProgressItem> TaskQueue { get; set; } = new();
 
-    public Spawner GetSpawnerForType(EnemyType enemyType)
+    public Spawner GetSpawnerForType(UnitType enemyType)
     {
         if (!IsActive)
         {
             return null;
         }
-        return Spawners.FirstOrDefault(s => s.EnemyType == enemyType);
+        return Spawners.FirstOrDefault(s => s.UnitType == enemyType);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

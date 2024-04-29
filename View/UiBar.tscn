@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://datlm1a8l16aa"]
+[gd_scene load_steps=9 format=3 uid="uid://datlm1a8l16aa"]
 
 [ext_resource type="Texture2D" uid="uid://do0txehoimol5" path="res://Resources/UIBarBackground.bmp" id="1_3krxh"]
 [ext_resource type="Script" path="res://View/UiBar.cs" id="1_gka31"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://fop0wb4aejle" path="res://View/ButtonContainer.tscn" id="3_2ipvm"]
 [ext_resource type="Script" path="res://View/ButtonGroup.cs" id="4_jfv3x"]
 [ext_resource type="PackedScene" uid="uid://b0l2u6c5f5fx" path="res://View/ProgressQueueUi.tscn" id="5_maoi0"]
+[ext_resource type="PackedScene" uid="uid://cbqabpm2aeymt" path="res://View/UnitInfoUi.tscn" id="7_bil8m"]
+[ext_resource type="Script" path="res://View/UnitInfoUi.cs" id="8_fngp0"]
 
 [node name="UiBar" type="Control"]
 layout_mode = 3
@@ -53,8 +55,18 @@ offset_right = 218.0
 offset_bottom = 116.0
 
 [node name="ProgressQueueUi" parent="." instance=ExtResource("5_maoi0")]
+visible = false
 layout_mode = 1
 offset_left = 517.0
 offset_top = 7.0
 offset_right = -583.0
-offset_bottom = -293.0
+offset_bottom = 7.0
+
+[node name="UnitInfoUi" parent="." instance=ExtResource("7_bil8m")]
+visible = false
+layout_mode = 1
+offset_left = 517.0
+offset_top = 7.0
+offset_right = -583.0
+offset_bottom = 7.0
+script = ExtResource("8_fngp0")

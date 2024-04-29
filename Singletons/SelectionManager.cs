@@ -44,4 +44,10 @@ public class SelectionManager
         _uiBar.ProgressQueueUi.SetTasks(progressItems);
         _uiBar.ProgressQueueUi.Show();
     }
+
+    public void ShowUnitInfoUi(IUnitModel model)
+    {
+        _uiBar.UnitInfoUi.SetModel(model);
+        _uiBar.UnitInfoUi.Show();
+    }
 }

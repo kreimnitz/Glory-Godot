@@ -7,7 +7,7 @@ public class Spawner : IUpdateFrom<Spawner>, IProgressInfo, INotifyPropertyChang
 {
     private int _currentValue;
     private int _max;
-    private EnemyType _enemyType;
+    private UnitType _unitType;
 
     [ProtoMember(1)]
     public Guid Id { get; } = IdGenerator.Generate();
@@ -41,15 +41,15 @@ public class Spawner : IUpdateFrom<Spawner>, IProgressInfo, INotifyPropertyChang
     }
 
     [ProtoMember(4)]
-    public EnemyType EnemyType
+    public UnitType UnitType
     {
-        get { return _enemyType; }
+        get { return _unitType; }
         set
         {
-            if (value != _enemyType)
+            if (value != _unitType)
             {
-                _enemyType = value;
-                NotifyPropertyChanged(nameof(EnemyType));
+                _unitType = value;
+                NotifyPropertyChanged(nameof(UnitType));
             }
         }
     }
@@ -60,7 +60,7 @@ public class Spawner : IUpdateFrom<Spawner>, IProgressInfo, INotifyPropertyChang
     {
         CurrentValue = other.CurrentValue;
         Max = other.Max;
-        EnemyType = other.EnemyType;
+        UnitType = other.UnitType;
     }
 
     private void NotifyPropertyChanged(string propertyName)

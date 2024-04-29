@@ -16,13 +16,13 @@ public class ServerTemple
         ServerSpawners = new(Temple.Spawners, serverSpawner => serverSpawner.Spawner);
     }
 
-    public ServerSpawner GetSpawnerForType(EnemyType enemyType)
+    public ServerSpawner GetSpawnerForType(UnitType enemyType)
     {
         if (!Temple.IsActive)
         {
             return null;
         }
-        return ServerSpawners.FirstOrDefault(s => s.Spawner.EnemyType == enemyType);
+        return ServerSpawners.FirstOrDefault(s => s.Spawner.UnitType == enemyType);
     }
 
     public void DoLoop()

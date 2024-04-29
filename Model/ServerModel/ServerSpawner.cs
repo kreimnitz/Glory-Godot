@@ -13,12 +13,12 @@ public class ServerSpawner
 
     public ServerSpawner(
         int timerMs,
-        EnemyType enemyType)
+        UnitType unitType)
     {
         _spawnTimer = new Timer(timerMs);
         _spawnTimer.AutoReset = true;
         _spawnTimer.Elapsed += (s, a) => IncrementQueue();
-        Spawner.EnemyType = enemyType;
+        Spawner.UnitType = unitType;
         Spawner.Max = 5;
         Spawner.CurrentValue = 0;
     }

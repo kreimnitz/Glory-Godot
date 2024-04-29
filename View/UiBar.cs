@@ -4,6 +4,7 @@ using Godot;
 public partial class UiBar : Control
 {
 	public ProgressQueueUi ProgressQueueUi { get; private set; }
+	public UnitInfoUi UnitInfoUi {get; private set; }
 
 	public ButtonGroup ButtonGroup { get; private set; }
 
@@ -20,6 +21,7 @@ public partial class UiBar : Control
 		DebugButton2 = GetNode<ButtonContainer>("DebugButtonContainer2").Button;
 
 		ProgressQueueUi = GetNode<ProgressQueueUi>("ProgressQueueUi");
+		UnitInfoUi = GetNode<UnitInfoUi>("UnitInfoUi");
 		ButtonGroup = GetNode<ButtonGroup>("MainButtonGroup");
 	}
 
@@ -32,5 +34,6 @@ public partial class UiBar : Control
 	{
 		ProgressQueueUi.Hide();
 		ButtonGroup.Hide();
+		UnitInfoUi.Hide();
 	}
 }
