@@ -33,7 +33,7 @@ public class ServerTemple
 
     public void QueueNewFollower()
     {
-        var delayedAction = new DelayedAction(ProgressItemType.RecruitingFollower, () => Temple.FollowerCount++, Temple.FollowerTrainDurationMs);
+        var delayedAction = new DelayedAction(ProgressItemType.RecruitingFollower, () => Temple.FollowerCount++, Follower.TrainDurationMs);
         InProgressQueue.Enqueue(delayedAction);
     }
 

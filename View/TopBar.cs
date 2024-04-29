@@ -24,6 +24,6 @@ public partial class TopBar : Control
 	public override void _Process(double delta)
 	{
 		_gloryLabel.Text = GloryLabelPrefix + Player.Glory;
-		_followersLabel.Text = FollowersLabelPrefix + Player.FollowerCount;
+		_followersLabel.Text = FollowersLabelPrefix + Player.TotalFollowerCount;
 	}
 }

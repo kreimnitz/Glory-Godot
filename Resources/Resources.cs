@@ -131,6 +131,20 @@ public static class Resources
         }
     }
 
+    private const string MainTempleIconPath = ResourcesPrefix + "MainTempleIcon.png";
+    private static Texture2D _mainTempleIcon;
+    public static Texture2D MainTempleIcon
+    {
+        get
+        {
+            if (_mainTempleIcon is null)
+            {
+                _mainTempleIcon = GD.Load<Texture2D>(MainTempleIconPath);
+            }
+            return _mainTempleIcon;
+        }
+    }
+
     public static readonly Dictionary<ProgressItemType, Texture2D> ProgressItemTextures = new()
     {
         { ProgressItemType.RecruitingFollower, FollowerIcon },

@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://c23f1ofnahgy3"]
 
-[ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/TowerSprite.tscn" id="1_0s3xs"]
 [ext_resource type="Script" path="res://View/BaseView.cs" id="1_ywp6l"]
 [ext_resource type="Texture2D" uid="uid://din8xgqlojr2y" path="res://Resources/Path.png" id="2_3oevd"]
 [ext_resource type="Texture2D" uid="uid://c7eyf52w4abw0" path="res://Resources/TempleFoundation.png" id="3_v7jag"]
+[ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/MainTempleSprite.tscn" id="3_xrgli"]
 [ext_resource type="Texture2D" uid="uid://056qkse32lxw" path="res://Resources/TowerFoundation.png" id="5_wc3ef"]
 
 [sub_resource type="Curve2D" id="Curve2D_oaq7p"]
@@ -27,32 +27,36 @@ texture = ExtResource("2_3oevd")
 [node name="EnemyPath" type="Path2D" parent="."]
 curve = SubResource("Curve2D_oaq7p")
 
-[node name="TowerSprite" parent="." instance=ExtResource("1_0s3xs")]
-position = Vector2(144, 240)
+[node name="TowerSprite" parent="." instance=ExtResource("3_xrgli")]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 192.0
+offset_right = 200.0
+offset_bottom = 288.0
 
 [node name="Temple0" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 112.0
-offset_top = 51.0
-offset_right = 162.0
-offset_bottom = 101.0
+offset_left = 100.0
+offset_top = 50.0
+offset_right = 150.0
+offset_bottom = 100.0
 scale = Vector2(1, 1.00816)
 texture_normal = ExtResource("3_v7jag")
 
 [node name="Temple1" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 101.0
-offset_top = 372.0
-offset_right = 151.0
-offset_bottom = 422.0
+offset_left = 100.0
+offset_top = 380.0
+offset_right = 150.0
+offset_bottom = 430.0
 texture_normal = ExtResource("3_v7jag")
 
 [node name="Temple2" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 51.0
-offset_top = 213.0
-offset_right = 101.0
-offset_bottom = 263.0
+offset_left = 20.0
+offset_top = 215.0
+offset_right = 70.0
+offset_bottom = 265.0
 texture_normal = ExtResource("3_v7jag")
 
 [node name="Tower0" type="TextureButton" parent="."]

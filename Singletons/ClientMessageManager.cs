@@ -16,11 +16,11 @@ public class ClientMessageManager
     {
     }
 
-    public void SendTempleIndexMessage(ClientRequestType requestType, int templeIndex)
+    public void SendTempleRequest(TempleRequest request, int templeIndex)
     {
-        var data = new TempleIndexData() { TempleIndex = templeIndex };
+        var data = new TempleRequestData() { Request = request, TempleIndex = templeIndex };
         var serialized = SerializationUtilities.ToByteArray(data);
-        SendMessage(requestType, serialized);
+        SendMessage(ClientRequestType.TempleRequest, serialized);
     }
 
     public void SendMessage(ClientRequestType request)

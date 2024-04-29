@@ -2,24 +2,34 @@ using ProtoBuf;
 
 public enum ClientRequestType
 {
-    AddFollower = 1,
-    BuildTemple = 2,
-
-    UpgradeTowerDamage = 5,
-    UpgradeTowerAttackSpeed = 6,
-
-    ConvertToFireTemple = 10,
-
-    UnlockFireImp = 20,
-    SpawnFireImp = 21,
+    PlayerRequest = 0,
+    TempleRequest = 1,
 
     DEBUG_SpawnEnemy = 50,
     DEBUG_ResetPlayers = 51
 }
 
-[ProtoContract]
-public class TempleIndexData
+public enum TempleRequest
 {
+    BuildTemple = 0,
+    RecruitFollower = 1,
+
+    ConvertToFireTemple = 10,
+    UnlockFireImp = 20,
+    SpawnFireImp = 21,
+}
+
+public enum PlayerRequest
+{
+    RecruitFollower = 0,
+}
+
+[ProtoContract]
+public class TempleRequestData
+{
+    [ProtoMember(0)]
+    public TempleRequest Request { get; set; }
+
     [ProtoMember(1)]
     public int TempleIndex { get; set; }
 }

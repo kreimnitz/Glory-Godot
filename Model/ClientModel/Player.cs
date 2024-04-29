@@ -6,6 +6,8 @@ using ProtoBuf;
 [ProtoContract]
 public class Player
 {
+    public const int StartingGlory = 0;
+    public const int StartingFollowerCount = 10;
     public const int TempleCount = 3;
     public const int HpMax = 20;
 
@@ -33,7 +35,10 @@ public class Player
     [ProtoMember(8)]
     public PlayerTech Tech { get; set; } = new();
 
-    public int FollowerCount => GetTotalFollowerCount();
+    [ProtoMember(9)]
+    public int FollowerCount { get; set; }
+
+    public int TotalFollowerCount => GetTotalFollowerCount();
 
     public Player()
     {
@@ -43,6 +48,7 @@ public class Player
     {
         Glory = p.Glory;
         HpCurrent = p.HpCurrent;
+        FollowerCount = p.FollowerCount;
         var templeUpdate = UpdateUtilites.UpdateMany(Temples, p.Temples);
         UpdateUtilites.UpdateMany(TaskQueue, p.TaskQueue);
 
@@ -56,7 +62,7 @@ public class Player
 
     private int GetTotalFollowerCount()
     {
-        int count = 0;
+        int count = FollowerCount;
         for (int i = 0; i < Temples.Count; i++)
         {
             count += Temples[i]?.FollowerCount ?? 0;

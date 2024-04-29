@@ -46,7 +46,7 @@ public partial class ButtonGroup : VBoxContainer
 	{
 		if (_handler != null)
 		{
-			_handler.ButtonPressed(row, column);
+			_handler.GridButtonPressed(row, column);
 		}
 	}
 
@@ -70,7 +70,7 @@ public partial class ButtonGroup : VBoxContainer
 
 public interface IButtonGroupHandler
 {
-	public void ButtonPressed(int row, int column);
+	public void GridButtonPressed(int row, int column);
 }
 
 public class ButtonContext

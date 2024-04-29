@@ -125,8 +125,7 @@ public class TempleView : IButtonGroupHandler
 
     private ButtonContext GetRecruitFollowerButtonContext()
     {
-        string tooltip = $"Recruit Follower\nCost: {Temple.FollowerCost}";
-        return new ButtonContext(0, 0, Resources.FollowerIcon, tooltip);
+        return new ButtonContext(0, 0, Resources.FollowerIcon, Follower.RecruitTooltip);
     }
 
     private ButtonContext GetConvertToFireTempleButtonContext()
@@ -153,26 +152,26 @@ public class TempleView : IButtonGroupHandler
         return new ButtonContext(1, 0, Resources.ImpIcon, tooltip, labelInfo);
     }
 
-    public void ButtonPressed(int row, int column)
+    public void GridButtonPressed(int row, int column)
     {
         var requestType = GetRequestType(row, column);
         if (requestType is null)
         {
             return;
         }
-        ClientMessageManager.Instance.SendTempleIndexMessage(requestType.Value, _templeIndex);
+        ClientMessageManager.Instance.SendTempleRequest(requestType.Value, _templeIndex);
     }
 
-    private ClientRequestType? GetRequestType(int row, int column)
+    private TempleRequest? GetRequestType(int row, int column)
     {
         if (!_temple.IsActive)
         {
-            return ClientRequestType.BuildTemple;
+            return TempleRequest.BuildTemple;
         }
 
         if (row == 0 && column == 0)
         {
-            return ClientRequestType.AddFollower;
+            return TempleRequest.RecruitFollower;
         }
 
         switch (_temple.Element)
@@ -181,7 +180,7 @@ public class TempleView : IButtonGroupHandler
             {
                 if (row == 1 && column == 0)
                 {
-                    return ClientRequestType.ConvertToFireTemple;
+                    return TempleRequest.ConvertToFireTemple;
                 }
                 break;
             }
@@ -191,9 +190,9 @@ public class TempleView : IButtonGroupHandler
                 {
                     if (_player.Tech.FireTech.HasFlag(FireTech.FlameImp))
                     {
-                        return ClientRequestType.SpawnFireImp;
+                        return TempleRequest.SpawnFireImp;
                     }
-                    return ClientRequestType.UnlockFireImp;
+                    return TempleRequest.UnlockFireImp;
                 }
                 break;
             }

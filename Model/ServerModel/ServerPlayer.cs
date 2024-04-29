@@ -6,7 +6,6 @@ using Godot;
 
 public class ServerPlayer
 {
-    public const int StartingGlory = 0;
     public const int IncomeTimerMs = 1000;
 
     public Player Player { get; } = new();
@@ -38,7 +37,7 @@ public class ServerPlayer
         ServerTemples = new(Player.Temples, (serverTemple) => serverTemple.Temple);
 
 
-        Player.Glory = StartingGlory;
+        Player.Glory = Player.StartingGlory;
         _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(ApplyIncome);
         _incomeTimer.Start();
         PlayerNumber = playerNumber;
@@ -47,8 +46,10 @@ public class ServerPlayer
         {
             ServerTemples.Add(new ServerTemple(this));
         }
-        ServerTemples[0].Temple.IsActive = true;
-        ServerTemples[0].Temple.FollowerCount = 10;
+        // ServerTemples[0].Temple.IsActive = true;
+        // ServerTemples[0].Temple.FollowerCount = 10;
+
+        Player.FollowerCount = Player.StartingFollowerCount;
 
         EnemyPath = new EnemyPath(EnemyPath.CreateWindingPathCurve());
     }
@@ -91,10 +92,7 @@ public class ServerPlayer
 
     private void ApplyIncome()
     {
-        for (int i = 0; i < Player.TempleCount; i++)
-        {
-            Player.Glory += Player.Temples[i].FollowerCount * Temple.IncomePerFollower;
-        }
+        Player.Glory += Player.TotalFollowerCount * Follower.IncomePerFollower;
     }
 
     public void AddEnemy(ServerEnemy enemy)
@@ -114,6 +112,12 @@ public class ServerPlayer
     public void TakeDamage(int damage)
     {
         Player.HpCurrent -= damage;
+    }
+
+    public void QueueNewFollower()
+    {
+        var delayedAction = new DelayedAction(ProgressItemType.RecruitingFollower, () => Player.FollowerCount++, Follower.TrainDurationMs);
+        InProgressQueue.Enqueue(delayedAction);
     }
 
     public void CheckLifetimes()

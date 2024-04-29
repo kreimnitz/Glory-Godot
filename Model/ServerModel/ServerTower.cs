@@ -5,6 +5,7 @@ using Godot;
 
 public class ServerTower
 {
+    private int _range = 450;
     private readonly int[] _damageLevels = { 4, 6, 8, 10 };
     private int DamageLevel { get; set; } = 0;
     
@@ -29,7 +30,8 @@ public class ServerTower
         }
 
         var closestEnemy = enemies.OrderByDescending(e => e.Enemy.Progress).First();
-        if (closestEnemy.Enemy.Progress < 150)
+        var distanceToEnemy = closestEnemy.Position.DistanceTo(Position);
+        if (distanceToEnemy > _range)
         {
             return null;
         }

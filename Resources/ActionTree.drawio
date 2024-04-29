@@ -1,0 +1,124 @@
+<mxfile host="app.diagrams.net" modified="2024-04-26T22:58:55.471Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="gPiDk04cJLUaMy9werIZ" version="24.3.1" type="device">
+  <diagram name="Page-1" id="gDOqkowDtDdmhePS0m9I">
+    <mxGraphModel dx="2578" dy="915" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-1" target="2-8dLQRRrUwTu2bhHORD-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-1" value="Demigod" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="190" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-2" target="2-8dLQRRrUwTu2bhHORD-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-2" value="Temple" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="780" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-3" value="Tower" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-4" target="2-8dLQRRrUwTu2bhHORD-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-4" target="2-8dLQRRrUwTu2bhHORD-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-4" value="Build Temple" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-6" value="Recruit Follower" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="300" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-7" value="Convert to Element" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="300" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-15" target="2-8dLQRRrUwTu2bhHORD-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-15" value="Elemental Temple" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="630" y="410" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-16" value="Summon T1 Unit" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-17" target="2-8dLQRRrUwTu2bhHORD-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-17" target="2-8dLQRRrUwTu2bhHORD-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-17" value="Unlock T1 Unit" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-20" target="2-8dLQRRrUwTu2bhHORD-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-20" target="2-8dLQRRrUwTu2bhHORD-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-20" value="Unlock T2 Unit" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-23" target="2-8dLQRRrUwTu2bhHORD-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-23" target="2-8dLQRRrUwTu2bhHORD-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-23" value="Unlock T3 Unit" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="2-8dLQRRrUwTu2bhHORD-25" target="2-8dLQRRrUwTu2bhHORD-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-25" value="Unlock T4 Unit" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-27" value="Summon T2 Unit" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-28" value="Summon T3 Unit" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-29" value="Summon T4 Unit" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-33" value="Research Elemental Tech" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="190" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-35" value="Fire Tech" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="120" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-36" value="Unit Move Speed+" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="850" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-37" value="Glory Per Affinity" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="500" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-38" value="Unit Summon Refresh Rate+" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="500" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-39" value="Water Tech" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="-270" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-40" value="Unit Cost Reduction" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-380" y="500" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-41" value="Earth Tech" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="-280" y="750" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-42" value="Air Tech" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="120" y="750" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-43" value="Glory Per Follower" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="850" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2-8dLQRRrUwTu2bhHORD-44" value="Additional Temple Slots" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-220" y="850" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

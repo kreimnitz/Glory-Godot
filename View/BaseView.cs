@@ -5,10 +5,11 @@ using System.Collections.Generic;
 public partial class BaseView : Control
 {
 	private Player _player;
-	private TowerSprite _tower;
+	private MainTempleSprite _tower;
 	private Path2D _enemyPath;
 	private TempleView[] _templeViews = new TempleView[Player.TempleCount];
-	private Dictionary<Guid, EnemySprite> _enemyIdToSprite = new();
+	private EnemySpriteManager _enemySpriteManager = new();
+	private TowerShotSpriteManager _towerShotSpriteManager = new();
 
 	public void Initialize(Player player)
 	{
@@ -19,7 +20,7 @@ public partial class BaseView : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_tower = GetNode<TowerSprite>("TowerSprite");
+		_tower = GetNode<MainTempleSprite>("TowerSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
 		_enemyPath.Curve = EnemyPath.CreateWindingPathCurve();
 	}
@@ -33,20 +34,6 @@ public partial class BaseView : Control
 		}
 	}
 
-	private Queue<EnemySprite> _hiddenEnemies = new Queue<EnemySprite>();
-	private EnemySprite CreateEnemySprite(Enemy model)
-	{
-		if (_hiddenEnemies.TryDequeue(out EnemySprite toRecycle))
-		{
-			toRecycle.Reset(model);
-			return toRecycle;
-		}
-
-		var enemy = EnemySprite.CreateEnemy(model, _enemyPath);
-		enemy.Hidden += () => _hiddenEnemies.Enqueue(enemy);
-		return enemy;
-	}
-
 	public void ProcessModelUpdate(PlayerUpdateInfo info)
 	{
 		if (info.NewTemples)
@@ -56,30 +43,22 @@ public partial class BaseView : Control
 
 		foreach (var enemy in info.EnemyUpdates.Added)
 		{
-			var sprite = CreateEnemySprite(enemy);
-			_enemyIdToSprite[enemy.Id] = sprite;
+			_enemySpriteManager.CreateSprite(enemy, _enemyPath);
 		}
 
 		foreach (var enemy in info.EnemyUpdates.Removed)
 		{
-			if (_enemyIdToSprite.TryGetValue(enemy.Id, out EnemySprite enemySprite))
-			{
-				enemySprite.Kill();
-				_enemyIdToSprite.Remove(enemy.Id);
-			}
+			_enemySpriteManager.RecycleSprite(enemy.Id);
 		}
 
 		foreach (var towerShot in info.TowerShotUpdates.Added)
 		{
-			if (_enemyIdToSprite.TryGetValue(towerShot.TargetId, out EnemySprite enemySprite))
-			{
-				_tower.CreateTowerShotSprite(towerShot, enemySprite, this);
-			}
+			_towerShotSpriteManager.CreateSprite(towerShot, this);
 		}
 
 		foreach (var towerShot in info.TowerShotUpdates.Removed)
 		{
-			_tower.KillTowerShotSprite(towerShot.Id);
+			_towerShotSpriteManager.RecycleSprite(towerShot.Id);
 		}
 	}
 

@@ -87,34 +87,15 @@ public class ServerGameState
         var handler = playerId == 0 ? _player0RequestHandler : _player1RequestHandler;
         switch (request)
         {
-            case ClientRequestType.BuildTemple:
+            case ClientRequestType.TempleRequest:
             {
-                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
-                handler.HandleBuildTempleRequest(templeIndexData);
+                var templeRequestData = SerializationUtilities.FromByteArray<TempleRequestData>(data);
+                handler.HandleTempleRequest(templeRequestData);
                 break;
             }
-            case ClientRequestType.AddFollower:
+            case ClientRequestType.PlayerRequest:
             {
-                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
-                handler.HandleAddFollowerRequest(templeIndexData);
-                break;
-            }
-            case ClientRequestType.ConvertToFireTemple:
-            {
-                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
-                handler.HandleConvertToFireTempleRequest(templeIndexData);
-                break;
-            }
-            case ClientRequestType.UnlockFireImp:
-            {
-                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
-                handler.HandleUnlockFireImpRequest(templeIndexData);
-                break;
-            }
-            case ClientRequestType.SpawnFireImp:
-            {
-                var templeIndexData = SerializationUtilities.FromByteArray<TempleIndexData>(data);
-                handler.HandleSpawnFireImpRequest(templeIndexData);
+                handler.HandleRecruitFollowerRequest();
                 break;
             }
             case ClientRequestType.DEBUG_SpawnEnemy:
