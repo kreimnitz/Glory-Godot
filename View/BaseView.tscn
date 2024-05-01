@@ -36,7 +36,7 @@ offset_top = 192.0
 offset_right = 200.0
 offset_bottom = 288.0
 
-[node name="Temple0" type="TextureButton" parent="."]
+[node name="Temple1" type="TextureButton" parent="."]
 layout_mode = 0
 offset_left = 100.0
 offset_top = 50.0
@@ -45,7 +45,7 @@ offset_bottom = 100.0
 scale = Vector2(1, 1.00816)
 texture_normal = ExtResource("3_v7jag")
 
-[node name="Temple1" type="TextureButton" parent="."]
+[node name="Temple2" type="TextureButton" parent="."]
 layout_mode = 0
 offset_left = 26.0
 offset_top = 216.0
@@ -53,7 +53,7 @@ offset_right = 76.0
 offset_bottom = 266.0
 texture_normal = ExtResource("3_v7jag")
 
-[node name="Temple2" type="TextureButton" parent="."]
+[node name="Temple3" type="TextureButton" parent="."]
 layout_mode = 0
 offset_left = 103.0
 offset_top = 390.0

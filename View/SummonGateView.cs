@@ -36,6 +36,7 @@ public partial class SummonGateView : TextureButton, IButtonGroupHandler
 		{
 			ConnectSpawner(spawner);
 		}
+		_actionQueue.Add(RefreshVisuals);
 	}
 
     private void TempleUpdated(object sender, PropertyChangedEventArgs e)
@@ -115,7 +116,8 @@ public partial class SummonGateView : TextureButton, IButtonGroupHandler
 
 	private void RefreshVisuals()
 	{
-		if (!_fireButton.Visible && _player.Temples.Any(t => t.Element == Element.Fire))
+		_fireButton.Hide();
+		if (_player.Temples.Any(t => t.Element == Element.Fire))
 		{
 			_fireButton.Show();
 		}

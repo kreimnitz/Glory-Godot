@@ -3,7 +3,7 @@ using Godot;
 public partial class BaseView : Control
 {
 	private Player _player;
-	private MainTempleSprite _tower;
+	private MainTempleSprite _mainTemple;
 	private Path2D _enemyPath;
 	private TempleView[] _templeViews = new TempleView[Player.TempleCount];
 	private EnemySpriteManager _enemySpriteManager = new();
@@ -13,7 +13,7 @@ public partial class BaseView : Control
 	public void Initialize(Player player)
 	{
 		_player = player;
-		_tower.Player = player;
+		_mainTemple.SetModel(player);
 		_summonGateView.SetModel(_player);
 		CreateTempleViews();
 	}
@@ -21,7 +21,7 @@ public partial class BaseView : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_tower = GetNode<MainTempleSprite>("MainTempleSprite");
+		_mainTemple = GetNode<MainTempleSprite>("MainTempleSprite");
 		_enemyPath = GetNode<Path2D>("EnemyPath");
 		_enemyPath.Curve = EnemyPath.CreateWindingPathCurve();
 		_summonGateView = GetNode<SummonGateView>("SummonGate");
@@ -38,6 +38,11 @@ public partial class BaseView : Control
 
 	public void ProcessModelUpdate(PlayerUpdateInfo info)
 	{
+		if (info.NewId)
+		{
+			Initialize(_player);
+		}
+
 		foreach (var enemy in info.EnemyUpdates.Added)
 		{
 			_enemySpriteManager.CreateSprite(enemy, _enemyPath);
@@ -61,7 +66,7 @@ public partial class BaseView : Control
 
 	private void CreateTempleViews()
 	{
-		for (int i = 0; i < Player.TempleCount; i++)
+		for (int i = 1; i < Player.TempleCount; i++)
 		{
 			var templeButton = GetNode<TextureButton>($"Temple{i}");
 			_templeViews[i] = new TempleView(_player.Temples[i], templeButton, _player);

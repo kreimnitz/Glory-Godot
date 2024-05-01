@@ -45,13 +45,13 @@ public class ServerPlayer
         {
             ServerTemples.Add(new ServerTemple(this, Player.Temples[i]));
         }
-
-        Player.FollowerCount = Player.StartingFollowerCount;
+        ServerTemples[0].Temple.FollowerCount = Player.StartingFollowerCount;
+        ServerTemples[0].Temple.IsActive = true;
 
         EnemyPath = new EnemyPath(EnemyPath.CreateWindingPathCurve());
 
         ServerSummonGate = new(Player.SummonGate);
-        ServerSummonGate.CreateSpawner(UnitType.Warrior);
+        ServerSummonGate.CreateSpawner(Enemies.WarriorInfo);
     }
 
     public void DoLoop()
@@ -76,10 +76,10 @@ public class ServerPlayer
         CheckLifetimes();
     }
 
-    public void UnlockFlameImp()
+    public void UnlockEnemy(EnemyInfo info)
     {
-        Player.Tech.FireTech |= FireTech.FlameImp;
-        ServerSummonGate.CreateSpawner(UnitType.FireImp);
+        Player.Tech.UpdateFrom(Player.Tech | info.RequiredTech);
+        ServerSummonGate.CreateSpawner(info);
     }
 
     private void ApplyIncome()
@@ -104,12 +104,6 @@ public class ServerPlayer
     public void TakeDamage(int damage)
     {
         Player.HpCurrent -= damage;
-    }
-
-    public void QueueNewFollower()
-    {
-        var delayedAction = new DelayedAction(ProgressItemType.RecruitingFollower, () => Player.FollowerCount++, Follower.TrainDurationMs);
-        InProgressQueue.Enqueue(delayedAction);
     }
 
     public void CheckLifetimes()

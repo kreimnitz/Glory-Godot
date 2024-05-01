@@ -11,26 +11,27 @@ public class TempleRequestHandler
 
     public void HandleRequest(TempleRequestData data)
     {
+        var serverTemple = GetServerTemple(data);
         switch (data.Request)
         {
             case TempleRequest.BuildTemple:
             {
-                HandleBuildTempleRequest(data);
+                HandleBuildTempleRequest(serverTemple);
                 break;
             }
             case TempleRequest.RecruitFollower:
             {
-                HandleTempleRecruitFollowerRequest(data);
+                HandleTempleRecruitFollowerRequest(serverTemple);
                 break;
             }
             case TempleRequest.ConvertToFireTemple:
             {
-                HandleConvertToFireTempleRequest(data);
+                HandleConvertToFireTempleRequest(serverTemple);
                 break;
             }
             case TempleRequest.UnlockFireImp:
             {
-                HandleUnlockFireImpRequest(data);
+                HandleUnlockFireImpRequest(serverTemple);
                 break;
             }
             default:
@@ -40,7 +41,12 @@ public class TempleRequestHandler
         }
     }
 
-    private void HandleTempleRecruitFollowerRequest(TempleRequestData data)
+    private ServerTemple GetServerTemple(TempleRequestData data)
+    {
+        return _serverPlayer.ServerTemples[data.TempleIndex];
+    }
+
+    private void HandleTempleRecruitFollowerRequest(ServerTemple serverTemple)
     {
         if (_serverPlayer.Player.Glory < Follower.Cost)
         {
@@ -48,12 +54,11 @@ public class TempleRequestHandler
         }
 
         _serverPlayer.Player.Glory -= Follower.Cost;
-        _serverPlayer.ServerTemples[data.TempleIndex].QueueNewFollower();
+        serverTemple.QueueNewFollower();
     }
 
-    private void HandleBuildTempleRequest(TempleRequestData data)
+    private void HandleBuildTempleRequest(ServerTemple serverTemple)
     {
-        var serverTemple = _serverPlayer.ServerTemples[data.TempleIndex];
         var alreadyQueued = serverTemple.Temple.TaskQueue.Any(t => t.Type == ProgressItemType.BuildTemple);
         if (_serverPlayer.Player.Glory < Temple.BuildCost || serverTemple.Temple.IsActive || alreadyQueued)
         {
@@ -64,9 +69,8 @@ public class TempleRequestHandler
         serverTemple.QueueBuild();
     }
 
-    private void HandleConvertToFireTempleRequest(TempleRequestData data)
+    private void HandleConvertToFireTempleRequest(ServerTemple serverTemple)
     {
-        var serverTemple = _serverPlayer.ServerTemples[data.TempleIndex];
         var alreadyQueued = serverTemple.Temple.TaskQueue.Any(t => t.Type == ProgressItemType.ConvertToFireTemple);
         if (_serverPlayer.Player.Glory < Temple.ConvertCost || serverTemple.Temple.Element != Element.None || alreadyQueued)
         {
@@ -77,9 +81,8 @@ public class TempleRequestHandler
         serverTemple.QueueConvertToElement(Element.Fire);
     }
 
-    private void HandleUnlockFireImpRequest(TempleRequestData data)
+    private void HandleUnlockFireImpRequest(ServerTemple serverTemple)
     {
-        var serverTemple = _serverPlayer.ServerTemples[data.TempleIndex];
         var alreadyQueued = serverTemple.Temple.TaskQueue.Any(t => t.Type == ProgressItemType.ConvertToFireTemple);
         if (serverTemple.Temple.Element != Element.Fire
             || _serverPlayer.Player.Glory < Enemies.FireImpInfo.UnlockGloryCost
@@ -90,6 +93,6 @@ public class TempleRequestHandler
         }
 
         _serverPlayer.Player.Glory -= Enemies.FireImpInfo.UnlockGloryCost;
-        _serverPlayer.ServerTemples[data.TempleIndex].QueueUnlockFlameImp();
+        serverTemple.QueueUnlockFlameImp();
     }
 }

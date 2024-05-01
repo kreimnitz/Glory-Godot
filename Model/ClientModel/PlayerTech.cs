@@ -12,10 +12,6 @@ public class PlayerTech
 
     public PlayerTech() { }
 
-    public PlayerTech(FireTech fireTech) : this(BaseTech.None, fireTech)
-    {
-    }
-
     public PlayerTech(BaseTech baseTech, FireTech fireTech)
     {
         BaseTech = baseTech;
@@ -48,6 +44,42 @@ public class PlayerTech
         RaiseTechUpdate(newTech);
         return newTech;
     }
+
+    public static PlayerTech operator |(PlayerTech a, PlayerTech b)
+    {
+        return new PlayerTech
+        {
+            BaseTech = a.BaseTech | b.BaseTech,
+            FireTech = a.FireTech | b.FireTech,
+        };
+    }
+
+    public static PlayerTech operator |(PlayerTech a, BaseTech b)
+    {
+        return new PlayerTech
+        {
+            BaseTech = a.BaseTech | b,
+            FireTech = a.FireTech,
+        };
+    }
+
+    public static PlayerTech operator |(PlayerTech a, FireTech b)
+    {
+        return new PlayerTech
+        {
+            BaseTech = a.BaseTech,
+            FireTech = a.FireTech | b,
+        };
+    }
+
+    public static PlayerTech operator &(PlayerTech a, PlayerTech b)
+    {
+        return new PlayerTech
+        {
+            BaseTech = a.BaseTech & b.BaseTech,
+            FireTech = a.FireTech & b.FireTech,
+        };
+    }
 }
 
 public class TechUpdateEventArgs
@@ -59,6 +91,7 @@ public class TechUpdateEventArgs
 public enum BaseTech
 {
     None = 0,
+    Warrior = 1,
 }
 
 [Flags]

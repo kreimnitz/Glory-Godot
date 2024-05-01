@@ -98,7 +98,7 @@ public class TempleView : IButtonGroupHandler
         }
     }
 
-    private IEnumerable<ButtonContext> GetButtonContext()
+    public IEnumerable<ButtonContext> GetButtonContext()
     {
         if (!_temple.IsActive)
         {

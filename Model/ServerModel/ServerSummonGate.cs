@@ -16,9 +16,8 @@ public class ServerSummonGate
         return Spawners.FirstOrDefault(s => s.Spawner.UnitType == unitType);
     }
 
-    public void CreateSpawner(UnitType unitType)
+    public void CreateSpawner(EnemyInfo info)
     {
-        var info = Enemies.TypeToInfo[unitType];
         var spawner = new ServerSpawner(info);
         Spawners.Add(spawner);
     }

@@ -9,17 +9,6 @@ public class ClientRequestHandler
         _templeRequestHandler = new(player);
     }
 
-    public void HandleRecruitFollowerRequest()
-    {
-        if (_serverPlayer.Player.Glory < Follower.Cost)
-        {
-            return;
-        }
-
-        _serverPlayer.Player.Glory -= Follower.Cost;
-        _serverPlayer.QueueNewFollower();
-    }
-
     public void HandleTempleRequest(TempleRequestData data)
     {
         _templeRequestHandler.HandleRequest(data);

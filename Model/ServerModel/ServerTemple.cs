@@ -41,7 +41,7 @@ public class ServerTemple
     {
         var delayedAction = new DelayedAction(
             ProgressItemType.UnlockFireImp,
-            () => _player.UnlockFlameImp(),
+            () => _player.UnlockEnemy(Enemies.FireImpInfo),
             Enemies.FireImpInfo.UnlockDuration);
         InProgressQueue.Enqueue(delayedAction);
     }

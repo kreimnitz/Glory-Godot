@@ -93,11 +93,6 @@ public class ServerGameState
                 handler.HandleTempleRequest(templeRequestData);
                 break;
             }
-            case ClientRequestType.PlayerRequest:
-            {
-                handler.HandleRecruitFollowerRequest();
-                break;
-            }
             case ClientRequestType.SummonRequest:
             {
                 var summonRequestData = SerializationUtilities.FromByteArray<SummonRequestData>(data);

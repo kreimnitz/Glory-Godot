@@ -5,11 +5,17 @@ using Godot;
 public partial class MainTempleSprite : TextureButton, IButtonGroupHandler
 {
 	private const string Label = "Main Temple";
-	private Dictionary<(int, int), Action> _buttonActions = new();
-	private ButtonContext _recruitFollowerBC;
 	private Texture2D _texture;
 	private ProgressBar _healthBar;
-	public Player Player { get; set; }
+	private TempleView _templeView;
+	public Player Player { get; private set; }
+
+	public void SetModel(Player player)
+	{
+		Player = player;
+		var dummyButton = new TextureButton();
+		_templeView = new TempleView(player.Temples[0], dummyButton, player);
+	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -18,8 +24,6 @@ public partial class MainTempleSprite : TextureButton, IButtonGroupHandler
 		_healthBar.MaxValue = Player.HpMax;
 
 		_texture = Resources.MainTempleIcon;
-		_recruitFollowerBC = new ButtonContext(0, 0, Resources.FollowerIcon, Follower.RecruitTooltip);
-		_buttonActions.Add((_recruitFollowerBC.Row, _recruitFollowerBC.Column), RecruitFollower);
 
 		Pressed += Select;
 	}
@@ -28,12 +32,15 @@ public partial class MainTempleSprite : TextureButton, IButtonGroupHandler
 	{
 		SelectionManager.Instance.Selection = this;
 		SelectionManager.Instance.ShowButtonGroup(this, GetButtonContext());
-		SelectionManager.Instance.ShowProgressQueue(_texture, Label, Player.TaskQueue);
+		SelectionManager.Instance.ShowProgressQueue(_texture, Label, Player.Temples[0].TaskQueue);
 	}
 
 	private IEnumerable<ButtonContext> GetButtonContext()
 	{
-		yield return _recruitFollowerBC;
+		foreach (var bc in _templeView.GetButtonContext())
+		{
+			yield return bc;
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -44,14 +51,6 @@ public partial class MainTempleSprite : TextureButton, IButtonGroupHandler
 
     public void GridButtonPressed(int row, int column)
     {
-        if (_buttonActions.TryGetValue((row, column), out Action action))
-		{
-			action();
-		}
+        _templeView.GridButtonPressed(row, column);
     }
-
-	private void RecruitFollower()
-	{
-		ClientMessageManager.Instance.SendMessage(ClientRequestType.PlayerRequest);
-	}
 }
