@@ -167,7 +167,7 @@ public partial class SummonGateView : TextureButton, IButtonGroupHandler
 		{
 			foreach (var buttonInfo in _buttonInfos.Where(i => i.Spawner != null))
 			{
-				var texture = Resources.BlankIcon;
+				var texture = ResourceHelpers.UnitTypeToIcon[buttonInfo.EnemyInfo.Type];
 				var tooltip = CreateTooltip(buttonInfo.EnemyInfo.Type);
 				var bc = new ButtonContext(buttonInfo.Row, buttonInfo.Column, texture, tooltip, buttonInfo.Spawner);
 				yield return bc;

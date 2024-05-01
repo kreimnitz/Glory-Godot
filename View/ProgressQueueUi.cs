@@ -57,7 +57,7 @@ public partial class ProgressQueueUi : Control
 			}
 			else
 			{
-				var texture = Resources.ProgressItemTextures[_taskList[i].Type];
+				var texture = ResourceHelpers.ProgressItemTextures[_taskList[i].Type];
 				if (_buttons[i].TextureNormal != texture)
 				{
 					_buttons[i].TextureNormal = texture;

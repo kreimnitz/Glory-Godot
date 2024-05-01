@@ -20,6 +20,7 @@ public class ServerEnemy
         Enemy.HpMax = enemyInfo.MaxHp;
         Enemy.HpCurrent = enemyInfo.MaxHp;
         Enemy.Progress = 0;
+        Enemy.Type = enemyInfo.Type;
         Position = path.GetPosition(0);
     }
 

@@ -75,6 +75,20 @@ public static class Resources
         }
     }
 
+    private const string ImpPath = ResourcesPrefix + "Imp.png";
+    private static Texture2D _imp;
+    public static Texture2D Imp
+    {
+        get
+        {
+            if (_imp is null)
+            {
+                _imp = GD.Load<Texture2D>(ImpPath);
+            }
+            return _imp;
+        }
+    }
+
     private const string FlameIconPath = ResourcesPrefix + "FlameIcon.png";
     private static Texture2D _flameIcon;
     public static Texture2D FlameIcon
@@ -159,11 +173,31 @@ public static class Resources
         }
     }
 
-    public static readonly Dictionary<ProgressItemType, Texture2D> ProgressItemTextures = new()
+    private const string WarriorPath = ResourcesPrefix + "Warrior.png";
+    private static Texture2D _warrior;
+    public static Texture2D Warrior
     {
-        { ProgressItemType.RecruitingFollower, FollowerIcon },
-        { ProgressItemType.ConvertToFireTemple, FlameIcon },
-        { ProgressItemType.UnlockFireImp, ImpIcon },
-        { ProgressItemType.BuildTemple, TempleIcon }
-    };
+        get
+        {
+            if (_warrior is null)
+            {
+                _warrior = GD.Load<Texture2D>(WarriorPath);
+            }
+            return _warrior;
+        }
+    }
+
+    private const string WarriorIconPath = ResourcesPrefix + "WarriorIcon.png";
+    private static Texture2D _warriorIcon;
+    public static Texture2D WarriorIcon
+    {
+        get
+        {
+            if (_warriorIcon is null)
+            {
+                _warriorIcon = GD.Load<Texture2D>(WarriorIconPath);
+            }
+            return _warriorIcon;
+        }
+    }
 }

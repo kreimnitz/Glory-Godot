@@ -12,6 +12,7 @@ public partial class EnemySprite : Sprite2D
 	public static EnemySprite CreateEnemy(Enemy model, Path2D path)
 	{
 		var enemy = _scene.Instantiate() as EnemySprite;
+		enemy.Texture = ResourceHelpers.UnitTypeToTexture[model.Type];
 		enemy.Model = model;
 		var pathFollow = new PathFollow2D();
 		pathFollow.Loop = false;

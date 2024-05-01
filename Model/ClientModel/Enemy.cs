@@ -65,6 +65,7 @@ public class Enemy : IUpdateFrom<Enemy>, INotifyPropertyChanged, IProgressInfo
 
     public void UpdateFrom(Enemy other)
     {
+        Type = other.Type;
         Progress = other.Progress;
         HpMax = other.HpMax;
         HpCurrent = other.HpCurrent;
