@@ -56,3 +56,10 @@ offset_top = 100.0
 offset_right = 127.0
 offset_bottom = 123.0
 text = "Server Status:"
+
+[node name="PublicIpLabel" type="Label" parent="."]
+offset_left = 250.0
+offset_top = 15.0
+offset_right = 387.0
+offset_bottom = 38.0
+text = "Your Public IP: ???"

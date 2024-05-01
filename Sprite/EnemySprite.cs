@@ -12,8 +12,7 @@ public partial class EnemySprite : Sprite2D
 	public static EnemySprite CreateEnemy(Enemy model, Path2D path)
 	{
 		var enemy = _scene.Instantiate() as EnemySprite;
-		enemy.Texture = ResourceHelpers.UnitTypeToTexture[model.Type];
-		enemy.Model = model;
+		enemy.SetModel(model);
 		var pathFollow = new PathFollow2D();
 		pathFollow.Loop = false;
 		pathFollow.Rotates = true;
@@ -21,6 +20,12 @@ public partial class EnemySprite : Sprite2D
 		enemy._pathFollow = pathFollow;
 		path.AddChild(enemy);
 		return enemy;
+	}
+
+	private void SetModel(Enemy model)
+	{
+		Model = model;
+		Texture = ResourceHelpers.UnitTypeToTexture[model.Type];
 	}
 
 	public void Kill()
@@ -31,7 +36,7 @@ public partial class EnemySprite : Sprite2D
 
 	public void Reset(Enemy model)
 	{
-		Model = model;
+		SetModel(model);
 		Show();
 	}
 
