@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 using Godot;
 
 public class SelectionManager
@@ -45,9 +44,16 @@ public class SelectionManager
         _uiBar.ProgressQueueUi.Show();
     }
 
-    public void ShowUnitInfoUi(IUnitModel model)
+    public void ShowUnitInfoUi(UnitType type, IProgressInfo progressInfo)
     {
-        _uiBar.UnitInfoUi.SetModel(model);
+        var info = Enemies.TypeToInfo[type];
+        _uiBar.UnitInfoUi.UpdateVisuals(Resources.BlankIcon, info.Name, progressInfo);
+        _uiBar.UnitInfoUi.Show();
+    }
+
+    public void ShowInfoUi(Texture2D texture, string name)
+    {
+        _uiBar.UnitInfoUi.UpdateVisuals(texture, name, null);
         _uiBar.UnitInfoUi.Show();
     }
 }

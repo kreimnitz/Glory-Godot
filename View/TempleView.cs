@@ -113,7 +113,10 @@ public class TempleView : IButtonGroupHandler
         }
         if (_temple.Element == Element.Fire)
         {
-            yield return GetFireImpButtonContext();
+            if (TryGetFireImpButtonContext() is var bc && bc is not null)
+            {
+                yield return bc;
+            }
         }
     }
 
@@ -134,22 +137,14 @@ public class TempleView : IButtonGroupHandler
         return new ButtonContext(1, 0, Resources.FlameIcon, tooltip);
     }
 
-    private ButtonContext GetFireImpButtonContext()
+    private ButtonContext TryGetFireImpButtonContext()
     {
-        IProgressInfo labelInfo;
-        string tooltip;
         if (_player.Tech.FireTech.HasFlag(FireTech.FlameImp))
         {
-            tooltip = $"Summon Fire Imp\nCost: {EnemyUtilites.FireImpCost}";
-            labelInfo = _temple.GetSpawnerForType(UnitType.FireImp);
+            return null;
         }
-        else
-        {
-            tooltip = $"Unlock Fire Imp\nCost: {Spawners.FireImpUnlockCost}";
-            labelInfo = null;
-        }
-        
-        return new ButtonContext(1, 0, Resources.ImpIcon, tooltip, labelInfo);
+        string tooltip = $"Unlock Fire Imp\nCost: {Enemies.FireImpInfo.UnlockGloryCost}";
+        return new ButtonContext(1, 0, Resources.ImpIcon, tooltip);
     }
 
     public void GridButtonPressed(int row, int column)
@@ -188,10 +183,6 @@ public class TempleView : IButtonGroupHandler
             {
                 if (row == 1 && column == 0)
                 {
-                    if (_player.Tech.FireTech.HasFlag(FireTech.FlameImp))
-                    {
-                        return TempleRequest.SpawnFireImp;
-                    }
                     return TempleRequest.UnlockFireImp;
                 }
                 break;

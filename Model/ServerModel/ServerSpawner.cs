@@ -7,20 +7,15 @@ public class ServerSpawner
 
     public Spawner Spawner { get; } = new();
 
-    public ServerSpawner()
+    public ServerSpawner(EnemyInfo info)
     {
-    }
-
-    public ServerSpawner(
-        int timerMs,
-        UnitType unitType)
-    {
-        _spawnTimer = new Timer(timerMs);
+        _spawnTimer = new Timer(info.SpawnTimerMs);
         _spawnTimer.AutoReset = true;
         _spawnTimer.Elapsed += (s, a) => IncrementQueue();
-        Spawner.UnitType = unitType;
-        Spawner.Max = 5;
+        Spawner.UnitType = info.Type;
+        Spawner.Max = info.SpawnMax;
         Spawner.CurrentValue = 0;
+        _spawnTimer.Start();
     }
 
     private object _queueLock = new();
@@ -51,10 +46,5 @@ public class ServerSpawner
             }
             return false;
         }
-    }
-
-    public void Activate()
-    {
-        _spawnTimer.Start();
     }
 }

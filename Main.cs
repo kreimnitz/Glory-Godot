@@ -23,7 +23,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-		_player = new();
+		_player = Player.Create();
 		_baseView = GetNode<BaseView>("BaseView");
 
 		_topBar = GetNode<TopBar>("TopBar");

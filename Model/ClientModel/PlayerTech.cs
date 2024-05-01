@@ -10,6 +10,18 @@ public class PlayerTech
     [ProtoMember(2)]
     public FireTech FireTech { get; set; }
 
+    public PlayerTech() { }
+
+    public PlayerTech(FireTech fireTech) : this(BaseTech.None, fireTech)
+    {
+    }
+
+    public PlayerTech(BaseTech baseTech, FireTech fireTech)
+    {
+        BaseTech = baseTech;
+        FireTech = fireTech;
+    }
+
     public delegate void TechUpdateHandler(object sender, TechUpdateEventArgs e);
     public event TechUpdateHandler OnTechUpdate;
     private void RaiseTechUpdate(PlayerTech newTech)

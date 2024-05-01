@@ -23,6 +23,13 @@ public class ClientMessageManager
         SendMessage(ClientRequestType.TempleRequest, serialized);
     }
 
+    public void SendSummonRequest(UnitType type)
+    {
+        var data = new SummonRequestData() { Type = type };
+        var serialized = SerializationUtilities.ToByteArray(data);
+        SendMessage(ClientRequestType.SummonRequest, serialized);
+    }
+
     public void SendMessage(ClientRequestType request)
     {
         SendMessage(request, Array.Empty<byte>());

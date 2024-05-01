@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using ProtoBuf;
 
 [ProtoContract]
@@ -36,9 +35,6 @@ public class Temple : IUpdateFrom<Temple>, INotifyPropertyChanged
     }
 
     [ProtoMember(4)]
-    public List<Spawner> Spawners { get; set; } = new();
-
-    [ProtoMember(5)]
     public Element Element
     {
         get { return _element; }
@@ -55,15 +51,6 @@ public class Temple : IUpdateFrom<Temple>, INotifyPropertyChanged
     [ProtoMember(6)]
     public virtual List<ProgressItem> TaskQueue { get; set; } = new();
 
-    public Spawner GetSpawnerForType(UnitType enemyType)
-    {
-        if (!IsActive)
-        {
-            return null;
-        }
-        return Spawners.FirstOrDefault(s => s.UnitType == enemyType);
-    }
-
     public event PropertyChangedEventHandler PropertyChanged;
 
     public void UpdateFrom(Temple other)
@@ -72,8 +59,7 @@ public class Temple : IUpdateFrom<Temple>, INotifyPropertyChanged
         IsActive = other.IsActive;
         FollowerCount = other.FollowerCount;
         Element = other.Element;
-        
-        UpdateUtilites.UpdateMany(Spawners, other.Spawners);
+
         UpdateUtilites.UpdateMany(TaskQueue, other.TaskQueue);
     }
 

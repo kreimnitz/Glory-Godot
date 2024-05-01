@@ -13,12 +13,12 @@ public class ServerEnemy
 
     public bool ReachedEndOfPath => Enemy.Progress >= _path.Length;
 
-    public ServerEnemy(int hp, EnemyPath path)
+    public ServerEnemy(EnemyInfo enemyInfo, EnemyPath path)
     {
         _speedPxPerLoop = _speedPxPerS * ServerGameState.LoopRateMs / 1000;
         _path = path;
-        Enemy.HpMax = hp;
-        Enemy.HpCurrent = hp;
+        Enemy.HpMax = enemyInfo.MaxHp;
+        Enemy.HpCurrent = enemyInfo.MaxHp;
         Enemy.Progress = 0;
         Position = path.GetPosition(0);
     }

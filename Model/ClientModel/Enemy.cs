@@ -3,7 +3,7 @@ using System.ComponentModel;
 using ProtoBuf;
 
 [ProtoContract]
-public class Enemy : IUpdateFrom<Enemy>, INotifyPropertyChanged, IUnitModel
+public class Enemy : IUpdateFrom<Enemy>, INotifyPropertyChanged, IProgressInfo
 {
     private float _progress;
     private int _hpMax;
@@ -56,6 +56,10 @@ public class Enemy : IUpdateFrom<Enemy>, INotifyPropertyChanged, IUnitModel
 
     [ProtoMember(5)]
     public UnitType Type { get; set; } = UnitType.Default;
+
+    public int CurrentValue => HpCurrent;
+
+    public int Max => HpMax;
 
     public event PropertyChangedEventHandler PropertyChanged;
 

@@ -1,28 +1,15 @@
-using System.Linq;
-
 public class ServerTemple
 {
     private ServerPlayer _player;
 
     public DelayedActionQueue InProgressQueue { get; } = new();
 
-    public Temple Temple { get; set; } = new();
+    public Temple Temple { get; set; }
 
-    public SyncedList<ServerSpawner, Spawner> ServerSpawners { get; }
-
-    public ServerTemple(ServerPlayer player)
+    public ServerTemple(ServerPlayer player, Temple temple)
     {
         _player = player;
-        ServerSpawners = new(Temple.Spawners, serverSpawner => serverSpawner.Spawner);
-    }
-
-    public ServerSpawner GetSpawnerForType(UnitType enemyType)
-    {
-        if (!Temple.IsActive)
-        {
-            return null;
-        }
-        return ServerSpawners.FirstOrDefault(s => s.Spawner.UnitType == enemyType);
+        Temple = temple;
     }
 
     public void DoLoop()
@@ -55,7 +42,7 @@ public class ServerTemple
         var delayedAction = new DelayedAction(
             ProgressItemType.UnlockFireImp,
             () => _player.UnlockFlameImp(),
-            Spawners.FireImpUnlockDurationMs);
+            Enemies.FireImpInfo.UnlockDuration);
         InProgressQueue.Enqueue(delayedAction);
     }
 }

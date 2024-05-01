@@ -145,6 +145,20 @@ public static class Resources
         }
     }
 
+    private const string SummonGateIconPath = ResourcesPrefix + "GateMediumIcon.png";
+    private static Texture2D _summonGateIcon;
+    public static Texture2D SummonGateIcon
+    {
+        get
+        {
+            if (_summonGateIcon is null)
+            {
+                _summonGateIcon = GD.Load<Texture2D>(SummonGateIconPath);
+            }
+            return _summonGateIcon;
+        }
+    }
+
     public static readonly Dictionary<ProgressItemType, Texture2D> ProgressItemTextures = new()
     {
         { ProgressItemType.RecruitingFollower, FollowerIcon },

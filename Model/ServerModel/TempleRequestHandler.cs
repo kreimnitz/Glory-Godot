@@ -14,34 +14,29 @@ public class TempleRequestHandler
         switch (data.Request)
         {
             case TempleRequest.BuildTemple:
-                {
-                    HandleBuildTempleRequest(data);
-                    break;
-                }
+            {
+                HandleBuildTempleRequest(data);
+                break;
+            }
             case TempleRequest.RecruitFollower:
-                {
-                    HandleTempleRecruitFollowerRequest(data);
-                    break;
-                }
+            {
+                HandleTempleRecruitFollowerRequest(data);
+                break;
+            }
             case TempleRequest.ConvertToFireTemple:
-                {
-                    HandleConvertToFireTempleRequest(data);
-                    break;
-                }
+            {
+                HandleConvertToFireTempleRequest(data);
+                break;
+            }
             case TempleRequest.UnlockFireImp:
-                {
-                    HandleUnlockFireImpRequest(data);
-                    break;
-                }
-            case TempleRequest.SpawnFireImp:
-                {
-                    HandleSpawnFireImpRequest(data);
-                    break;
-                }
+            {
+                HandleUnlockFireImpRequest(data);
+                break;
+            }
             default:
-                {
-                    break;
-                }
+            {
+                break;
+            }
         }
     }
 
@@ -87,32 +82,14 @@ public class TempleRequestHandler
         var serverTemple = _serverPlayer.ServerTemples[data.TempleIndex];
         var alreadyQueued = serverTemple.Temple.TaskQueue.Any(t => t.Type == ProgressItemType.ConvertToFireTemple);
         if (serverTemple.Temple.Element != Element.Fire
-            || _serverPlayer.Player.Glory < Spawners.FireImpUnlockCost
+            || _serverPlayer.Player.Glory < Enemies.FireImpInfo.UnlockGloryCost
             || _serverPlayer.Player.Tech.FireTech.HasFlag(FireTech.FlameImp)
             || alreadyQueued)
         {
             return;
         }
 
-        _serverPlayer.Player.Glory -= Spawners.FireImpUnlockCost;
+        _serverPlayer.Player.Glory -= Enemies.FireImpInfo.UnlockGloryCost;
         _serverPlayer.ServerTemples[data.TempleIndex].QueueUnlockFlameImp();
-    }
-
-    private void HandleSpawnFireImpRequest(TempleRequestData data)
-    {
-        var impSpawner = _serverPlayer.ServerTemples[data.TempleIndex].GetSpawnerForType(UnitType.FireImp);
-        if (impSpawner is null)
-        {
-            return;
-        }
-
-        if (_serverPlayer.Player.Glory < EnemyUtilites.FireImpCost || !impSpawner.DecrementQueue())
-        {
-            return;
-        }
-
-        _serverPlayer.Player.Glory -= EnemyUtilites.FireImpCost;
-        var imp = EnemyUtilites.CreateFireImp(_serverPlayer.EnemyPath);
-        _serverPlayer.Opponent.AddEnemy(imp);
     }
 }

@@ -9,12 +9,24 @@ public partial class UnitInfoUi : Control
 	private Label _mainLabel;
 	private Label _hpLabel;
 
-	private IUnitModel _model;
+	private IProgressInfo _hpBarInfo;
 
-	public void SetModel(IUnitModel unitModel)
+	public void UpdateVisuals(Texture2D texture, string label, IProgressInfo hpInfo = null)
 	{
-		_model = unitModel;
-
+		_mainTexture.Texture = texture;
+		_mainLabel.Text = label;
+		_hpBarInfo = hpInfo;
+		if (hpInfo == null)
+		{
+			_hpBar.Hide();
+			_hpLabel.Hide();
+		}
+		else
+		{
+			_hpBarInfo = hpInfo;
+			_hpBar.Show();
+			_hpLabel.Show();
+		}
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -29,6 +41,13 @@ public partial class UnitInfoUi : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (_hpBarInfo is not null)
+		{
+			_hpBar.Value = _hpBarInfo.CurrentValue;
+			_hpBar.MaxValue = _hpBarInfo.Max;
+
+			_hpLabel.Text = $"{_hpBar.Value} / {_hpBar.MaxValue}";
+		}
 	}
 }
 

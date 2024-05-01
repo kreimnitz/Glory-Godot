@@ -8,7 +8,7 @@ public class ServerPlayer
 {
     public const int IncomeTimerMs = 1000;
 
-    public Player Player { get; } = new();
+    public Player Player { get; } = Player.Create();
     private ActionQueue _actionQueue = new();
     private System.Timers.Timer _incomeTimer = new(IncomeTimerMs);
 
@@ -20,7 +20,8 @@ public class ServerPlayer
 
     private SyncedList<ServerEnemy, Enemy> _serverEnemies;
     private SyncedList<ServerTowerShot, TowerShot> _serverTowerShots;
-    public SyncedList<ServerTemple, Temple> ServerTemples { get; }
+    public List<ServerTemple> ServerTemples { get; } = new();
+    public ServerSummonGate ServerSummonGate { get; }
 
     public ServerPlayer Opponent { get; set; }
 
@@ -34,8 +35,6 @@ public class ServerPlayer
     {
         _serverEnemies = new(Player.Enemies, (serverEnemy) => serverEnemy.Enemy);
         _serverTowerShots = new(Player.TowerShots, (serverTowerShot) => serverTowerShot.TowerShot);
-        ServerTemples = new(Player.Temples, (serverTemple) => serverTemple.Temple);
-
 
         Player.Glory = Player.StartingGlory;
         _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(ApplyIncome);
@@ -44,14 +43,15 @@ public class ServerPlayer
 
         for (int i = 0; i < Player.TempleCount; i++)
         {
-            ServerTemples.Add(new ServerTemple(this));
+            ServerTemples.Add(new ServerTemple(this, Player.Temples[i]));
         }
-        // ServerTemples[0].Temple.IsActive = true;
-        // ServerTemples[0].Temple.FollowerCount = 10;
 
         Player.FollowerCount = Player.StartingFollowerCount;
 
         EnemyPath = new EnemyPath(EnemyPath.CreateWindingPathCurve());
+
+        ServerSummonGate = new(Player.SummonGate);
+        ServerSummonGate.CreateSpawner(UnitType.Warrior);
     }
 
     public void DoLoop()
@@ -79,15 +79,7 @@ public class ServerPlayer
     public void UnlockFlameImp()
     {
         Player.Tech.FireTech |= FireTech.FlameImp;
-        foreach (var temple in ServerTemples)
-        {
-            if (temple.Temple.Element == Element.Fire)
-            {
-                var spawner = Spawners.CreateFireImpSpawner();
-                temple.ServerSpawners.Add(spawner);
-                spawner.Activate();
-            }
-        }
+        ServerSummonGate.CreateSpawner(UnitType.FireImp);
     }
 
     private void ApplyIncome()

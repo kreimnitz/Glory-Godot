@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvy2mjbffb0tx"]
+
+[ext_resource type="Texture2D" uid="uid://bwjj71q7ex7b3" path="res://Resources/GateMediumIcon.png" id="1_7e7sy"]
+[ext_resource type="Texture2D" uid="uid://dba720q85lrtf" path="res://Resources/FlameIcon.png" id="2_ranjk"]
+
+[node name="SummonGateView" type="TextureButton"]
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+texture_normal = ExtResource("1_7e7sy")
+
+[node name="FireButton" type="TextureButton" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -23.0
+offset_top = -23.0
+offset_right = 27.0
+offset_bottom = 27.0
+scale = Vector2(0.65, 0.65)
+texture_normal = ExtResource("2_ranjk")

@@ -98,12 +98,18 @@ public class ServerGameState
                 handler.HandleRecruitFollowerRequest();
                 break;
             }
+            case ClientRequestType.SummonRequest:
+            {
+                var summonRequestData = SerializationUtilities.FromByteArray<SummonRequestData>(data);
+                handler.HandleSummonRequest(summonRequestData);
+                break;
+            }
             case ClientRequestType.DEBUG_SpawnEnemy:
             {
-                var imp0 = EnemyUtilites.CreateFireImp(_player0.EnemyPath);
+                var imp0 = new ServerEnemy(Enemies.FireImpInfo, _player0.EnemyPath);
                 _player0.AddEnemy(imp0);
 
-                var imp1 = EnemyUtilites.CreateFireImp(_player1.EnemyPath);
+                var imp1 = new ServerEnemy(Enemies.FireImpInfo, _player1.EnemyPath);
                 _player1.AddEnemy(imp1);
                 break;
             }

@@ -17,12 +17,15 @@ public partial class TopBar : Control
 	{
 		_gloryLabel = GetNode<Label>("GloryLabel");
 		_followersLabel = GetNode<Label>("FollowersLabel");
-		Player = new();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (Player is null)
+		{
+			return;
+		}
 		_gloryLabel.Text = GloryLabelPrefix + Player.Glory;
 		_followersLabel.Text = FollowersLabelPrefix + Player.TotalFollowerCount;
 	}
