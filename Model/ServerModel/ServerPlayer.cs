@@ -1,14 +1,8 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Timers;
-using Godot;
-
 public class ServerPlayer
 {
     public const int IncomeTimerMs = 1000;
 
-    public Player Player { get; } = Player.Create();
+    public Player Player { get; } = new();
     private ActionQueue _actionQueue = new();
     private System.Timers.Timer _incomeTimer = new(IncomeTimerMs);
 
@@ -20,7 +14,7 @@ public class ServerPlayer
 
     private SyncedList<ServerEnemy, Enemy> _serverEnemies;
     private SyncedList<ServerTowerShot, TowerShot> _serverTowerShots;
-    public List<ServerTemple> ServerTemples { get; } = new();
+    public SyncedList<ServerTemple, Temple> ServerTemples { get; }
     public ServerSummonGate ServerSummonGate { get; }
 
     public ServerPlayer Opponent { get; set; }
@@ -35,18 +29,17 @@ public class ServerPlayer
     {
         _serverEnemies = new(Player.Enemies, (serverEnemy) => serverEnemy.Enemy);
         _serverTowerShots = new(Player.TowerShots, (serverTowerShot) => serverTowerShot.TowerShot);
+        ServerTemples = new(Player.Temples, (serverTemple) => serverTemple.Temple);
 
         Player.Glory = Player.StartingGlory;
         _incomeTimer.Elapsed += (s, a) => _actionQueue.Add(ApplyIncome);
         _incomeTimer.Start();
         PlayerNumber = playerNumber;
 
-        for (int i = 0; i < Player.TempleCount; i++)
-        {
-            ServerTemples.Add(new ServerTemple(this, Player.Temples[i]));
-        }
-        ServerTemples[0].Temple.FollowerCount = Player.StartingFollowerCount;
-        ServerTemples[0].Temple.IsActive = true;
+        var mainTemple = new ServerTemple(this, 0);
+        mainTemple.Temple.FollowerCount = Player.StartingFollowerCount;
+        mainTemple.Temple.IsActive = true;
+        ServerTemples.Add(mainTemple);
 
         EnemyPath = new EnemyPath(EnemyPath.CreateWindingPathCurve());
 
@@ -76,10 +69,26 @@ public class ServerPlayer
         CheckLifetimes();
     }
 
-    public void UnlockEnemy(EnemyInfo info)
+    public void BuildTemple(int position)
     {
-        Player.Tech.UpdateFrom(Player.Tech | info.RequiredTech);
-        ServerSummonGate.CreateSpawner(info);
+        var newTemple = new ServerTemple(this, position);
+        ServerTemples.Add(newTemple);
+        newTemple.QueueBuild();
+    }
+
+    public void QueueUnlockEnemyResearch(EnemyInfo enemyInfo)
+    {
+        var delayedAction = new DelayedAction(
+            ProgressItemTypeHelpers.FromTech(enemyInfo.RequiredTech.Tech),
+            () => UnlockEnemy(enemyInfo),
+            enemyInfo.RequiredTech.ResearchDurationMs);
+        InProgressQueue.Enqueue(delayedAction);
+    }
+
+    public void UnlockEnemy(EnemyInfo enemyInfo)
+    {
+        Player.Tech.UpdateFrom(Player.Tech | enemyInfo.RequiredTech.Tech);
+        ServerSummonGate.CreateSpawner(enemyInfo);
     }
 
     private void ApplyIncome()

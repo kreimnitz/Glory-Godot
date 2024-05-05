@@ -26,12 +26,6 @@ public partial class SummonGateView : TextureButton, IButtonGroupHandler
 	public void SetModel(Player player)
 	{
 		_player = player;
-		_player.Tech.OnTechUpdate += TechUpdated;
-		foreach (var temple in _player.Temples)
-		{
-			temple.PropertyChanged += TempleUpdated;
-		}
-		_player.SummonGate.SpawnersAdded += SpawnersAdded;
 		foreach (var spawner in _player.SummonGate.Spawners)
 		{
 			ConnectSpawner(spawner);
@@ -39,26 +33,16 @@ public partial class SummonGateView : TextureButton, IButtonGroupHandler
 		_actionQueue.Add(RefreshVisuals);
 	}
 
-    private void TempleUpdated(object sender, PropertyChangedEventArgs e)
-    {
-		if (e.PropertyName == nameof(Temple.Element))
-		{
-			_actionQueue.Add(RefreshVisuals);
-		}
-	}
-
-    private void TechUpdated(object sender, TechUpdateEventArgs e)
-    {
-        _actionQueue.Add(RefreshVisuals);
-    }
-
-    private void SpawnersAdded(object sender, SpawnersAddedEventArgs e)
-    {
-        foreach (var spawner in e.Added)
+	public void ProcessModelUpdate(PlayerUpdateInfo info)
+	{
+		foreach (var spawner in info.SummonGateUpdates.SpawnerUpdates.Added)
 		{
 			ConnectSpawner(spawner);
 		}
-		_actionQueue.Add(RefreshVisuals);
+		if (info.ElementAdded || !info.AddedTech.IsEmpty())
+		{
+			_actionQueue.Add(RefreshVisuals);
+		}
 	}
 
     private void ConnectSpawner(Spawner spawner)

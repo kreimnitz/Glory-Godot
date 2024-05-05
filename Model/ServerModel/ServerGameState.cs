@@ -87,9 +87,15 @@ public class ServerGameState
         var handler = playerId == 0 ? _player0RequestHandler : _player1RequestHandler;
         switch (request)
         {
-            case ClientRequestType.TempleRequest:
+            case ClientRequestType.BuildTemple:
             {
-                var templeRequestData = SerializationUtilities.FromByteArray<TempleRequestData>(data);
+                var buildTempleRequestData = SerializationUtilities.FromByteArray<BuildTempleRequestData>(data);
+                handler.HandleBuildTempleRequest(buildTempleRequestData);
+                break;
+            }
+            case ClientRequestType.TempleActionRequest:
+            {
+                var templeRequestData = SerializationUtilities.FromByteArray<TempleActionRequestData>(data);
                 handler.HandleTempleRequest(templeRequestData);
                 break;
             }
@@ -97,6 +103,12 @@ public class ServerGameState
             {
                 var summonRequestData = SerializationUtilities.FromByteArray<SummonRequestData>(data);
                 handler.HandleSummonRequest(summonRequestData);
+                break;
+            }
+            case ClientRequestType.EnemyTechRequest:
+            {
+                var enemyTechRequestData = SerializationUtilities.FromByteArray<EnemyTechRequestData>(data);
+                handler.HandleEnemyTechRequest(enemyTechRequestData);
                 break;
             }
             case ClientRequestType.DEBUG_SpawnEnemy:

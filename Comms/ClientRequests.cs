@@ -2,32 +2,31 @@ using ProtoBuf;
 
 public enum ClientRequestType
 {
-    PlayerRequest = 0,
-    TempleRequest = 1,
-    SummonRequest = 2,
+    BuildTemple = 0,
+    TempleActionRequest = 1,
+    TempleTechRequest = 2,
+    SummonRequest = 3,
+    EnemyTechRequest = 4,
 
     DEBUG_SpawnEnemy = 50,
     DEBUG_ResetPlayers = 51
 }
 
-public enum TempleRequest
+public enum TempleActionRequest
 {
-    BuildTemple = 0,
     RecruitFollower = 1,
     ConvertToFireTemple = 10,
-    UnlockFireImp = 20,
 }
 
-public enum PlayerRequest
+public enum TempleTechRequest
 {
-    RecruitFollower = 0,
 }
 
 [ProtoContract]
-public class PlayerRequestData
+public class BuildTempleRequestData
 {
     [ProtoMember(1)]
-    public PlayerRequest Request { get; set; }
+    public int Position { get; set; }
 }
 
 [ProtoContract]
@@ -37,12 +36,34 @@ public class SummonRequestData
     public UnitType Type { get; set; }
 }
 
+public interface TempleIndexData
+{
+    int TempleIndex { get; set; }
+}
+
 [ProtoContract]
-public class TempleRequestData
+public class TempleActionRequestData : TempleIndexData
 {
     [ProtoMember(1)]
-    public TempleRequest Request { get; set; }
+    public TempleActionRequest Request { get; set; }
 
     [ProtoMember(2)]
     public int TempleIndex { get; set; }
+}
+
+[ProtoContract]
+public class TempleTechRequestData : TempleIndexData
+{
+    [ProtoMember(1)]
+    public PlayerTech Tech { get; set; }
+
+    [ProtoMember(2)]
+    public int TempleIndex { get; set; }
+}
+
+[ProtoContract]
+public class EnemyTechRequestData
+{
+    [ProtoMember(1)]
+    public UnitType EnemyType { get; set; }
 }

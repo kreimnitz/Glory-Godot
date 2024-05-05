@@ -1,70 +1,39 @@
 using System;
-using System.ComponentModel;
 using ProtoBuf;
 
 [ProtoContract]
-public class Spawner : IUpdateFrom<Spawner>, IProgressInfo, INotifyPropertyChanged
+public class Spawner : IUpdateFrom<Spawner, PropertyUpdateInfo>, IProgressInfo
 {
-    private int _currentValue;
-    private int _max;
-    private UnitType _unitType;
-
     [ProtoMember(1)]
     public Guid Id { get; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
-    public int CurrentValue
-    {
-        get { return _currentValue; }
-        set
-        {
-            if (value != _currentValue)
-            {
-                _currentValue = value;
-                NotifyPropertyChanged(nameof(CurrentValue));
-            }
-        }
-    }
+    public int CurrentValue { get; set; }
 
     [ProtoMember(3)]
-    public int Max
-    {
-        get { return _max; }
-        set
-        {
-            if (value != _max)
-            {
-                _max = value;
-                NotifyPropertyChanged(nameof(Max));
-            }
-        }
-    }
+    public int Max { get; set; }
 
     [ProtoMember(4)]
-    public UnitType UnitType
+    public UnitType UnitType { get; set; }
+
+    public PropertyUpdateInfo UpdateFrom(Spawner other)
     {
-        get { return _unitType; }
-        set
+        PropertyUpdateInfo updateInfo = new();
+        if (CurrentValue != other.CurrentValue)
         {
-            if (value != _unitType)
-            {
-                _unitType = value;
-                NotifyPropertyChanged(nameof(UnitType));
-            }
+            CurrentValue = other.CurrentValue;
+            updateInfo.Add(nameof(CurrentValue));
         }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public void UpdateFrom(Spawner other)
-    {
-        CurrentValue = other.CurrentValue;
-        Max = other.Max;
-        UnitType = other.UnitType;
-    }
-
-    private void NotifyPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        if (Max != other.Max)
+        {
+            Max = other.Max;
+            updateInfo.Add(nameof(Max));
+        }
+        if (UnitType != other.UnitType)
+        {
+            UnitType = other.UnitType;
+            updateInfo.Add(nameof(UnitType));
+        }
+        return updateInfo;
     }
 }

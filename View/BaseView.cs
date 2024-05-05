@@ -1,21 +1,24 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class BaseView : Control
 {
-	private Player _player;
+	private const int MinorTempleButtonCount = 4;
 	private MainTempleSprite _mainTemple;
 	private Path2D _enemyPath;
-	private TempleView[] _templeViews = new TempleView[Player.TempleCount];
+	private List<TempleView> _templeViews = new List<TempleView>();
 	private EnemySpriteManager _enemySpriteManager = new();
 	private TowerShotSpriteManager _towerShotSpriteManager = new();
 	private SummonGateView _summonGateView;
 
-	public void Initialize(Player player)
+	public void SetModel(Player player)
 	{
-		_player = player;
 		_mainTemple.SetModel(player);
-		_summonGateView.SetModel(_player);
-		CreateTempleViews();
+		_summonGateView.SetModel(player);
+		for (int i = 0; i < MinorTempleButtonCount; i++)
+		{
+			_templeViews[i].SetModel(i + 1, player);
+		}
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -25,6 +28,10 @@ public partial class BaseView : Control
 		_enemyPath = GetNode<Path2D>("EnemyPath");
 		_enemyPath.Curve = EnemyPath.CreateWindingPathCurve();
 		_summonGateView = GetNode<SummonGateView>("SummonGate");
+		for (int i = 0; i < MinorTempleButtonCount; i++)
+		{
+			_templeViews.Add(GetNode<TempleView>($"Temple{i + 1}"));
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,17 +39,12 @@ public partial class BaseView : Control
 	{
 		foreach (var templeView in _templeViews)
 		{
-			templeView?._Process();
+			templeView._Process();
 		}
 	}
 
 	public void ProcessModelUpdate(PlayerUpdateInfo info)
 	{
-		if (info.NewId)
-		{
-			Initialize(_player);
-		}
-
 		foreach (var enemy in info.EnemyUpdates.Added)
 		{
 			_enemySpriteManager.CreateSprite(enemy, _enemyPath);
@@ -62,14 +64,11 @@ public partial class BaseView : Control
 		{
 			_towerShotSpriteManager.RecycleSprite(towerShot.Id);
 		}
-	}
 
-	private void CreateTempleViews()
-	{
-		for (int i = 1; i < Player.TempleCount; i++)
+		_mainTemple.ProcessModelUpdate(info);
+		foreach (var templeView in _templeViews)
 		{
-			var templeButton = GetNode<TextureButton>($"Temple{i}");
-			_templeViews[i] = new TempleView(_player.Temples[i], templeButton, _player);
+			templeView.ProcessModelUpdate(info);
 		}
 	}
 }

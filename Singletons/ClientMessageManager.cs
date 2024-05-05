@@ -16,11 +16,11 @@ public class ClientMessageManager
     {
     }
 
-    public void SendTempleRequest(TempleRequest request, int templeIndex)
+    public void SendTempleRequest(TempleActionRequest request, int templeIndex)
     {
-        var data = new TempleRequestData() { Request = request, TempleIndex = templeIndex };
+        var data = new TempleActionRequestData() { Request = request, TempleIndex = templeIndex };
         var serialized = SerializationUtilities.ToByteArray(data);
-        SendMessage(ClientRequestType.TempleRequest, serialized);
+        SendMessage(ClientRequestType.TempleActionRequest, serialized);
     }
 
     public void SendSummonRequest(UnitType type)
@@ -28,6 +28,13 @@ public class ClientMessageManager
         var data = new SummonRequestData() { Type = type };
         var serialized = SerializationUtilities.ToByteArray(data);
         SendMessage(ClientRequestType.SummonRequest, serialized);
+    }
+
+    public void SendBuildTempleRequest(int position)
+    {
+        var data = new BuildTempleRequestData() { Position = position };
+        var serialized = SerializationUtilities.ToByteArray(data);
+        SendMessage(ClientRequestType.BuildTemple, serialized);
     }
 
     public void SendMessage(ClientRequestType request)

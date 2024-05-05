@@ -1,38 +1,26 @@
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using Godot;
 
-public class TempleView : IButtonGroupHandler
+public partial class TempleView : TextureButton, IButtonGroupHandler
 {
     private const string TempleLabel = "Temple";
     private const string TempleFoundationLabel = "Temple Foundation";
     private const string FireTempleLabel = "Fire Temple";
 
+    private int _position;
     private Player _player;
     private Temple _temple;
-    private int _templeIndex;
+    private int _templeIndex = -1;
     private ActionQueue _actionQueue = new();
 
-    public TextureButton Button { get; }
-
-    public TempleView(Temple temple, TextureButton button, Player player)
+    public void SetModel(int position, Player player)
     {
-        _temple = temple;
+        _position = position;
+        TextureNormal = GetTempleTexture();
+        Pressed += () => SelectTemple();
         _player = player;
-        Button = button;
-        Button.TextureNormal = GetTempleTexture();
-        Button.Pressed += () => SelectTemple();
-
-        for (int i = 0; i < Player.TempleCount; i++)
-        {
-            if (_player.Temples[i] == _temple)
-            {
-                _templeIndex = i;
-            }
-        }
-
-        temple.PropertyChanged += OnModelChanged;
-        player.Tech.OnTechUpdate += OnTechUpdate;
+        SetTempleIfExists();
     }
 
     public void _Process()
@@ -40,41 +28,65 @@ public class TempleView : IButtonGroupHandler
         _actionQueue.ExecuteActions();
     }
 
-    private void OnTechUpdate(object sender, TechUpdateEventArgs e)
+    public bool ProcessModelUpdate(PlayerUpdateInfo playerUpdateInfo)
     {
-        if (e.NewTech.FireTech.HasFlag(FireTech.FlameImp))
+        if (_temple == null && !SetTempleIfExists())
+        {
+            return true;
+        }
+
+        if (playerUpdateInfo.AddedTech.FireTech.HasFlag(FireTech.FireImp))
         {
             _actionQueue.Add(RefreshVisuals);
+            return false;
         }
+
+        if (playerUpdateInfo.TempleUpdates.Updated.TryGetValue(_temple, out PropertyUpdateInfo templeUpdateInfo))
+        {
+            if (templeUpdateInfo.Contains(nameof(Temple.Element))
+                || templeUpdateInfo.Contains(nameof(Temple.IsActive)))
+            {
+                _actionQueue.Add(RefreshVisuals);
+                return true;
+            }
+        }
+        return false;
     }
 
-    private void OnModelChanged(object sender, PropertyChangedEventArgs e)
+    private bool SetTempleIfExists()
     {
-        if (e.PropertyName == nameof(Temple.Element) || e.PropertyName == nameof(Temple.IsActive))
+        var temple = _player.Temples.FirstOrDefault(t => t.Position == _position);
+        if (temple is not null)
         {
+            _temple = temple;
+            _templeIndex = _player.Temples.IndexOf(temple);
             _actionQueue.Add(RefreshVisuals);
+            return true;
         }
+        return false;
     }
 
     private void RefreshVisuals()
     {
-        Button.TextureNormal = GetTempleTexture();
+        TextureNormal = GetTempleTexture();
         if (SelectionManager.Instance.Selection == this)
         {
             SelectTemple();
         }
     }
 
+    private List<ProgressItem> _emptyProgressItemList = new();
     private void SelectTemple()
     {
         SelectionManager.Instance.Selection = this;
         SelectionManager.Instance.ShowButtonGroup(this, GetButtonContext());
-        SelectionManager.Instance.ShowProgressQueue(GetTempleTexture(), GetTempleLabel(), _temple.TaskQueue);
+        var tasks = _temple?.TaskQueue ?? _emptyProgressItemList;
+        SelectionManager.Instance.ShowProgressQueue(GetTempleTexture(), GetTempleLabel(), tasks);
     }
 
     private Texture2D GetTempleTexture()
     {
-        if (!_temple.IsActive)
+        if (_temple is null || !_temple.IsActive)
         {
             return Resources.TempleFoundationIcon;
         }
@@ -87,7 +99,7 @@ public class TempleView : IButtonGroupHandler
 
     private string GetTempleLabel()
     {
-        if (!_temple.IsActive)
+        if (_temple is null || !_temple.IsActive)
         {
             return TempleFoundationLabel;
         }
@@ -100,9 +112,14 @@ public class TempleView : IButtonGroupHandler
 
     public IEnumerable<ButtonContext> GetButtonContext()
     {
-        if (!_temple.IsActive)
+        if (_temple is null)
         {
             yield return GetBuildTempleButton();
+            yield break;
+        }
+
+        if (!_temple.IsActive)
+        {
             yield break;
         }
 
@@ -139,16 +156,22 @@ public class TempleView : IButtonGroupHandler
 
     private ButtonContext TryGetFireImpButtonContext()
     {
-        if (_player.Tech.FireTech.HasFlag(FireTech.FlameImp))
+        if (_player.Tech.FireTech.HasFlag(FireTech.FireImp))
         {
             return null;
         }
-        string tooltip = $"Unlock Fire Imp\nCost: {Enemies.FireImpInfo.UnlockGloryCost}";
+        string tooltip = $"Unlock Fire Imp\nCost: {Tech.FireImpTechInfo.GloryCost}";
         return new ButtonContext(1, 0, Resources.ImpIcon, tooltip);
     }
 
     public void GridButtonPressed(int row, int column)
     {
+        if (_temple is null)
+        {
+            ClientMessageManager.Instance.SendBuildTempleRequest(_position);
+            return;
+        }
+
         var requestType = GetRequestType(row, column);
         if (requestType is null)
         {
@@ -157,16 +180,11 @@ public class TempleView : IButtonGroupHandler
         ClientMessageManager.Instance.SendTempleRequest(requestType.Value, _templeIndex);
     }
 
-    private TempleRequest? GetRequestType(int row, int column)
+    private TempleActionRequest? GetRequestType(int row, int column)
     {
-        if (!_temple.IsActive)
-        {
-            return TempleRequest.BuildTemple;
-        }
-
         if (row == 0 && column == 0)
         {
-            return TempleRequest.RecruitFollower;
+            return TempleActionRequest.RecruitFollower;
         }
 
         switch (_temple.Element)
@@ -175,15 +193,7 @@ public class TempleView : IButtonGroupHandler
             {
                 if (row == 1 && column == 0)
                 {
-                    return TempleRequest.ConvertToFireTemple;
-                }
-                break;
-            }
-            case Element.Fire:
-            {
-                if (row == 1 && column == 0)
-                {
-                    return TempleRequest.UnlockFireImp;
+                    return TempleActionRequest.ConvertToFireTemple;
                 }
                 break;
             }

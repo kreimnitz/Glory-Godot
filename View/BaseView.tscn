@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://c23f1ofnahgy3"]
+[gd_scene load_steps=10 format=3 uid="uid://c23f1ofnahgy3"]
 
 [ext_resource type="Script" path="res://View/BaseView.cs" id="1_ywp6l"]
 [ext_resource type="Texture2D" uid="uid://din8xgqlojr2y" path="res://Resources/Path.png" id="2_3oevd"]
-[ext_resource type="Texture2D" uid="uid://c7eyf52w4abw0" path="res://Resources/TempleFoundation.png" id="3_v7jag"]
 [ext_resource type="PackedScene" uid="uid://7sctp4ikh68m" path="res://Sprite/MainTempleSprite.tscn" id="3_xrgli"]
-[ext_resource type="Texture2D" uid="uid://056qkse32lxw" path="res://Resources/TowerFoundation.png" id="5_wc3ef"]
+[ext_resource type="PackedScene" uid="uid://cs3eo8i6b1rij" path="res://TempleView.tscn" id="4_jha4f"]
+[ext_resource type="Script" path="res://View/TempleView.cs" id="5_i5g4u"]
+[ext_resource type="PackedScene" uid="uid://bfqc265i46lmv" path="res://View/TowerView.tscn" id="5_yomcj"]
 [ext_resource type="PackedScene" uid="uid://dvy2mjbffb0tx" path="res://View/SummonGateView.tscn" id="6_ialcn"]
 [ext_resource type="Script" path="res://View/SummonGateView.cs" id="7_ds17a"]
 
@@ -36,54 +37,58 @@ offset_top = 192.0
 offset_right = 200.0
 offset_bottom = 288.0
 
-[node name="Temple1" type="TextureButton" parent="."]
+[node name="Temple1" parent="." instance=ExtResource("4_jha4f")]
 layout_mode = 0
-offset_left = 100.0
-offset_top = 50.0
-offset_right = 150.0
-offset_bottom = 100.0
-scale = Vector2(1, 1.00816)
-texture_normal = ExtResource("3_v7jag")
+offset_left = 126.0
+offset_top = 31.0
+offset_right = 176.0
+offset_bottom = 81.0
+script = ExtResource("5_i5g4u")
 
-[node name="Temple2" type="TextureButton" parent="."]
+[node name="Temple2" parent="." instance=ExtResource("4_jha4f")]
 layout_mode = 0
-offset_left = 26.0
-offset_top = 216.0
-offset_right = 76.0
-offset_bottom = 266.0
-texture_normal = ExtResource("3_v7jag")
+offset_left = 32.0
+offset_top = 99.0
+offset_right = 82.0
+offset_bottom = 149.0
+script = ExtResource("5_i5g4u")
 
-[node name="Temple3" type="TextureButton" parent="."]
+[node name="Temple3" parent="." instance=ExtResource("4_jha4f")]
 layout_mode = 0
-offset_left = 103.0
-offset_top = 390.0
-offset_right = 153.0
-offset_bottom = 440.0
-texture_normal = ExtResource("3_v7jag")
+offset_left = 33.0
+offset_top = 330.0
+offset_right = 83.0
+offset_bottom = 380.0
+script = ExtResource("5_i5g4u")
 
-[node name="Tower0" type="TextureButton" parent="."]
+[node name="Temple4" parent="." instance=ExtResource("4_jha4f")]
+layout_mode = 0
+offset_left = 124.0
+offset_top = 407.0
+offset_right = 174.0
+offset_bottom = 457.0
+script = ExtResource("5_i5g4u")
+
+[node name="Tower0" parent="." instance=ExtResource("5_yomcj")]
 layout_mode = 0
 offset_left = 375.0
 offset_top = 215.0
 offset_right = 425.0
 offset_bottom = 265.0
-texture_normal = ExtResource("5_wc3ef")
 
-[node name="Tower1" type="TextureButton" parent="."]
+[node name="Tower1" parent="." instance=ExtResource("5_yomcj")]
 layout_mode = 0
 offset_left = 567.0
 offset_top = 215.0
 offset_right = 617.0
 offset_bottom = 265.0
-texture_normal = ExtResource("5_wc3ef")
 
-[node name="Tower2" type="TextureButton" parent="."]
+[node name="Tower2" parent="." instance=ExtResource("5_yomcj")]
 layout_mode = 0
 offset_left = 759.0
 offset_top = 215.0
 offset_right = 809.0
 offset_bottom = 265.0
-texture_normal = ExtResource("5_wc3ef")
 
 [node name="SummonGate" parent="." instance=ExtResource("6_ialcn")]
 layout_mode = 0

@@ -4,12 +4,13 @@ public class ServerTemple
 
     public DelayedActionQueue InProgressQueue { get; } = new();
 
-    public Temple Temple { get; set; }
+    public Temple Temple { get; set; } = new();
 
-    public ServerTemple(ServerPlayer player, Temple temple)
+    public ServerTemple(ServerPlayer player, int position)
     {
         _player = player;
-        Temple = temple;
+        Temple = new Temple();
+        Temple.Position = position;
     }
 
     public void DoLoop()
@@ -32,17 +33,14 @@ public class ServerTemple
 
     public void QueueConvertToElement(Element element)
     {
-        var itemType = ProgressItemTypeHelpers.ConvertToElementProgressType(element);
-        var delayedAction = new DelayedAction(itemType, () => Temple.Element = element, Temple.ConvertDurationMs);
+        var itemType = ProgressItemTypeHelpers.FromElement(element);
+        var delayedAction = new DelayedAction(itemType, () => ConvertToElement(element), Temple.ConvertDurationMs);
         InProgressQueue.Enqueue(delayedAction);
     }
 
-    public void QueueUnlockFlameImp()
+    private void ConvertToElement(Element element)
     {
-        var delayedAction = new DelayedAction(
-            ProgressItemType.UnlockFireImp,
-            () => _player.UnlockEnemy(Enemies.FireImpInfo),
-            Enemies.FireImpInfo.UnlockDuration);
-        InProgressQueue.Enqueue(delayedAction);
+        Temple.Element |= element;
+        _player.Player.Element |= element;
     }
 }

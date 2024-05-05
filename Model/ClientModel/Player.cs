@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ProtoBuf;
 
 [ProtoContract]
-public class Player
+public class Player : IUpdateFrom<Player, PlayerUpdateInfo>
 {
     public const int StartingGlory = 1000;
     public const int StartingFollowerCount = 10;
-    public const int TempleCount = 4;
     public const int HpMax = 20;
 
     [ProtoMember(1)]
@@ -16,6 +14,9 @@ public class Player
 
     [ProtoMember(2)]
     public int Glory { get; set; }
+
+    [ProtoMember(3)]
+    public Element Element { get; set; }
 
     [ProtoMember(4)]
     public int HpCurrent { get; set; } = HpMax;
@@ -44,17 +45,7 @@ public class Player
     {
     }
 
-    public static Player Create()
-    {
-        var p = new Player();
-        for (int i = 0; i < TempleCount; i++)
-        {
-            p.Temples.Add(new());
-        }
-        return p;
-    }
-
-    public PlayerUpdateInfo UpdateAndGetInfo(Player p)
+    public PlayerUpdateInfo UpdateFrom(Player p)
     {
         PlayerUpdateInfo playerUpdateInfo = new();
         if (Id != p.Id)
@@ -64,15 +55,16 @@ public class Player
         }
         Glory = p.Glory;
         HpCurrent = p.HpCurrent;
-        SummonGate.UpdateFrom(p.SummonGate);
-        for (int i = 0; i < TempleCount; i++)
+        if (Element != p.Element)
         {
-            Temples[i].UpdateFrom(p.Temples[i]);
+            Element = p.Element;
+            playerUpdateInfo.ElementAdded = true;
         }
-        UpdateUtilites.UpdateMany(TaskQueue, p.TaskQueue);
 
-        playerUpdateInfo.EnemyUpdates = UpdateUtilites.UpdateMany(Enemies, p.Enemies);
-        playerUpdateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany(TowerShots, p.TowerShots);
+        playerUpdateInfo.SummonGateUpdates = SummonGate.UpdateFrom(p.SummonGate);  
+        playerUpdateInfo.TempleUpdates = UpdateUtilites.UpdateMany<Temple, PropertyUpdateInfo>(Temples, p.Temples);
+        playerUpdateInfo.EnemyUpdates = UpdateUtilites.UpdateMany<Enemy, PropertyUpdateInfo>(Enemies, p.Enemies);
+        playerUpdateInfo.TowerShotUpdates = UpdateUtilites.UpdateMany<TowerShot, PropertyUpdateInfo>(TowerShots, p.TowerShots);
         playerUpdateInfo.AddedTech = Tech.UpdateFrom(p.Tech);
         return playerUpdateInfo;
     }
@@ -91,7 +83,10 @@ public class Player
 public class PlayerUpdateInfo
 {
     public bool NewId { get; set; }
+    public bool ElementAdded { get; set; }
     public PlayerTech AddedTech { get; set; }
-    public ListUpdateInfo<Enemy> EnemyUpdates { get; set; } = new();
-    public ListUpdateInfo<TowerShot> TowerShotUpdates { get; set; } = new();
+    public SummonGateUpdateInfo SummonGateUpdates { get; set; }
+    public ListUpdateInfo<Temple, PropertyUpdateInfo> TempleUpdates { get; set; }
+    public ListUpdateInfo<Enemy, PropertyUpdateInfo> EnemyUpdates { get; set; }
+    public ListUpdateInfo<TowerShot, PropertyUpdateInfo> TowerShotUpdates { get; set; }
 }

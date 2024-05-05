@@ -9,7 +9,7 @@ public enum UnitType
 
 public static class Enemies
 {
-    public static EnemyInfo FireImpInfo = new()
+    public static EnemyInfo FireImpInfo { get; } = new()
     {
         Name = "Fire Imp",
         Type = UnitType.FireImp,
@@ -17,14 +17,12 @@ public static class Enemies
         Speed = 200,
         GloryCost = 50,
         Element = Element.Fire,
-        UnlockGloryCost = 150,
-        UnlockDuration = 10000,
         SpawnTimerMs = 5000,
         SpawnMax = 10,
-        RequiredTech = new PlayerTech() | FireTech.FlameImp,
+        RequiredTech = Tech.FireImpTechInfo,
     };
 
-    public static EnemyInfo WarriorInfo = new()
+    public static EnemyInfo WarriorInfo { get; } = new()
     {
         Name = "Warrior",
         Type = UnitType.Warrior,
@@ -32,11 +30,9 @@ public static class Enemies
         Speed = 200,
         GloryCost = 50,
         Element = Element.None,
-        UnlockGloryCost = 150,
-        UnlockDuration = 5000,
         SpawnTimerMs = 5000,
         SpawnMax = 5,
-        RequiredTech = new PlayerTech() | BaseTech.Warrior,
+        RequiredTech = Tech.WarriorTechInfo
     };
 
     public static Dictionary<UnitType, EnemyInfo> TypeToInfo { get; } = new()
@@ -44,6 +40,12 @@ public static class Enemies
         { UnitType.Default, WarriorInfo },
         { UnitType.Warrior, WarriorInfo },
         { UnitType.FireImp, FireImpInfo },
+    };
+
+    public static Dictionary<TechInfo, EnemyInfo> TechToInfo { get; } = new()
+    {
+        { Tech.WarriorTechInfo, WarriorInfo },
+        { Tech.FireImpTechInfo, FireImpInfo },
     };
 }
 
@@ -54,10 +56,8 @@ public class EnemyInfo
     public int MaxHp { get; set; }
     public int GloryCost { get; set; }
     public Element Element { get; set; }
-    public int UnlockGloryCost { get; set; }
-    public int UnlockDuration { get; set; }
     public int SpawnTimerMs { get; set; }
     public int SpawnMax { get; set; }
     public int Speed { get; set; }
-    public PlayerTech RequiredTech { get; set; }
+    public TechInfo RequiredTech { get; set; }
 }

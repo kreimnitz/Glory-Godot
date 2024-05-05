@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cs3eo8i6b1rij"]
+
+[ext_resource type="Texture2D" uid="uid://c7eyf52w4abw0" path="res://Resources/TempleFoundation.png" id="1_v5f85"]
+
+[node name="Temple1" type="TextureButton"]
+offset_left = 100.0
+offset_top = 50.0
+offset_right = 150.0
+offset_bottom = 100.0
+scale = Vector2(1, 1.00816)
+texture_normal = ExtResource("1_v5f85")

@@ -2,63 +2,89 @@ using System;
 using ProtoBuf;
 
 [ProtoContract]
-public class PlayerTech
+public class PlayerTech : IUpdateFrom<PlayerTech, PlayerTech>
 {
+    public static PlayerTech Empty { get; } = new();
+
     [ProtoMember(1)]
-    public BaseTech BaseTech { get; set; }
+    public Guid Id { get; set; } = IdGenerator.Generate();
 
     [ProtoMember(2)]
+    public NormalTech NormalTech { get; set; }
+
+    [ProtoMember(3)]
     public FireTech FireTech { get; set; }
 
     public PlayerTech() { }
 
-    public PlayerTech(BaseTech baseTech, FireTech fireTech)
+    public PlayerTech(NormalTech normalTech, FireTech fireTech)
     {
-        BaseTech = baseTech;
+        NormalTech = normalTech;
         FireTech = fireTech;
-    }
-
-    public delegate void TechUpdateHandler(object sender, TechUpdateEventArgs e);
-    public event TechUpdateHandler OnTechUpdate;
-    private void RaiseTechUpdate(PlayerTech newTech)
-    {
-        // Make sure someone is listening to event
-        if (OnTechUpdate == null) return;
-        if (newTech.BaseTech == BaseTech.None && newTech.FireTech == FireTech.None)
-        {
-            return;
-        }
-        OnTechUpdate(this, new TechUpdateEventArgs() {NewTech = newTech});
     }
 
     public PlayerTech UpdateFrom(PlayerTech other)
     {
         var newTech = new PlayerTech
         {
-            BaseTech = other.BaseTech & ~BaseTech,
+            NormalTech = other.NormalTech & ~NormalTech,
             FireTech = other.FireTech & ~FireTech
         };
 
-        BaseTech |= other.BaseTech;
+        NormalTech |= other.NormalTech;
         FireTech |= other.FireTech;
-        RaiseTechUpdate(newTech);
         return newTech;
+    }
+
+    public bool IsEmpty()
+    {
+        if (NormalTech != NormalTech.None)
+        {
+            return false;
+        }
+        if (FireTech != FireTech.None)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj as PlayerTech is null)
+        {
+            return false;
+        }
+        var other = (PlayerTech)obj;
+        return FireTech == other.FireTech && NormalTech == other.NormalTech;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(FireTech.GetHashCode(), NormalTech.GetHashCode());
+    }
+
+    public bool HasAllFlags(PlayerTech other)
+    {
+        var hasFireTech = (FireTech & other.FireTech) == other.FireTech;
+        var hasNormalTech = (NormalTech & other.NormalTech) == other.NormalTech;
+        return hasFireTech && hasNormalTech;
     }
 
     public static PlayerTech operator |(PlayerTech a, PlayerTech b)
     {
         return new PlayerTech
         {
-            BaseTech = a.BaseTech | b.BaseTech,
+            NormalTech = a.NormalTech | b.NormalTech,
             FireTech = a.FireTech | b.FireTech,
         };
     }
 
-    public static PlayerTech operator |(PlayerTech a, BaseTech b)
+    public static PlayerTech operator |(PlayerTech a, NormalTech b)
     {
         return new PlayerTech
         {
-            BaseTech = a.BaseTech | b,
+            NormalTech = a.NormalTech | b,
             FireTech = a.FireTech,
         };
     }
@@ -67,7 +93,7 @@ public class PlayerTech
     {
         return new PlayerTech
         {
-            BaseTech = a.BaseTech,
+            NormalTech = a.NormalTech,
             FireTech = a.FireTech | b,
         };
     }
@@ -76,19 +102,14 @@ public class PlayerTech
     {
         return new PlayerTech
         {
-            BaseTech = a.BaseTech & b.BaseTech,
+            NormalTech = a.NormalTech & b.NormalTech,
             FireTech = a.FireTech & b.FireTech,
         };
     }
 }
 
-public class TechUpdateEventArgs
-{
-    public PlayerTech NewTech { get; set; }
-}
-
 [Flags]
-public enum BaseTech
+public enum NormalTech
 {
     None = 0,
     Warrior = 1,
@@ -98,5 +119,5 @@ public enum BaseTech
 public enum FireTech
 {
     None = 0,
-    FlameImp = 1,
+    FireImp = 1,
 }

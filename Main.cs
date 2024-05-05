@@ -23,8 +23,9 @@ public partial class Main : Node, IServerMessageReceivedHandler
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-		_player = Player.Create();
+		_player = new();
 		_baseView = GetNode<BaseView>("BaseView");
+		_baseView.SetModel(_player);
 
 		_topBar = GetNode<TopBar>("TopBar");
 		_topBar.Player = _player;
@@ -39,8 +40,6 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		serverButton.Pressed += _serverWindow.Show;
 
 		SelectionManager.CreateSingleton(_bottomBar);
-
-		_baseView.Initialize(_player);
 
 		_bottomBar.DebugButton0.Pressed +=
 			() => ClientMessageManager.Instance.SendMessage(ClientRequestType.DEBUG_SpawnEnemy);
@@ -81,7 +80,7 @@ public partial class Main : Node, IServerMessageReceivedHandler
 		if (message.MessageTypeId == 0)
 		{
 			var serverGameState = SerializationUtilities.FromByteArray<GameStateInfo>(message.Data);
-			var updateInfo = _player.UpdateAndGetInfo(serverGameState.PlayerInfo);
+			var updateInfo = _player.UpdateFrom(serverGameState.PlayerInfo);
 			_actions.Enqueue(() => _baseView.ProcessModelUpdate(updateInfo));
 		}
     }
