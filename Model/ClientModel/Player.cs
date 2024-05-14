@@ -61,6 +61,7 @@ public class Player : IUpdateFrom<Player, PlayerUpdateInfo>
             playerUpdateInfo.ElementAdded = true;
         }
 
+        UpdateUtilites.UpdateMany<ProgressItem, DummyUpdateInfo>(TaskQueue, p.TaskQueue);
         playerUpdateInfo.SummonGateUpdates = SummonGate.UpdateFrom(p.SummonGate);  
         playerUpdateInfo.TempleUpdates = UpdateUtilites.UpdateMany<Temple, PropertyUpdateInfo>(Temples, p.Temples);
         playerUpdateInfo.EnemyUpdates = UpdateUtilites.UpdateMany<Enemy, PropertyUpdateInfo>(Enemies, p.Enemies);

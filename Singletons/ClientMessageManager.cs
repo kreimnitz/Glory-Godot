@@ -23,11 +23,25 @@ public class ClientMessageManager
         SendMessage(ClientRequestType.TempleActionRequest, serialized);
     }
 
+    public void SendTempleTechRequest(PlayerTech tech, int templeIndex)
+    {
+        var data = new TempleTechRequestData() { Tech = tech, TempleIndex = templeIndex };
+        var serialized = SerializationUtilities.ToByteArray(data);
+        SendMessage(ClientRequestType.TempleTechRequest, serialized);
+    }
+
     public void SendSummonRequest(UnitType type)
     {
-        var data = new SummonRequestData() { Type = type };
+        var data = new UnitTypeData() { Type = type };
         var serialized = SerializationUtilities.ToByteArray(data);
         SendMessage(ClientRequestType.SummonRequest, serialized);
+    }
+
+    public void SendEnemyTechRequest(UnitType type)
+    {
+        var data = new UnitTypeData() { Type = type };
+        var serialized = SerializationUtilities.ToByteArray(data);
+        SendMessage(ClientRequestType.EnemyTechRequest, serialized);
     }
 
     public void SendBuildTempleRequest(int position)

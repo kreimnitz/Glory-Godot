@@ -18,10 +18,6 @@ public enum TempleActionRequest
     ConvertToFireTemple = 10,
 }
 
-public enum TempleTechRequest
-{
-}
-
 [ProtoContract]
 public class BuildTempleRequestData
 {
@@ -30,7 +26,7 @@ public class BuildTempleRequestData
 }
 
 [ProtoContract]
-public class SummonRequestData
+public class UnitTypeData
 {
     [ProtoMember(1)]
     public UnitType Type { get; set; }
@@ -59,11 +55,4 @@ public class TempleTechRequestData : TempleIndexData
 
     [ProtoMember(2)]
     public int TempleIndex { get; set; }
-}
-
-[ProtoContract]
-public class EnemyTechRequestData
-{
-    [ProtoMember(1)]
-    public UnitType EnemyType { get; set; }
 }

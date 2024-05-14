@@ -8,6 +8,18 @@ public partial class TempleView : TextureButton, IButtonGroupHandler
     private const string TempleFoundationLabel = "Temple Foundation";
     private const string FireTempleLabel = "Fire Temple";
 
+    private static List<TempleButtonInfo> _normalPositionList = new()
+    {
+        new (1, 0, TempleActionRequest.ConvertToFireTemple),
+    };
+
+    private static List<TempleButtonInfo> _fireTypePositionList = new()
+    {
+    };
+
+    private ButtonContext _recruitFollowerButtonContext =
+        new ButtonContext(0, 0, Resources.FollowerIcon, Follower.RecruitTooltip);
+
     private int _position;
     private Player _player;
     private Temple _temple;
@@ -123,17 +135,14 @@ public partial class TempleView : TextureButton, IButtonGroupHandler
             yield break;
         }
 
-        yield return GetRecruitFollowerButtonContext();
+        yield return _recruitFollowerButtonContext;
         if (_temple.Element == Element.None)
         {
             yield return GetConvertToFireTempleButtonContext();
         }
         if (_temple.Element == Element.Fire)
         {
-            if (TryGetFireImpButtonContext() is var bc && bc is not null)
-            {
-                yield return bc;
-            }
+
         }
     }
 
@@ -143,25 +152,10 @@ public partial class TempleView : TextureButton, IButtonGroupHandler
         return new ButtonContext(0, 0, Resources.TempleIcon, tooltip);
     }
 
-    private ButtonContext GetRecruitFollowerButtonContext()
-    {
-        return new ButtonContext(0, 0, Resources.FollowerIcon, Follower.RecruitTooltip);
-    }
-
     private ButtonContext GetConvertToFireTempleButtonContext()
     {
         string tooltip = $"Upgrade to Fire Temple\nCost: {Temple.ConvertCost}";
         return new ButtonContext(1, 0, Resources.FlameIcon, tooltip);
-    }
-
-    private ButtonContext TryGetFireImpButtonContext()
-    {
-        if (_player.Tech.FireTech.HasFlag(FireTech.FireImp))
-        {
-            return null;
-        }
-        string tooltip = $"Unlock Fire Imp\nCost: {Tech.FireImpTechInfo.GloryCost}";
-        return new ButtonContext(1, 0, Resources.ImpIcon, tooltip);
     }
 
     public void GridButtonPressed(int row, int column)
@@ -172,34 +166,65 @@ public partial class TempleView : TextureButton, IButtonGroupHandler
             return;
         }
 
-        var requestType = GetRequestType(row, column);
-        if (requestType is null)
+        if (row == 0 && column == 0)
+        {
+            ClientMessageManager.Instance.SendTempleRequest(TempleActionRequest.RecruitFollower, _templeIndex);
+            return;
+        }
+
+        var buttonInfo = GetInfo(row, column);
+        if (buttonInfo is null)
         {
             return;
         }
-        ClientMessageManager.Instance.SendTempleRequest(requestType.Value, _templeIndex);
+        else if (buttonInfo.ActionRequest.HasValue)
+        {
+            ClientMessageManager.Instance.SendTempleRequest(buttonInfo.ActionRequest.Value, _templeIndex);
+        }
+        else if (buttonInfo.TechRequest is not null)
+        {
+            ClientMessageManager.Instance.SendTempleTechRequest(buttonInfo.TechRequest, _templeIndex);
+        }
     }
 
-    private TempleActionRequest? GetRequestType(int row, int column)
+    private TempleButtonInfo GetInfo(int row, int column)
     {
-        if (row == 0 && column == 0)
-        {
-            return TempleActionRequest.RecruitFollower;
-        }
-
+        List<TempleButtonInfo> positionList;
         switch (_temple.Element)
         {
-            case Element.None:
+            case Element.Fire:
             {
-                if (row == 1 && column == 0)
-                {
-                    return TempleActionRequest.ConvertToFireTemple;
-                }
+                positionList = _fireTypePositionList;
                 break;
             }
             default:
+            {
+                positionList = _normalPositionList;
                 break;
+            }
         }
-        return null;
+        return positionList.FirstOrDefault(bi => bi.Row == row && bi.Column == column);
+    }
+
+    private class TempleButtonInfo
+    {
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public TempleActionRequest? ActionRequest { get; set; } = null;
+        public PlayerTech TechRequest { get; set; } = null;
+
+        public TempleButtonInfo(int row, int column, TempleActionRequest request)
+        {
+            Row = row;
+            Column = column;
+            ActionRequest = request;
+        }
+
+        public TempleButtonInfo(int row, int column, PlayerTech request)
+        {
+            Row = row;
+            Column = column;
+            TechRequest = request;
+        }
     }
 }

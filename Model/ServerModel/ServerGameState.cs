@@ -101,13 +101,13 @@ public class ServerGameState
             }
             case ClientRequestType.SummonRequest:
             {
-                var summonRequestData = SerializationUtilities.FromByteArray<SummonRequestData>(data);
+                var summonRequestData = SerializationUtilities.FromByteArray<UnitTypeData>(data);
                 handler.HandleSummonRequest(summonRequestData);
                 break;
             }
             case ClientRequestType.EnemyTechRequest:
             {
-                var enemyTechRequestData = SerializationUtilities.FromByteArray<EnemyTechRequestData>(data);
+                var enemyTechRequestData = SerializationUtilities.FromByteArray<UnitTypeData>(data);
                 handler.HandleEnemyTechRequest(enemyTechRequestData);
                 break;
             }

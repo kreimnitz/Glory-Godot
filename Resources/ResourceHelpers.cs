@@ -8,6 +8,7 @@ public static class ResourceHelpers
         { ProgressItemType.RecruitingFollower, Resources.FollowerIcon },
         { ProgressItemType.ConvertToFireTemple, Resources.FlameIcon },
         { ProgressItemType.UnlockFireImp, Resources.ImpIcon },
+        { ProgressItemType.UnlockWarrior, Resources.WarriorIcon },
         { ProgressItemType.BuildTemple, Resources.TempleIcon }
     };
 

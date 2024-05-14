@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://fop0wb4aejle"]
+[gd_scene load_steps=5 format=3 uid="uid://fop0wb4aejle"]
 
 [ext_resource type="Script" path="res://View/ButtonContainer.cs" id="1_2fvuo"]
 [ext_resource type="Texture2D" uid="uid://c7e4nyqeu8ciy" path="res://Resources/ButtonIcon.bmp" id="1_hvyt2"]
 [ext_resource type="Texture2D" uid="uid://b372hpnduwxnu" path="res://Resources/GrayIcon.bmp" id="3_l250d"]
+[ext_resource type="Texture2D" uid="uid://dvo6fm7ob5qkg" path="res://Resources/GrayMask.png" id="4_hhjsk"]
 
 [node name="ButtonContainer" type="MarginContainer"]
 custom_minimum_size = Vector2(60, 60)
@@ -19,3 +20,7 @@ custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = ExtResource("1_hvyt2")
 texture_disabled = ExtResource("3_l250d")
+
+[node name="DisabledMask" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("4_hhjsk")

@@ -29,6 +29,7 @@ public class ServerPlayer
     {
         _serverEnemies = new(Player.Enemies, (serverEnemy) => serverEnemy.Enemy);
         _serverTowerShots = new(Player.TowerShots, (serverTowerShot) => serverTowerShot.TowerShot);
+        
         ServerTemples = new(Player.Temples, (serverTemple) => serverTemple.Temple);
 
         Player.Glory = Player.StartingGlory;
@@ -43,7 +44,7 @@ public class ServerPlayer
 
         EnemyPath = new EnemyPath(EnemyPath.CreateWindingPathCurve());
 
-        ServerSummonGate = new(Player.SummonGate);
+        ServerSummonGate = new(this);
         ServerSummonGate.CreateSpawner(Enemies.WarriorInfo);
     }
 
@@ -52,6 +53,7 @@ public class ServerPlayer
         _actionQueue.ExecuteActions();
         InProgressQueue.ApplyNextActionIfReady();
         Player.TaskQueue = InProgressQueue.ToProgressItemList();
+        ServerSummonGate.DoLoop();
         foreach (var temple in ServerTemples)
         {
             temple.DoLoop();
@@ -74,21 +76,6 @@ public class ServerPlayer
         var newTemple = new ServerTemple(this, position);
         ServerTemples.Add(newTemple);
         newTemple.QueueBuild();
-    }
-
-    public void QueueUnlockEnemyResearch(EnemyInfo enemyInfo)
-    {
-        var delayedAction = new DelayedAction(
-            ProgressItemTypeHelpers.FromTech(enemyInfo.RequiredTech.Tech),
-            () => UnlockEnemy(enemyInfo),
-            enemyInfo.RequiredTech.ResearchDurationMs);
-        InProgressQueue.Enqueue(delayedAction);
-    }
-
-    public void UnlockEnemy(EnemyInfo enemyInfo)
-    {
-        Player.Tech.UpdateFrom(Player.Tech | enemyInfo.RequiredTech.Tech);
-        ServerSummonGate.CreateSpawner(enemyInfo);
     }
 
     private void ApplyIncome()

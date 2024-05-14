@@ -70,5 +70,6 @@ public partial class BaseView : Control
 		{
 			templeView.ProcessModelUpdate(info);
 		}
+		_summonGateView.ProcessModelUpdate(info);
 	}
 }

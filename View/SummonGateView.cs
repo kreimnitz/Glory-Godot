@@ -95,7 +95,7 @@ public partial class SummonGateView : TextureButton, IButtonGroupHandler
 	{
 		SelectionManager.Instance.Selection = this;
 		SelectionManager.Instance.ShowButtonGroup(this, GetButtonContexts());
-		SelectionManager.Instance.ShowInfoUi(Resources.SummonGateIcon, "Summoning Gate");
+		SelectionManager.Instance.ShowProgressQueue(Resources.SummonGateIcon, "Summoning Gate", _player.SummonGate.TaskQueue);
 	}
 
 	private void RefreshVisuals()
@@ -119,48 +119,82 @@ public partial class SummonGateView : TextureButton, IButtonGroupHandler
     public void GridButtonPressed(int row, int column)
     {
 		var buttonManager = GetButtonManagerForElement(_selectedElement);
-		var unitType = buttonManager.TryGetType(row, column);
-		if (unitType != null)
-		{
-			ClientMessageManager.Instance.SendSummonRequest(unitType.Value);
-		}
+		buttonManager.ExecuteButton(row, column);
 	}
 
 	private class SummonGateButtonManager
 	{
-		private List<SummonButtonInfo> _buttonInfos;
+		private Dictionary<(int, int), SummonButtonInfo> _buttonInfos = new();
 
 		public Element Element { get; set; }
 
 		public SummonGateButtonManager(Element element, List<SummonButtonInfo> infos)
 		{
 			Element = element;
-			_buttonInfos = infos;
+			foreach (var info in infos)
+			{
+				_buttonInfos.Add((info.Row, info.Column), info);
+			}
 		}
 
 		public void AddOrUpdateSpawner(Spawner spawner)
 		{
-			var info = _buttonInfos.First(i => i.EnemyInfo.Type == spawner.UnitType);
+			var info = _buttonInfos.Values.First(i => i.EnemyInfo.Type == spawner.UnitType);
 			info.Spawner = spawner;
 		}
 
-		public UnitType? TryGetType(int row, int column)
+		public void ExecuteButton(int row, int column)
 		{
-			return _buttonInfos.FirstOrDefault(i => i.Row == row && i.Column == column)?.EnemyInfo.Type;
+			var info = TryGetButtonInfo(row, column);
+			if (info is null)
+			{
+				return;
+			}
+			if (info.Spawner is null)
+			{
+				ClientMessageManager.Instance.SendEnemyTechRequest(info.EnemyInfo.Type);
+			}
+			else
+			{
+				ClientMessageManager.Instance.SendSummonRequest(info.EnemyInfo.Type);
+			}
+		}
+
+		private SummonButtonInfo TryGetButtonInfo(int row, int column)
+		{
+			if (_buttonInfos.TryGetValue((row, column), out var buttonInfo))
+			{
+				return buttonInfo;
+			}
+			return null;
 		}
 
 		public IEnumerable<ButtonContext> GetButtonContexts()
 		{
-			foreach (var buttonInfo in _buttonInfos.Where(i => i.Spawner != null))
+			foreach (var buttonInfo in _buttonInfos.Values)
 			{
-				var texture = ResourceHelpers.UnitTypeToIcon[buttonInfo.EnemyInfo.Type];
-				var tooltip = CreateTooltip(buttonInfo.EnemyInfo.Type);
-				var bc = new ButtonContext(buttonInfo.Row, buttonInfo.Column, texture, tooltip, buttonInfo.Spawner);
-				yield return bc;
+				Texture2D texture;
+				string tooltip;
+				texture = ResourceHelpers.UnitTypeToIcon[buttonInfo.EnemyInfo.Type];
+				if (buttonInfo.Spawner == null)
+				{
+					tooltip = CreateResearchTooltip(buttonInfo.EnemyInfo.Type);
+				}
+				else
+				{
+					tooltip = CreateSummonTooltip(buttonInfo.EnemyInfo.Type);
+				}
+				yield return new ButtonContext(buttonInfo.Row, buttonInfo.Column, texture, tooltip, buttonInfo.Spawner);
 			}
 		}
 
-		private string CreateTooltip(UnitType type)
+		private string CreateResearchTooltip(UnitType type)
+		{
+			var info = Enemies.TypeToInfo[type];
+			return $"Research {info.Name}\nCost: {info.RequiredTech.GloryCost}";
+		}
+
+		private string CreateSummonTooltip(UnitType type)
 		{
 			var info = Enemies.TypeToInfo[type];
 			return $"Summon {info.Name}\nCost: {info.GloryCost}";
